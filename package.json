@@ -1,0 +1,24 @@
+{
+  "name": "gwift-book",
+  "version": "0.0.0",
+  "description": "django paperification",
+  "main": "index.js",
+  "dependencies": {
+    "gitbook": "^2.3.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.framasoft.org/Grimbox/gwift-book.git"
+  },
+  "keywords": [
+    "django",
+    "paper",
+    "tutorial"
+  ],
+  "author": "",
+  "license": "CC-BY-SA-4.0"
+}
