@@ -21,3 +21,7 @@ Cette commande se base sur le fichier `SUMMARY.md` pour générer l'arborescence
 
  * `nodejs node_modules/gitbook-cli/bin/gitbook.js build`
  * `nodejs node_modules/gitbook-cli/bin/gitbook.js serve`
+
+## Formats supportés
+
+Pour les formats autres que HTML (PDF, Mobi & ePub), il faut installer `Calibre` grâce à un `aptitude install Calibre`. Attention qu'il y a un bon petit 300MB de dépendances...
