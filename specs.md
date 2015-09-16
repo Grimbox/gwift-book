@@ -12,16 +12,18 @@ Ensuite, nous pourrons traduire ces besoins en fonctionnalités et finalement ef
 Besoins utilisateur du site gwift
 ---------------------------------
 
-Nous souhaitons développer un site où un utilisateur donné peut créer une liste contenant des souhaits et où d'autres utilisateurs peuvent choisir les souhaits qu'il souhaite réaliser.
+Nous souhaitons développer un site où un utilisateur donné peut créer une liste contenant des souhaits et où d'autres utilisateurs, authentifiés ou non, peuvent choisir les souhaits qu'il souhaite réaliser.
 Il sera nécessaire de s'authentifier pour : 
 
  1. Créer une liste associée à son utilisateur
- 2. Ajouter un nouvel élément à une liste
- 3. Faire une promesse d'offre pour un élément appartenant à une liste, associée à un utilisateur.
+ 1. Ajouter un nouvel élément à une liste
+ 
+Il ne sera pas nécessaire de s'authentifier pour :
+ 1. Faire une promesse d'offre pour un élément appartenant à une liste, associée à un utilisateur.
 
-L'utilisateur ayant créé une liste pourra envoyer un email ou une notification aux utilisateurs enregistrés directement depuis le site aux personnes avec qui il souhaite partager sa liste, ce dernier contenant la manière d'y accéder.
+L'utilisateur ayant créé une liste pourra envoyer un email directement depuis le site aux personnes avec qui il souhaite partager sa liste, ce dernier contenant la manière d'y accéder.
 
-A chaque souhait, on pourrait de manière facultative ajouter un prix. Dans ce cas, le souhait pourrait aussi être subdivisé en plusieurs parts, de manière à ce que plusieurs personnes puissent participer à son acquisition.
+A chaque souhait, on pourrait de manière facultative ajouter un prix. Dans ce cas, le souhait pourrait aussi être subdivisé en plusieurs parts, de manière à ce que plusieurs personnes puissent participer à sa réalisation.
 
 Un souhait pourrait aussi être réalisé plusieurs fois.
 
@@ -37,37 +39,75 @@ Pour gérer les utilisateurs, nous utiliserons ce que Django met par défaut à 
 #### Modèlisation
 
 Les données suivantes doivent être associées à une liste:
-
 * un identifiant
+* un identifiant externe
 * un nom
 * une description
+* le propriétaire
+* une date de création
+* une date de modification
 
 #### Fonctionnalités
 
  1. Un utilisateur authentifié doit pouvoir créer, modifier, désactiver et supprimer une liste dont il est le propriétaire
- 2. Un utilisateur doit pouvoir associer ou retirer des souhaits à une liste dont il est le propriétaire
- 3. Il faut pouvoir accéder à une liste, avec un utilisateur authentifier ou non, *via* sont identifiant
- 4. Il faut pouvoir envoyer un email avec le lien vers la liste, contenant son identifiant
- 5. L'utilisateur doit pouvoir voir toutes les listes qui lui appartiennent
+ 1. Un utilisateur doit pouvoir associer ou retirer des souhaits à une liste dont il est le propriétaire
+ 1. Il faut pouvoir accéder à une liste, avec un utilisateur authentifier ou non, *via* son identifiant externe
+ 1. Il faut pouvoir envoyer un email avec le lien vers la liste, contenant son identifiant externe
+ 1. L'utilisateur doit pouvoir voir toutes les listes qui lui appartiennent
 
 ### Gestion des souhaits
 
 #### Modélisation
 
 Les données suivantes peuvent être associées à un souhait:
+* un identifiant
+* identifiant de la liste
 * un nom
 * une description
+* le propriétaire
+* une date de création
+* une date de modification
 * une image
-* un prix facultatif
 * un nombre (1 par défaut)
+* un prix facultatif
 * un nombre de part facultatif, si un prix est fourni
-* la liste à laquelle il appartient
-* L'utilisateur qui l'a créée.
 
 #### Fonctionnalités
 
  1. Un utilisateur authentifié doit pouvoir créer, modifier, désactiver et supprimer un souhait dont il est le propriétaire.
- 2. On ne peut créer un souhait sans liste associée
- 3. Il faut pouvoir fractionner un souhait uniquement si un prix est donné.
- 4. Il faut pouvoir accéder à un souhait, avec un utilisateur authentifié ou non.
- 5. Il faut pouvoir réaliser un souhait ou une partie seulement, avec un utilisateur authentifié ou non.
+ 1. On ne peut créer un souhait sans liste associée
+ 1. Il faut pouvoir fractionner un souhait uniquement si un prix est donné.
+ 1. Il faut pouvoir accéder à un souhait, avec un utilisateur authentifié ou non.
+ 1. Il faut pouvoir réaliser un souhait ou une partie seulement, avec un utilisateur authentifié ou non.
+ 1. Un souhait en cours de réalisation et composé de différente part ne peut plus être modifié.
+ 1. Un souhait en cours de réalisation ou réalisé ne peut plus être supprimé.
+ 1. On peut modifier le nombre de fois qu'un souhait doit être réalisé dans la limite des réalisations déjà effectuées.
+ 
+### Gestion des réalisations de souhaits
+ 
+#### Modélisation
+
+Les données suivantes peuvent être associées à une réalisation de souhait:
+* identifiant du souhait
+* identifiant de l'utilisateur si connu
+* identifiant de la personne si utilisateur non connu
+* un commentaire
+* une date de réalisation
+
+#### Fonctionnalités
+
+ 1. L'utilisateur doit pouvoir voir si un souhait est réalisé, en partie ou non.
+ 1. L'utilisateur doit pouvoir voir la ou les personnes ayant réaliser un souhait.
+ 1. Il y a autant de réalisation que de parts de souhait réalisées ou de nombre de fois que le souhait est réalisé.
+ 
+### Gestion des personnes réalisants les souhaits et qui ne sont pas connues
+ 
+#### Modélisation
+
+Les données suivantes peuvent être associées à une personne réalisant un souhait:
+* un identifiant
+* un nom
+* une adresse email facultative
+
+#### Fonctionnalités
+
