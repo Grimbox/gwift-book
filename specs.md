@@ -12,16 +12,16 @@ Ensuite, nous pourrons traduire ces besoins en fonctionnalités et finalement ef
 Besoins utilisateur du site gwift
 ---------------------------------
 
-Nous souhaitons développer un site où un utilisateur donné peut créer une liste contenant des souhaits et où d'autres utilisateurs, authentifiés ou non, peuvent choisir les souhaits qu'il souhaite réaliser.
+Nous souhaitons développer un site où un utilisateur donné peut créer une liste contenant des souhaits et où d'autres utilisateurs, authentifiés ou non, peuvent choisir les souhaits qu'ils souhaitent réaliser.
 Il sera nécessaire de s'authentifier pour : 
 
- 1. Créer une liste associée à son utilisateur
+ 1. Créer une liste associée à l'utilisateur en cours
  1. Ajouter un nouvel élément à une liste
  
 Il ne sera pas nécessaire de s'authentifier pour :
  1. Faire une promesse d'offre pour un élément appartenant à une liste, associée à un utilisateur.
 
-L'utilisateur ayant créé une liste pourra envoyer un email directement depuis le site aux personnes avec qui il souhaite partager sa liste, ce dernier contenant la manière d'y accéder.
+L'utilisateur ayant créé une liste pourra envoyer un email directement depuis le site aux personnes avec qui il souhaite partager sa liste, cet email contenant un lien permettant d'accéder à cette liste.
 
 A chaque souhait, on pourrait de manière facultative ajouter un prix. Dans ce cas, le souhait pourrait aussi être subdivisé en plusieurs parts, de manière à ce que plusieurs personnes puissent participer à sa réalisation.
 
@@ -70,7 +70,7 @@ Les données suivantes peuvent être associées à un souhait:
 * une image
 * un nombre (1 par défaut)
 * un prix facultatif
-* un nombre de part facultatif, si un prix est fourni
+* un nombre de part facultatif, si un prix est fourni.
 
 #### Fonctionnalités
 
