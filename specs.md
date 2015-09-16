@@ -1,4 +1,5 @@
-# Single App
+Single App
+==========
 
 Pour commencer, nous allons nous concentrer sur la création d'un site ne contenant qu'une seule application, même si en pratique le site contiendra déjà plusieurs applications fournies pas django, comme nous le verrons plus loin.
 
@@ -12,20 +13,24 @@ Besoins utilisateur du site gwift
 ---------------------------------
 
 Nous souhaitons développer un site où un utilisateur donné peut créer une liste contenant des souhaits et où d'autres utilisateurs peuvent choisir les souhaits qu'il souhaite réaliser.
-Il ne sera pas nécessaire de s'authentifier pour réaliser un souhait mais bien pour créer une liste.
+Il sera nécessaire de s'authentifier pour : 
 
-L'utilisateur ayant créé une liste pourra envoyer un email directement depuis le site aux personnes avec qui il souhaite partager sa liste, ce dernier contenant la manière d'y accéder.
+ 1. Créer une liste associée à son utilisateur
+ 2. Ajouter un nouvel élément à une liste
+ 3. Faire une promesse d'offre pour un élément appartenant à une liste, associée à un utilisateur.
 
-A chaque souhait, on pourrait de manière facultative ajouter un prix. Dans ce cas, le souhait pourrait aussi être subdivisé en plusieurs part, de manière à être offert par plusieurs autres personnes.
+L'utilisateur ayant créé une liste pourra envoyer un email ou une notification aux utilisateurs enregistrés directement depuis le site aux personnes avec qui il souhaite partager sa liste, ce dernier contenant la manière d'y accéder.
 
-Un souhait pourrait aussi être réalisé plusieurs fois
+A chaque souhait, on pourrait de manière facultative ajouter un prix. Dans ce cas, le souhait pourrait aussi être subdivisé en plusieurs parts, de manière à ce que plusieurs personnes puissent participer à son acquisition.
+
+Un souhait pourrait aussi être réalisé plusieurs fois.
 
 Besoins fonctionnels du site gwift
 ----------------------------------
 
 ### Gestion des utilisateurs
 
-Pour gérer les utilisateurs, nous utiliserons directement ce que django met à notre disposition
+Pour gérer les utilisateurs, nous utiliserons ce que Django met par défaut à notre disposition.
 
 ### Gestion des listes
 
