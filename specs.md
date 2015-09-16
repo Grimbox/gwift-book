@@ -44,10 +44,10 @@ Les données suivantes doivent être associées à une liste:
 
 #### Fonctionnalités
 
- 1. Il faut pouvoir créer, modifier, désactiver et supprimer une liste, avec un utilisateur authentifié
- 2. Il faut pouvoir y associer ou retirer des souhaits avec un utilisateur authentifié
- 3. Il faut pouvoir accéder à une liste, avec un utilisateur authentifier ou non, via le uid.
- 4. Il faut pouvoir envoyer un email avec le lien vers la liste, contenant l'uid.
+ 1. Un utilisateur authentifié doit pouvoir créer, modifier, désactiver et supprimer une liste dont il est le propriétaire
+ 2. Un utilisateur doit pouvoir associer ou retirer des souhaits à une liste dont il est le propriétaire
+ 3. Il faut pouvoir accéder à une liste, avec un utilisateur authentifier ou non, *via* sont identifiant
+ 4. Il faut pouvoir envoyer un email avec le lien vers la liste, contenant son identifiant
  5. L'utilisateur doit pouvoir voir toutes les listes qui lui appartiennent
 
 ### Gestion des souhaits
@@ -62,11 +62,12 @@ Les données suivantes peuvent être associées à un souhait:
 * un nombre (1 par défaut)
 * un nombre de part facultatif, si un prix est fourni
 * la liste à laquelle il appartient
+* L'utilisateur qui l'a créée.
 
 #### Fonctionnalités
 
- 1. Il faut pouvoir créer, modifier, désactiver et supprimer un souhait, avec un utilisateur authentifié
- 2. On ne peut créer un souahit sans liste associée
+ 1. Un utilisateur authentifié doit pouvoir créer, modifier, désactiver et supprimer un souhait dont il est le propriétaire.
+ 2. On ne peut créer un souhait sans liste associée
  3. Il faut pouvoir fractionner un souhait uniquement si un prix est donné.
- 4. Il faut pouvoir accéder à un souhait, avec un utilisateur authentifier ou non.
- 5. Il faut pouvoir réaliser un souhait ou une partie seulement, avec un utilisateur authentifier ou non.
+ 4. Il faut pouvoir accéder à un souhait, avec un utilisateur authentifié ou non.
+ 5. Il faut pouvoir réaliser un souhait ou une partie seulement, avec un utilisateur authentifié ou non.
