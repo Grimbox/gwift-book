@@ -26,4 +26,30 @@ Rendez-vous dans ce répertoire, et activez-le grâce à la commande `source bin
 Django
 ------
 
-Comme l'environnement est activé, on peut à présent y installer Django. La librairie restera indépendante du reste du système, et ne polluera pas les autres projets.
+Comme l'environnement est activé, on peut à présent y installer Django. La librairie restera indépendante du reste du système, et ne polluera pas les autres projets. C'est parti: `pip install django`!
+
+```shell
+$ pip install django
+Collecting django
+  Downloading Django-1.8.4-py2.py3-none-any.whl (6.2MB)
+100% |################################| 6.2MB 91kB/s  eta 0:00:01
+Installing collected packages: django
+Successfully installed django-1.8.4
+```
+
+Les commandes de création d'un nouveau site sont à présent disponibles, la principale étant `django-admin startproject`. Par la suite, nous utiliserons `manage.py`, qui constitue un *wrapper* autour de `django-admin`.
+
+Pour démarrer notre projet, placez-vous dans l'environnement `gwift-env`, activez-le, installez django et lancez `django-admin startproject gwift`. Cette action aura pour effet de créer un nouveau dossier `gwift`, dans lequel on trouve la structure suivante:
+
+```
+gwift/
+  __init__.py
+  settings.py
+  urls.py
+  wsgi.py
+manage.py
+```
+
+ * `settings.py` contient tous les paramètres globaux à notre projet.
+ * `urls.py` contient les variables de routes, les adresses utilisées et les fonctions vers lesquelles elles pointent.
+ * `wsgi.py` contient la définition de l'interface [WSGI](https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface), qui permettra à votre serveur Web (Nginx, Apache, ...) de faire un pont vers votre projet.
