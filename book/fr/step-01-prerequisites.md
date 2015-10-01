@@ -53,3 +53,12 @@ manage.py
  * `settings.py` contient tous les paramètres globaux à notre projet.
  * `urls.py` contient les variables de routes, les adresses utilisées et les fonctions vers lesquelles elles pointent.
  * `wsgi.py` contient la définition de l'interface [WSGI](https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface), qui permettra à votre serveur Web (Nginx, Apache, ...) de faire un pont vers votre projet.
+
+Comme nous venons d'ajouter une dépendance à notre projet, nous allons créer un fichier reprenant tous les projets connexes. Ceux-ci sont placés dans un fichier `requirements.txt`. Dans un premier temps, ce fichier peut être placé directement à la racine du projet, mais on préférera rapidement le déplacer dans un sous-répertoire spécifique (`requirements`), afin de grouper les dépendances en fonction de leur utilité: 
+
+ * `base.txt`
+ * `dev.txt`
+ * `staging.txt`
+ * `production.txt`
+
+Au début de chaque fichier, il suffira d'ajouter la ligne `-r base.txt`, puis de lancer l'installation grâce à un `pip install -r <nom du fichier>`. De cette manière, il est tout à fait acceptable de n'installer `flake8` et `django-debug-toolbar` qu'en développement par exemple.  Dans l'immédiat, ajoutez simplement `django` dans le fichier `requirements/base.txt`.
