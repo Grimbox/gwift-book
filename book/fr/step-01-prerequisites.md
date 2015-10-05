@@ -44,7 +44,7 @@ Include/ Lib/ Scripts/
 Nous pouvons ensuite l'activer grâce à la commande `source gwirt-env/bin/activate`.
 
 ```shell
-$ source gwirt-env/bin/activate
+$ source gwift-env/bin/activate
 ```
 
 A présent, tous les binaires présents dans cet environnement prendront le pas sur les binaires du système. De la même manière, une variable *PATH* propre est définie et utilisée, afin que les librairies Python soient stockées dans le répertoire `gwift-env/Lib/site-packages/`. C'est notamment ici que nous retrouverons le code-source de Django, ainsi que des librairies externes une fois que nous les aurons installées.
