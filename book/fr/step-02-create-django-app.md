@@ -19,7 +19,7 @@ Comme expliqué un peu plus haut, le fichier `manage.py` est un *wrapper* sur le
  * `manage.py runserver` pour lancer un serveur de développement
  * `manage.py test` pour découvrir les tests unitaires disponibles et les lancer.
 
-La liste complète peut être affichée avec `manage.py help`. Vous remarquerez que ces commandes sont groupées: 
+La liste complète peut être affichée avec `manage.py help`. Vous remarquerez que ces commandes sont groupées:
 
  * **auth**: création d'un nouveau super-utilisateur, changer le mot de passe pour un utilisateur existant.
  * **django**: vérifier la *compliance* du projet, lancer un *shell*, *dumper* les données de la base, effectuer une migration du schéma, ...
@@ -31,22 +31,22 @@ Nous verrons plus tard comment ajouter de nouvelles commandes.
 Structure d'une application
 ---------------------------
 
-Maintenant que l'on a vu à quoi servait `manage.py`, on peut créer notre nouvelle application grâce à la commande `manage.py startapp <label>`. 
+Maintenant que l'on a vu à quoi servait `manage.py`, on peut créer notre nouvelle application grâce à la commande `manage.py startapp <label>`.
 Cette application servira à structurer les listes de souhaits, les éléments qui les composent et les parties que chaque utilisateur pour offrir. Essayez de trouver un nom éloquent, court et qui résume bien ce que fait l'application. Pour nous, ce sera donc `wish`. C'est parti pour `manage.py startapp wish`!
 
 ```shell
 $ cd gwift
 $ python manage.py startapp wish
-``` 
+```
 
-Résultat? Django nous a créé un répertoire `wish`, dans lequel on trouve les fichiers suivants: 
+Résultat? Django nous a créé un répertoire `wish`, dans lequel on trouve les fichiers suivants:
 
 ```shell
 $ ls -l wish
 admin.py  __init__.py  migrations  models.py  tests.py  views.py
-``` 
+```
 
-En résumé, chaque fichier a la fonction suivante: 
+En résumé, chaque fichier a la fonction suivante:
 
  * `admin.py` servira à structurer l'administration de notre application. Chaque information peut en effet être administrée facilement au travers d'une interface générée à la volée par le framework. On y reviendra par la suite.
  * `__init__.py` pour que notre répertoire `wish` soit converti en package Python.
@@ -54,4 +54,3 @@ En résumé, chaque fichier a la fonction suivante:
  * `models.py` pour représenter et structurer nos données.
  * `tests.py` pour les tests unitaires.
  * `views.py` pour définir ce que nous pouvons faire avec nos données.
-
