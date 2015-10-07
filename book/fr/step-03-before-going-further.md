@@ -37,3 +37,29 @@ Attention que celle-ci ne permet pas de vérifier que le code est **bien** test�
 ## Documentation
 
 Il existe plusieurs manières de générer la documentation d'un projet. Les plus connues sont [Sphinx](http://sphinx-doc.org/) et [MkDocs](http://www.mkdocs.org/). Le premier a l'avantage d'être plus reconnu dans la communauté Python que l'autre, de pouvoir *parser* le code pour en extraire la documentation et de pouvoir lancer des [tests orientés documentation](https://duckduckgo.com/?q=documentation+driven+development&t=ffsb). A contrario, votre syntaxe devra respecter [ReStructuredText](https://en.wikipedia.org/wiki/ReStructuredText). Le second a l'avantage d'avoir une syntaxe plus simple à apprendre et à comprendre, mais est plus limité dans son résultat.
+
+Dans l'immédiat, nous nous contenterons d'avoir des modules documentés (quelle que soit la méthode Sphinx/MkDocs/...). Dans la continuié avec `Flake8`, il existe un greffon qui vérifie la présence de commentaires au niveau des méthodes et modules développés.
+
+```shell
+pip install flake8_docstrings
+```
+
+Lancez ensuite `flake8` avec la commande `flake8 . --exclude="migrations"`. Sur notre projet (presque) vide, le résultat sera le suivant:
+
+```shell
+$ flake8 . --exclude="migrations"
+.\gwift\manage.py:1:1: D100  Missing docstring in public module
+.\gwift\gwift\__init__.py:1:1: D100  Missing docstring in public module
+.\gwift\gwift\urls.py:1:1: D400  First line should end with a period (not 'n')
+.\gwift\wish\__init__.py:1:1: D100  Missing docstring in public module
+.\gwift\wish\admin.py:1:1: D100  Missing docstring in public module
+.\gwift\wish\admin.py:1:1: F401 'admin' imported but unused
+.\gwift\wish\models.py:1:1: D100  Missing docstring in public module
+.\gwift\wish\models.py:1:1: F401 'models' imported but unused
+.\gwift\wish\tests.py:1:1: D100  Missing docstring in public module
+.\gwift\wish\tests.py:1:1: F401 'TestCase' imported but unused
+.\gwift\wish\views.py:1:1: D100  Missing docstring in public module
+.\gwift\wish\views.py:1:1: F401 'render' imported but unused
+```
+
+Bref, on le voit: nous n'avons que très peu de modules, et aucun d'eux n'est commenté.
