@@ -33,6 +33,15 @@ Finalement, la solution qui couvre ces deux domaines existe et s'intitule [flake
 La couverture de code donne un pourcentage lié à la quantité de code couvert par les testss.
 Attention que celle-ci ne permet pas de vérifier que le code est **bien** testé, elle permet juste de vérifier que le code est **testé**. Pour chaque fonction ou *statement* présent.
 
+## Complexité de McCabe
+
+La [complexité cyclomatique](https://fr.wikipedia.org/wiki/Nombre_cyclomatique) (ou complexité de McCabe) peut s'apparenter à une [...]
+
+A nouveau, un greffon pour `flake8` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre `--max-complexity`. Toute fonction dans la complexité est supérieure à 10 est considérée comme trop complexe.
+
+```shell
+
+```
 
 ## Documentation
 
