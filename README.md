@@ -1,10 +1,27 @@
-# Django
+# Installation
 
-[Django](https://www.djangoproject.com/) est l'un des frameworks Web proposant une très bonne intégration des composants, et une flexibilité bien pensée: chacun des composants permet de définir son contenu de manière poussée, en respectant des contraintes logiques et faciles à retenir.
+## Prérequis
 
-En restant dans les sentiers battus, votre projet suivra le patron de conception `MVC` (Modèle-Vue-Controleur), avec une petite variante sur les termes utilisés: Django les nomme respectivement Modèle-Template-Vue:
+`sudo aptitude install nodejs`.
+Après cela, lance `npm install` qui ira récupérer le contenu du fichier `package.json`.
 
- * Le modèle (`models.py`) fait le lien avec la base de données et permet de définir les champs et leur type à associer à une table. *Grosso modo*, une table SQL correspondra à une classe d'un modèle Django.
- * La vue (`views.py`), qui joue le rôle de contrôleur: *a priori*, tous les traitements, la récupération des données, etc. doit passer par ce composant et ne doit (pratiquement) pas être généré à la volée, directement à l'affichage d'une page.
- * Le template, qui s'occupe de la mise en forme: c'est le composant qui va s'occuper de transformer les données en un affichage compréhensible (avec l'aide du navigateur) pour l'utilisateur.
+## Editeur
 
+Il existe un éditeur pour Gitbook, qui offre pas mal de fonctionnalités sans avoir à tripatouiller la documentation; il est disponible à [l'adresse suivante](https://www.gitbook.com/editor/linux).
+
+Pour l'installation, un petit `dpkg -i gitbook-editor.x.y.z.deb`.
+Seul soucis: un compte Gitbook est requis.
+
+# Initialisation
+
+L'initiation du contenu peut se faire une fois que le module `gitbook-cli`aura été installé, grâce à la commande `nodejs node_modules/gitbook-cli/bin/gitbook.js init <folder>`.
+Cette commande se base sur le fichier `SUMMARY.md` pour générer l'arborescence correcte des fichiers (vides, dans un premier temps).
+
+# Compilation
+
+ * `nodejs node_modules/gitbook-cli/bin/gitbook.js build`
+ * `nodejs node_modules/gitbook-cli/bin/gitbook.js serve`
+
+## Formats supportés
+
+Pour les formats autres que HTML (PDF, Mobi & ePub), il faut installer `Calibre` grâce à un `aptitude install Calibre`. Attention qu'il y a un bon petit 300MB de dépendances...
