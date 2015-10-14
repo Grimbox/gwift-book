@@ -3,7 +3,7 @@ Avant propos
 
 Avant de démarrer le développement, il est nécessaire de passer un peu de temps sur la configuration de l'environnement.
 
-Nous allons utiliser [Python](https://www.python.org/), disponible sur la majorité des distributions Linux, ainsi que sur MacOS, dans des versions parfois différentes. Pour les utilisateurs de Windows, il sera sans doute nécessaire d'installer une version de l'interpréteur et de configurer la variable *PATH* pour votre utilisateur. Ajoutez-y `virtualenv` afin de créer un [environnement virtuel](http://sametmax.com/les-environnement-virtuels-python-virtualenv-et-virtualenvwrapper/) et les prérequis seront remplis.
+Nous allons utiliser [Python](https://www.python.org/), disponible sur la majorité des distributions Linux, ainsi que sur MacOS, dans des versions parfois différentes. Pour les utilisateurs de Windows, il sera sans doute nécessaire d'installer une version de l'interpréteur et de configurer la variable *PATH* pour votre utilisateur. Ajoutez-y `virtualenv` afin de créer un [environnement virtuel](http://sametmax.com/les-environnement-virtuels-python-virtualenv-et-virtualenvwrapper/), puis `virtualenvwrapper` pour en faciliter la gestion, et les prérequis seront remplis. 
 
 Les morceaux de code seront développés pour Python3.4+ et nécessiteront peut-être quelques adaptations pour fonctionner sur une version antérieure.
 
@@ -12,23 +12,25 @@ Remarque : les commandes qui seront exécutés dans ce livre le seront depuis un
 Création de l'environnement
 ---------------------------
 
-Nous commençons par créer le répertoire du projet, à savoir `gwift-project`.
+### Environnement virtuel
+
+Commencez par créer un environnement virtuel, afin d'y stocker les dépendances. Vérifiez dans votre fichier `~/.bashrc` (ou tout fichier lancé au démarrage de votre session) que la variable `WORKON_HOME` est bien définie. Faites ensuite un `source` sur le fichier `virtualenvwrapper.sh` (à adapter en fonction de votre distribution):
 
 ```shell
-$ mkdir gwift-project
-$ cd gwift-project
+# ~/.bashrc
+
+[...]
+
+WORKON_HOME=~/.virtualenvs
+source /usr/local/bin/virtualenvwrapper.sh
 ```
 
-Ensuite, dans ce répertoire, nous créons notre répertoire d'environnement virtuel pour python avec `virtualenv`. Ce comportement a énormément d'avantages, notamment:
+L'intérêt de ceci ? Ne pas devoir se soucier de l'emplacement des environnements virtuels, et pouvoir entièrement les découpler des sources sur lesquelles vous travaillez, en plus d'isoler le code, de créer un containeur pour les dépendances et d'être indépendant des librairies tierces déjà installées sur le système.
 
- * Isolation du code
- * Création d'un containeur pour les dépendances
- * Indépendances des librairies tierces déjà présentes sur la machine.
-
-Lancez `virtualenv gwift-env` (ou le chemin vers le binaire de virtualenv à utiliser).
+Lancez `mkvirtualenv gwift-env`.
 
 ```shell
-$ virtualenv gwift-env
+$ mkvirtualenv -p python3 gwift-env
 New python executable in gwift-env/bin/python3
 Also creating executable in gwift-env/bin/python
 Installing setuptools, pip...done.
@@ -41,16 +43,30 @@ $ ls gwift-env
 Include/ Lib/ Scripts/
 ```
 
-Nous pouvons ensuite l'activer grâce à la commande `source gwirt-env/bin/activate`.
-
-```shell
-$ source gwift-env/bin/activate
-```
+Nous pouvons ensuite l'activer grâce à la commande `source gwift-env/bin/activate` avec `virtualenv` et `workon gwift-env` avec `virtualenvwrapper`.
 
 A présent, tous les binaires présents dans cet environnement prendront le pas sur les binaires du système. De la même manière, une variable *PATH* propre est définie et utilisée, afin que les librairies Python soient stockées dans le répertoire `gwift-env/Lib/site-packages/`. C'est notamment ici que nous retrouverons le code-source de Django, ainsi que des librairies externes une fois que nous les aurons installées.
 
-Django
-------
+```shell
+$ tree .
+.virtualenvs
+    project1
+    project2
+    ...
+sources
+    gwift-project
+    other-project
+    ...
+```
+
+### Fichiers sources
+
+Nous commençons par créer le répertoire du projet, à savoir `gwift-project`.
+
+```shell
+$ mkdir gwift-project
+$ cd gwift-project
+```
 
 Comme l'environnement est activé, on peut à présent y installer Django. La librairie restera indépendante du reste du système, et ne polluera pas les autres projets.
 
