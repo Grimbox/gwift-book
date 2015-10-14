@@ -7,12 +7,33 @@ L'ORM de Django permet de définir travailler uniquement avec une définition de
 
 Lors de la définition d'une nouvelle classe, et puisque l'ORM se base sur Active Records, il peut être intéressant de définir une valeur pour les options suivantes:
 
- * `def __str__(self)`: retournera une chaîne de caractère pour toute instance de la classe
- * `def get_absolute_url(self)` : retourne l'URI à laquelle on peut envoyer une requête pour obtenir le maximum d'informations concernant cette instance. Par exemple: `return reverse('myapp.views.details', args=[self.id])`. Lorsqu'on en aura besoin, il suffira d'appeler cette méthode pour atterrir d'office sur la bonne page
-   * class Meta:
-    * ordering = ['-field1', 'field2']
-    * verbose_name = 'my class in singular'
-    * verbose_name_plural = 'my class when is in a list!'
+## Une représentation textuelle
+
+Surcharger la fonction `def __str__(self)` sur la classe permettra de retourner une chaîne de caractère qui représentera l'instance de la classe. Cette information est utilisée un peu partout dans le code, et donnera une meilleure idée de ce qu'on manipule. 
+En plus, c'est aussi ceci qui est appelé lorsque l'admin de Django historisera une action (et ceci sera inaltérable).
+
+## URL absolue
+
+La méthode `def get_absolute_url(self)` retourne l'URL à laquelle on peut envoyer une requête pour obtenir le maximum d'informations 
+concernant cette instance. 
+
+Par exemple: 
+
+```python
+def get_absolute_url(self):
+    return reverse('myapp.views.details', args=[self.id])
+```
+
+Lorsqu'on en aura besoin, il suffira d'appeler cette méthode pour atterrir d'office sur la page de détails pour cette instance.
+
+## Meta
+
+```python
+class Meta:
+    ordering = ['-field1', 'field2']
+    verbose_name = 'my class in singular'
+    verbose_name_plural = 'my class when is in a list!'
+```
 
 Titre
 -----
