@@ -1,6 +1,8 @@
 # Summary
 
 * [Introduction](README.md)
-  * [step-01](step-01-prerequisites.md)
-  * [step-02](step-02-create-django-app.md)
-  * [step-03](step-03-before-going-further.md)
+  * [Avant-propos](intro/step-01-prerequisites.md)
+  * [Une application Django](intro/step-02-create-django-app.md)
+  * [Avant d'aller plus loin](intro/step-03-before-going-further.md)
+* [Gwift](gwift/specs.md)
+  * [Modèle](gwift/models.md)

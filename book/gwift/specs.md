@@ -1,18 +1,24 @@
-Gwift
-=====
+Single App
+==========
+
+Pour commencer, nous allons nous concentrer sur la création d'un site ne contenant qu'une seule application, même si en pratique le site contiendra déjà plusieurs applications fournies pas django, comme nous le verrons plus loin.
+
+Pour prendre un exemple concret, nous allons créer un site permettant de gérer des listes de souhaits, que nous appellerons `gwift` (pour `GiFTs and WIshlisTs` :)).
+
+La première chose à faire est de définir nos besoins du point de vue de l'utilisateur, c'est-à-dire ce que nous souhaitons qu'un utilisateur puisse faire avec l'application.
+
+Ensuite, nous pourrons traduire ces besoins en fonctionnalités et finalement effectuer le développement
 
 Besoins utilisateur du site gwift
 ---------------------------------
 
 Nous souhaitons développer un site où un utilisateur donné peut créer une liste contenant des souhaits et où d'autres utilisateurs, authentifiés ou non, peuvent choisir les souhaits qu'ils souhaitent réaliser.
-
 Il sera nécessaire de s'authentifier pour : 
 
  1. Créer une liste associée à l'utilisateur en cours
  1. Ajouter un nouvel élément à une liste
  
 Il ne sera pas nécessaire de s'authentifier pour :
-
  1. Faire une promesse d'offre pour un élément appartenant à une liste, associée à un utilisateur.
 
 L'utilisateur ayant créé une liste pourra envoyer un email directement depuis le site aux personnes avec qui il souhaite partager sa liste, cet email contenant un lien permettant d'accéder à cette liste.
@@ -30,22 +36,16 @@ Pour gérer les utilisateurs, nous utiliserons ce que Django met par défaut à 
 
 ### Gestion des listes
 
-Les listes seront gérées par leur créateur. Plusieurs pages seront développées pour permettre aux utilisateurs de: 
-
- 1. Créer une liste
- 1. Ajouter des éléments à cette liste.
-
 #### Modèlisation
 
 Les données suivantes doivent être associées à une liste:
-
- * un identifiant
- * un identifiant externe
- * un nom
- * une description
- * le propriétaire
- * une date de création
- * une date de modification
+* un identifiant
+* un identifiant externe
+* un nom
+* une description
+* le propriétaire
+* une date de création
+* une date de modification
 
 #### Fonctionnalités
 
@@ -60,18 +60,17 @@ Les données suivantes doivent être associées à une liste:
 #### Modélisation
 
 Les données suivantes peuvent être associées à un souhait:
- 
- * un identifiant
- * identifiant de la liste
- * un nom
- * une description
- * le propriétaire
- * une date de création
- * une date de modification
- * une image
- * un nombre (1 par défaut)
- * un prix facultatif
- * un nombre de part facultatif, si un prix est fourni.
+* un identifiant
+* identifiant de la liste
+* un nom
+* une description
+* le propriétaire
+* une date de création
+* une date de modification
+* une image
+* un nombre (1 par défaut)
+* un prix facultatif
+* un nombre de part facultatif, si un prix est fourni.
 
 #### Fonctionnalités
 
@@ -89,12 +88,11 @@ Les données suivantes peuvent être associées à un souhait:
 #### Modélisation
 
 Les données suivantes peuvent être associées à une réalisation de souhait:
-
- * identifiant du souhait
- * identifiant de l'utilisateur si connu
- * identifiant de la personne si utilisateur non connu
- * un commentaire
- * une date de réalisation
+* identifiant du souhait
+* identifiant de l'utilisateur si connu
+* identifiant de la personne si utilisateur non connu
+* un commentaire
+* une date de réalisation
 
 #### Fonctionnalités
 

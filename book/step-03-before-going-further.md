@@ -72,3 +72,5 @@ $ flake8 . --exclude="migrations"
 ```
 
 Bref, on le voit: nous n'avons que très peu de modules, et aucun d'eux n'est commenté.
+
+En plus de cette méthode, Django permet également de rendre la documentation accessible depuis son interface d'administration.
