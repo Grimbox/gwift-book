@@ -8,7 +8,7 @@ L'ORM de Django permet de définir travailler uniquement avec une définition de
 Lors de la définition d'une nouvelle classe, et puisque l'ORM se base sur Active Records, il peut être intéressant de définir une valeur pour les options suivantes:
 
  * `def __str__(self)`: retournera une chaîne de caractère pour toute instance de la classe
- * `def get_absolute_url(self) : retourne l'URI à laquelle on peut envoyer une requête pour obtenir le maximum d'informations concernant cette instance. Par exemple: `return reverse('myapp.views.details', args=[self.id])`. Lorsqu'on en aura besoin, il suffira d'appeler cette méthode pour atterrir d'office sur la bonne page
+ * `def get_absolute_url(self)` : retourne l'URI à laquelle on peut envoyer une requête pour obtenir le maximum d'informations concernant cette instance. Par exemple: `return reverse('myapp.views.details', args=[self.id])`. Lorsqu'on en aura besoin, il suffira d'appeler cette méthode pour atterrir d'office sur la bonne page
    * class Meta:
     * ordering = ['-field1', 'field2']
     * verbose_name = 'my class in singular'
