@@ -5,7 +5,7 @@ Avant de démarrer le développement, il est nécessaire de passer un peu de tem
 
 Nous allons utiliser [Python](https://www.python.org/), disponible sur la majorité des distributions Linux, ainsi que sur MacOS, dans des versions parfois différentes. Pour les utilisateurs de Windows, il sera sans doute nécessaire d'installer une version de l'interpréteur et de configurer la variable *PATH* pour votre utilisateur. Ajoutez-y `virtualenv` afin de créer un [environnement virtuel](http://sametmax.com/les-environnement-virtuels-python-virtualenv-et-virtualenvwrapper/), puis `virtualenvwrapper` pour en faciliter la gestion, et les prérequis seront remplis. 
 
-Les morceaux de code seront développés pour Python3.4+ et nécessiteront peut-être quelques adaptations pour fonctionner sur une version antérieure.
+Les morceaux de code seront développés pour Python3.4+ et Django 1.8+. Ils nécessiteront peut-être quelques adaptations pour fonctionner sur une version antérieure.
 
 Remarque : les commandes qui seront exécutés dans ce livre le seront depuis un shell sous linux. Certaines devrons donc être adaptés si vous êtes dans un autre environnemnet.
 
