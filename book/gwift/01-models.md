@@ -8,6 +8,23 @@ Comme on l'a vu dans la description des fonctionnalités, on va *grosso modo* av
  * Des utilisateurs pour gérer tout ceci.
 
 Nous proposons dans un premier temps d'éluder la gestion des utilisateurs, et de simplement se concentrer sur les fonctionnalités principales.
+Cela nous donne ceci: 
+
+```python
+from django.db import models
+
+
+class Wishlist(models.Model):
+    pass
+
+
+class Item(models.Model):
+    pass
+
+
+class Part(models.Model):
+    pass
+```
 
 ## Listes de souhaits
 
