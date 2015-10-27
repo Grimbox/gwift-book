@@ -121,6 +121,45 @@ Le problème est que les identifiants seront définis et incrémentés au niveau
 
 Lorsqu'on définit une classe de type **proxy**, on fait en sorte que cette nouvelle classe ne définisse aucun nouveau champ sur la classe mère. Cela ne change dès lors rien à la traduction du modèle de données en SQL, puisque la classe mère sera traduite par une table, et la classe fille ira récupérer les mêmes informations dans la même table: elle ne fera qu'ajouter ou modifier un comportement dynamiquement, sans ajouter d'emplacements de stockage supplémentaires.
 
+Nous pourrions ainsi défiinr les classes suivantes:
+
+```python
+# wish/models.py
+
+class Wishlist(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=2000)
+    expiration_date = models.DateField()
+
+    @staticmethod
+    def create(self, name, description):
+        wishlist = Wishlist()
+        wishlist.name = name
+        wishlist.description = description
+        wishlist.save()
+        return wishlist
+
+class ChristmasWishlist(Wishlist):
+
+    @staticmethod
+    def create(self, name, description):
+        w = Wishlist.create(name, description)
+        w.expiration_date = datetime(current_year, 12, 31)
+        w.save()
+
+
+class EasterWishlist(Wishlist):
+
+    @staticmethod
+    def create(self, name, description):
+        w = Wishlist.create(name, description)
+        w.expiration_date = datetime(current_year, 4, 1)
+        w.save()
+
+``` 
+
+Cette représentation viole plusieurs principes suivis par Django et ne sert qu'à représenter une classe Proxy. Nous verrons plus loin qu'il sera plus facile de créer des formulaires dépendant de notre modèle `Wishlist` et dans lequel la date d'expiration sera fixée, plutôt que de créer de nouvelles classes modèles.
+
 ## Gestion des utilisateurs
 
 Dans les spécifications, nous souhaitions pouvoir associer un utilisateur à une liste (*le propriétaire*) et un utilisateur à une part (*le donateur*). Par défaut, Django offre une gestion simplifiée des utilisateurs (pas de connexion LDAP, pas de double authentification, ...): juste un utilisateur et un mot de passe. Pour y accéder, un paramètre par défaut est défini dans votre fichier de settings: `AUTH_USER_MODEL`.
