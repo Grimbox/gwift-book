@@ -14,7 +14,9 @@ urlpatterns = [
 ]
 ```
 
-Le champ `urlpatterns` associe un ensemble d'adresses à des fonctions. Dans le fichier *nu*, seul le *pattern* `^admin/` est défini, et inclut toutes les adresses qui sont définies dans le fichier `admin.site.urls`. Reportez-vous à l'installation de l'environnement: ce fichier contient les informations suivantes:
+Le champ `urlpatterns` associe un ensemble d'adresses à des fonctions. Dans le fichier *nu*, seul le *pattern* `^admin/` [^1] est défini, et inclut toutes les adresses qui sont définies dans le fichier `admin.site.urls`. Reportez-vous à l'installation de l'environnement: ce fichier contient les informations suivantes:
+
+[^1] Rappelez-vous de vos expressions régulières: `^` indique le début de la chaîne.
 
 ```python
 # admin.site.urls.py
