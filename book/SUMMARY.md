@@ -9,3 +9,4 @@
   * [Vues](gwift/02-views.md)
   * [URLs](gwift/03-urls.md)
   * [Forms](gwift/05-forms.md)
+  * [Administration](gwift/06-admin.md)
