@@ -1,6 +1,13 @@
 Introduction
 ============
 
+Django se présente comme un [Framework Web pour perfectionnistes ayant des deadlines](https://www.djangoproject.com/). [Django suit quelques principes](https://docs.djangoproject.com/en/dev/misc/design-philosophies/):
+
+ * Faible couplage et forte cohésion, pour que chaque composant ait son indépendance.
+ * Moins de code, plus de fonctionnalités.
+ * [Don't repeat yourself](https://fr.wikipedia.org/wiki/Sec): ne pas se répéter!
+ * Rapidié du développement.
+
 Pour commencer, nous allons nous concentrer sur la création d'un site ne contenant qu'une seule application, même si en pratique le site contiendra déjà plusieurs applications fournies pas django, comme nous le verrons plus loin.
 
 Pour prendre un exemple concret, nous allons créer un site permettant de gérer des listes de souhaits, que nous appellerons `gwift` (pour `GiFTs and WIshlisTs` :)).
