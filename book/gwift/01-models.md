@@ -79,11 +79,47 @@ On constate que chaque classe possède les propriétés `created_at` et `updated
  
 ### Classe abstraite
 
+L'héritage par classe abstraite consiste à déterminer une classe mère qui ne sera jamais instanciée. C'est utile pour définir des champs qui se répèteront dans plusieurs autres classes et surtout pour respecter le principe de DRY. Comme la classe mère ne sera jamais instanciée, ces champs seront en fait dupliqués physiquement, et traduits en SQL, dans chacune des classes filles. 
+
+```python
+# wish/models.py
+
+class AbstractModel(models.Model):
+    class Meta:
+        abstract = True
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Wishlist(AbstractModel):
+    pass
+
+
+class Item(AbstractModel):
+    pass
+
+
+class Part(AbstractModel):
+    pass
+```
+
+En traduisant ceci en SQL, on aura en fait trois tables, chacune reprenant les champs `created_at` et `updated_at`, ainsi que son propre identifiant.
+
 ### Héritage classique
+
+L'héritage classique est généralement déconseillé, car il peut introduire très rapidement un problème de performances: en reprenant l'exemple introduit avec l'héritage par classe abstraite, et en omettant l'attribut `abstract = True`, on se retrouvera en fait avec quatre tables SQL:
+
+ * Une table `AbstractModel`, qui reprend les deux champs `created_at` et `updated_at`
+ * Une table `Wishlist`
+ * Une table `Item`
+ * Une table `Part`.
+
+Le problème est que les identifiants seront définis et incrémentés au niveau de la table mère, et que pour obtenir les informations héritées, nous seront obligés de faire une jointure. En gros, impossible d'obtenir les données complètes pour l'une des classes de notre travail de base sans effectuer un *join* sur la classe mère. Dans ce sens, cela va encore... Mais imaginez que vous définissiez une classe `Wishlist`, de laquelle héritent les classes `ChristmasWishlist` et `EasterWishlist`: pour obtenir la liste complètes des listes de souhaits, il vous faudra faire une jointure externe sur chacune des tables possibles, avant même d'avoir commencé à remplir vos données. La [dénormalisation] entre rapidement en jeu pour garder des performances correctes. 
 
 ### Classe proxy
 
-Lorsqu'on définit une classe de type **proxy**, on fait en sorte que cette nouvelle classe ne définisse aucun nouveau champ sur la classe mère. Cela ne change dès lors rien à la traduction du modèle de données en SQL.
+Lorsqu'on définit une classe de type **proxy**, on fait en sorte que cette nouvelle classe ne définisse aucun nouveau champ sur la classe mère. Cela ne change dès lors rien à la traduction du modèle de données en SQL, puisque la classe mère sera traduite par une table, et la classe fille ira récupérer les mêmes informations dans la même table: elle ne fera qu'ajouter ou modifier un comportement dynamiquement, sans ajouter d'emplacements de stockage supplémentaires.
 
 ## Gestion des utilisateurs
 
