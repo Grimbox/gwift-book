@@ -30,6 +30,8 @@ class Part(models.Model):
 
 Les classes sont créées, mais vides. Entrons dans les détails.
 
+[Ajouter pourquoi on hérite de `models.Model`, etc.)
+
 ## Listes de souhaits
 
 Comme déjà décrit précédemment, les listes de souhaits peuvent s'apparenter simplement à un objet ayant un nom et une description. Pour rappel, voici ce qui avait été défini dans les spécifications:
@@ -71,7 +73,7 @@ A présent, notre classe
 
 ## Refactoring
 
-On constate que chaque classe possède les propriétés `created_at` et `updated_at`, initialisées aux mêmes valeurs. Pour gagner en cohérence, nous allons créer une classe dans laquelle nous définirons ces deux champs, et nous ferons en sorte que les classes `Wishlist`, `Item` et `Part` en héritent. Django gère trois sortes d'héritage: 
+On constate que plusieurs classes possèdent les propriétés `created_at` et `updated_at`, initialisées aux mêmes valeurs. Pour gagner en cohérence, nous allons créer une classe dans laquelle nous définirons ces deux champs, et nous ferons en sorte que les classes `Wishlist`, `Item` et `Part` en héritent. Django gère trois sortes d'héritage: 
 
  1. L'héritage par classe abstraite
  1. L'héritage classique
