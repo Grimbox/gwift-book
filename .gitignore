@@ -3,3 +3,5 @@ _book/
 *.swp
 *.pdf
 *.*~
+build
+*.log

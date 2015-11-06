@@ -1,3 +1,4 @@
+=====
 Gwift
 =====
 
@@ -9,4 +10,4 @@ La première chose à faire est de définir nos besoins du point de vue de l'uti
 
 Ensuite, nous pourrons traduire ces besoins en fonctionnalités et finalement effectuer le développement
 
-
+.. include:: specs/00-specs.rst
