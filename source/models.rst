@@ -248,7 +248,33 @@ L'héritage par classe abstraite consiste à déterminer une classe mère qui ne
     class Part(AbstractModel):
         pass
 
-En traduisant ceci en SQL, on aura en fait trois tables, chacune reprenant les champs `created_at` et `updated_at`, ainsi que son propre identifiant.
+En traduisant ceci en SQL, on aura en fait trois tables, chacune reprenant les champs `created_at` et `updated_at`, ainsi que son propre identifiant:
+
+.. code-block:: sql
+
+  --$ python manage.py sql wish
+  BEGIN;
+  CREATE TABLE "wish_wishlist" (
+      "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+      "created_at" datetime NOT NULL,
+      "updated_at" datetime NOT NULL
+  )
+  ;
+  CREATE TABLE "wish_item" (
+      "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+      "created_at" datetime NOT NULL,
+      "updated_at" datetime NOT NULL
+  )
+  ;
+  CREATE TABLE "wish_part" (
+      "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+      "created_at" datetime NOT NULL,
+      "updated_at" datetime NOT NULL
+  )
+  ;
+
+  COMMIT;
+
 
 
 Héritage classique
@@ -261,8 +287,35 @@ L'héritage classique est généralement déconseillé, car il peut introduire t
  * Une table ``Item``
  * Une table ``Part``.
 
-Le problème est que les identifiants seront définis et incrémentés au niveau de la table mère, et que pour obtenir les informations héritées, nous seront obligés de faire une jointure. En gros, impossible d'obtenir les données complètes pour l'une des classes de notre travail de base sans effectuer un *join* sur la classe mère. Dans ce sens, cela va encore... Mais imaginez que vous définissiez une classe `Wishlist`, de laquelle héritent les classes `ChristmasWishlist` et `EasterWishlist`: pour obtenir la liste complètes des listes de souhaits, il vous faudra faire une jointure externe sur chacune des tables possibles, avant même d'avoir commencé à remplir vos données. La [dénormalisation] entre rapidement en jeu pour garder des performances correctes.
+.. code-block:: sql
 
+    --$ python manage.py sql wish
+
+    BEGIN;
+    CREATE TABLE "wish_abstractmodel" (
+       "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+       "created_at" datetime NOT NULL,
+       "updated_at" datetime NOT NULL
+    )
+    ;
+    CREATE TABLE "wish_wishlist" (
+       "abstractmodel_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "wish_abstractmodel" ("id")
+    )
+    ;
+    CREATE TABLE "wish_item" (
+       "abstractmodel_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "wish_abstractmodel" ("id")
+    )
+    ;
+    CREATE TABLE "wish_part" (
+       "abstractmodel_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "wish_abstractmodel" ("id")
+    )
+    ;
+
+    COMMIT;
+
+Le problème est que les identifiants seront définis et incrémentés au niveau de la table mère. Pour obtenir les informations héritées, nous seront obligés de faire une jointure. En gros, impossible d'obtenir les données complètes pour l'une des classes de notre travail de base sans effectuer un *join* sur la classe mère.
+
+Dans ce sens, cela va encore... Mais imaginez que vous définissiez une classe `Wishlist`, de laquelle héritent les classes `ChristmasWishlist` et `EasterWishlist`: pour obtenir la liste complètes des listes de souhaits, il vous faudra faire une jointure **externe** sur chacune des tables possibles, avant même d'avoir commencé à remplir vos données. Il est parfois nécessaire de passer par cette modélisation, mais en étant conscient des risques inhérents.
 
 Classe proxy
 ============
@@ -281,10 +334,11 @@ Nous pourrions ainsi défiinr les classes suivantes:
         expiration_date = models.DateField()
 
         @staticmethod
-        def create(self, name, description):
+        def create(self, name, description, expiration_date=None):
             wishlist = Wishlist()
             wishlist.name = name
             wishlist.description = description
+            wishlist.expiration_date = expiration_date
             wishlist.save()
             return wishlist
 
@@ -292,8 +346,8 @@ Nous pourrions ainsi défiinr les classes suivantes:
 
         @staticmethod
         def create(self, name, description):
-            w = Wishlist.create(name, description)
-            w.expiration_date = datetime(current_year, 12, 31)
+            christmas = datetime(current_year, 12, 31)
+            w = Wishlist.create(name, description, christmas)
             w.save()
 
 
@@ -301,12 +355,9 @@ Nous pourrions ainsi défiinr les classes suivantes:
 
         @staticmethod
         def create(self, name, description):
-            w = Wishlist.create(name, description)
-            w.expiration_date = datetime(current_year, 4, 1)
+            expiration_date = datetime(current_year, 4, 1)
+            w = Wishlist.create(name, description, expiration_date)
             w.save()
-
-Cette représentation viole plusieurs principes suivis par Django et ne sert qu'à représenter une classe Proxy. Nous verrons plus loin qu'il sera plus facile de créer des formulaires dépendant de notre modèle ``Wishlist`` et dans lequel la date d'expiration sera fixée, plutôt que de créer de nouvelles classes modèles.
-
 
 ************************
 Gestion des utilisateurs
