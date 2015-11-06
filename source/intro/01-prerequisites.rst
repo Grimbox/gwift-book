@@ -13,7 +13,7 @@ Les morceaux de code seront développés pour Python3.4+ et Django 1.8+. Ils né
 Création de l'environnement
 ===========================
 
-Commencez par créer un environnement virtuel, afin d'y stocker les dépendances. Vérifiez dans votre fichier `~/.bashrc` (ou tout fichier lancé au démarrage de votre session) que la variable `WORKON_HOME` est bien définie. Faites ensuite un `source` sur le fichier `virtualenvwrapper.sh` (à adapter en fonction de votre distribution):
+Commencez par créer un environnement virtuel, afin d'y stocker les dépendances. Vérifiez dans votre fichier `~/.bashrc` (ou tout fichier lancé au démarrage de votre session) que la variable ``WORKON_HOME`` est bien définie. Faites ensuite un `source` sur le fichier `virtualenvwrapper.sh` (à adapter en fonction de votre distribution):
 
 .. code-block:: shell
     

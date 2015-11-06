@@ -47,7 +47,7 @@ A nouveau, un greffon pour `flake8` existe et donnera une estimation de la compl
 
 .. code-block:: shell
 
-    $ 
+    $
 
 
 Documentation
