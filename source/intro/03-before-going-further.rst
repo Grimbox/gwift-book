@@ -5,7 +5,7 @@ Avant d'aller plus loin...
 Avant d'aller plus loin, donc, un petit point sur les conventions, les tests (unitaires, orientés comportement, basés sur la documentation, ...) et sur la documentation. Plus que dans tout langage compilé, ceux-ci sont pratiquement obligatoires. Vous pourrez les voir comme une perte de temps dans un premier temps, mais nous vous promettons qu'ils vous en feront gagner par la suite.
 
 PEP8
-****
+====
 
 Le langage Python fonctionne avec un système d'améliorations basées sur des propositions: les PEP, ou "Python Enhancement Proposal". Chacune d'entre elles doit être approuvée par le `Benevolent Dictator For Life <http://fr.wikipedia.org/wiki/Benevolent_Dictator_for_Life>`_.
 
@@ -47,7 +47,7 @@ A nouveau, un greffon pour `flake8` existe et donnera une estimation de la compl
 
 .. code-block:: shell
 
-    $
+    $ 
 
 
 Documentation
@@ -58,7 +58,7 @@ Il existe plusieurs manières de générer la documentation d'un projet. Les plu
 Dans l'immédiat, nous nous contenterons d'avoir des modules documentés (quelle que soit la méthode Sphinx/MkDocs/...). Dans la continuié avec `Flake8`, il existe un greffon qui vérifie la présence de commentaires au niveau des méthodes et modules développés.
 
 .. code-block:: shell
-    
+
     pip install flake8_docstrings
 
 Lancez ensuite `flake8` avec la commande `flake8 . --exclude="migrations"`. Sur notre projet (presque) vide, le résultat sera le suivant:
