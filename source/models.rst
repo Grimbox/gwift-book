@@ -2,7 +2,7 @@
 Modélisation
 ============
 
-L'ORM de Django permet de définir travailler uniquement avec une définition de classes, et de faire en sorte que le lien avec la base de données soit géré uniquement de manière indirecte, par Django lui-même. On peut schématiser ce comportement par  une classe = une table.
+L'ORM de Django permet de travailler uniquement avec une définition de classes, et de faire en sorte que le lien avec la base de données soit géré uniquement de manière indirecte, par Django lui-même. On peut schématiser ce comportement par  une classe = une table.
 
 Comme on l'a vu dans la description des fonctionnalités, on va *grosso modo* avoir besoin des éléments suivants:
 
@@ -72,7 +72,7 @@ Que peut-on constater?
 
 Au niveau de notre modélisation:
 
- * La propriété ``created_at`` est gérée automatiquement par Django grâce à l'attribut ``auto_now_add``: de cette manière, lors d'un **ajout**, une valeur par défaut ("*maintenant*") sera attribuée à cette propriété
+ * La propriété ``created_at`` est gérée automatiquement par Django grâce à l'attribut ``auto_now_add``: de cette manière, lors d'un **ajout**, une valeur par défaut ("*maintenant*") sera attribuée à cette propriété.
  * La propriété ``updated_at`` est également gérée automatique, cette fois grâce à l'attribut ``auto_now`` initialisé à ``True``: lors d'une **mise à jour**, la propriété se verra automatiquement assigner la valeur du moment présent. Cela ne permet évidemment pas de gérer un historique complet et ne nous dira pas **quels champs** ont été modifiés, mais cela nous conviendra dans un premier temps.
  * La propriété ``external_id`` est de type ``UUIDField``. Lorsqu'une nouvelle instance sera instanciée, cette propriété prendra la valeur générée par la fonction ``uuid.uuid4()``. *A priori*, chacun des types de champs possède une propriété ``default``, qui permet d'initialiser une valeur sur une nouvelle instance.
 
@@ -119,7 +119,7 @@ A nouveau, que peut-on constater ?
  * L'attribut ``default`` permet de spécifier une valeur initiale, utilisée lors de la construction de l'instance. Cet attribut peut également être une fonction.
  * Pour rendre un champ optionnel, il suffit de lui ajouter l'attribut ``null=True``.
  * Comme cité ci-dessus, chaque champ possède des attributs spécifiques. Le champ ``DecimalField`` possède par exemple les attributs ``max_digits`` et ``decimal_places``, qui nous permettra de représenter une valeur comprise entre 0 et plus d'un milliard (avec deux chiffres décimaux).
- * L'ajout d'un champ de type ``ImageField`` nécessite l'installation de ``pillow`` pour la gestion des images. On peut l'ajouter à nos pré-requis, dans le fichier ``requirements/base.txt`` pour ne plus rencontrer cette erreur.
+ * L'ajout d'un champ de type ``ImageField`` nécessite l'installation de ``pillow`` pour la gestion des images. Nous l'ajoutons donc à nos pré-requis, dans le fichier ``requirements/base.txt``.
 
 *******
 Parties
@@ -163,7 +163,7 @@ Si vous décidez de définir un constructeur sur votre modèle, ne surchargez pa
 Relations
 =========
 
-Lorsque vous déclarez une relation 1-1, 1-N ou N-N entre deux classes, n'oubliez pas d'ajouter l'attribut ``related_name``. Cet attribut permet de nommer la relation inverse. Dans le cas de nos listes et de leurs souhaits, on a la relation suivante:
+Dans le cas de nos listes et de leurs souhaits, on a la relation suivante:
 
 .. code-block:: python
 
@@ -178,7 +178,7 @@ Lorsque vous déclarez une relation 1-1, 1-N ou N-N entre deux classes, n'oublie
 
 Depuis le code, à partir de l'instance de la classe ``Item``, on peut donc accéder à la liste en appelant la propriété ``wishlist`` de notre instance. *A contrario*, depuis une instance de type ``Wishlist``, on peut accéder à tous les éléments liés grâce à ``<nom de la propriété>_set``; ici ``item_set``.
 
-Si, dans une classe A, plusieurs relations sont liées à une classe B. Django ne saura pas à quoi correspondra la relation inverse. Pour palier à ce problème et pour gagner en cohérence, on fixe alors une valeur à l'attribut ``related_name``:
+Lorsque vous déclarez une relation 1-1, 1-N ou N-N entre deux classes, vou pouvez d'ajouter l'attribut ``related_name``. Cet attribut permet de nommer la relation inverse. 
 
 .. code-block:: python
 
@@ -207,6 +207,8 @@ A partir de maintenant, on peut accéder à nos propriétés de la manière suiv
     >>>
     >>> w.items.all()
     [<Item: Item object>]
+
+Remarque: si, dans une classe A, plusieurs relations sont liées à une classe B, Django ne saura pas à quoi correspondra la relation inverse. Pour palier à ce problème et pour gagner en cohérence, on fixe alors une valeur à l'attribut ``related_name``.
 
 
 ***********
@@ -322,7 +324,7 @@ Classe proxy
 
 Lorsqu'on définit une classe de type **proxy**, on fait en sorte que cette nouvelle classe ne définisse aucun nouveau champ sur la classe mère. Cela ne change dès lors rien à la traduction du modèle de données en SQL, puisque la classe mère sera traduite par une table, et la classe fille ira récupérer les mêmes informations dans la même table: elle ne fera qu'ajouter ou modifier un comportement dynamiquement, sans ajouter d'emplacements de stockage supplémentaires.
 
-Nous pourrions ainsi défiinr les classes suivantes:
+Nous pourrions ainsi définir les classes suivantes:
 
 .. code-block:: python
 
@@ -343,6 +345,8 @@ Nous pourrions ainsi défiinr les classes suivantes:
             return wishlist
 
     class ChristmasWishlist(Wishlist):
+        class Meta:
+            proxy = True
 
         @staticmethod
         def create(self, name, description):
@@ -352,6 +356,8 @@ Nous pourrions ainsi défiinr les classes suivantes:
 
 
     class EasterWishlist(Wishlist):
+        class Meta:
+            proxy = True
 
         @staticmethod
         def create(self, name, description):
