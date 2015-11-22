@@ -37,6 +37,7 @@ Tests et couverture de code
 La couverture de code donne un pourcentage lié à la quantité de code couvert par les testss.
 Attention que celle-ci ne permet pas de vérifier que le code est **bien** testé, elle permet juste de vérifier que le code est **testé**. Pour chaque fonction ou *statement* présent.
 
+// TODO
 
 Complexité de McCabe
 ====================
@@ -45,17 +46,14 @@ La `complexité cyclomatique <https://fr.wikipedia.org/wiki/Nombre_cyclomatique>
 
 A nouveau, un greffon pour `flake8` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre `--max-complexity`. Toute fonction dans la complexité est supérieure à 10 est considérée comme trop complexe.
 
-.. code-block:: shell
-
-    $
-
+// TODO
 
 Documentation
 =============
 
 Il existe plusieurs manières de générer la documentation d'un projet. Les plus connues sont `Sphinx <http://sphinx-doc.org/>`_ et `MkDocs <http://www.mkdocs.org/>`_. Le premier a l'avantage d'être plus reconnu dans la communauté Python que l'autre, de pouvoir *parser* le code pour en extraire la documentation et de pouvoir lancer des `tests orientés documentation <https://duckduckgo.com/?q=documentation+driven+development&t=ffsb>`_. A contrario, votre syntaxe devra respecter `ReStructuredText <https://en.wikipedia.org/wiki/ReStructuredText>`_. Le second a l'avantage d'avoir une syntaxe plus simple à apprendre et à comprendre, mais est plus limité dans son résultat.
 
-Dans l'immédiat, nous nous contenterons d'avoir des modules documentés (quelle que soit la méthode Sphinx/MkDocs/...). Dans la continuié avec `Flake8`, il existe un greffon qui vérifie la présence de commentaires au niveau des méthodes et modules développés.
+Dans l'immédiat, nous nous contenterons d'avoir des modules documentés (quelle que soit la méthode Sphinx/MkDocs/...). Dans la continuié de `Flake8`, il existe un greffon qui vérifie la présence de commentaires au niveau des méthodes et modules développés.
 
 .. code-block:: shell
 

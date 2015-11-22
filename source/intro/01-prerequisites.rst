@@ -4,7 +4,7 @@ Environnement
 
 Avant de démarrer le développement, il est nécessaire de passer un peu de temps sur la configuration de l'environnement.
 
-Nous allons utiliser `Python <https://www.python.org/>`_, disponible sur la majorité des distributions GNU/Linux, ainsi que sur MacOS, dans des versions parfois différentes. Pour les utilisateurs de Windows, il sera sans doute nécessaire d'installer une version de l'interpréteur et de configurer la variable *PATH* pour votre utilisateur. Ajoutez-y ``virtualenv`` afin de créer un `environnement virtuel <http://sametmax.com/les-environnement-virtuels-python-virtualenv-et-virtualenvwrapper/>`_, puis ``virtualenvwrapper`` pour en faciliter la gestion, et les prérequis seront remplis. 
+Nous allons utiliser `Python <https://www.python.org/>`_, disponible sur la majorité des distributions GNU/Linux, ainsi que sur MacOS, dans des versions parfois différentes. Pour les utilisateurs de Windows, il sera sans doute nécessaire d'installer une version de l'interpréteur et de configurer la variable *PATH* pour votre utilisateur. Ajoutez-y ``virtualenv`` afin de créer un `environnement virtuel <http://sametmax.com/les-environnement-virtuels-python-virtualenv-et-virtualenvwrapper/>`_, puis ``virtualenvwrapper`` pour en faciliter la gestion, et les prérequis seront remplis.
 
 Les morceaux de code seront développés pour Python3.4+ et Django 1.8+. Ils nécessiteront peut-être quelques adaptations pour fonctionner sur une version antérieure.
 
@@ -16,7 +16,7 @@ Création de l'environnement
 Commencez par créer un environnement virtuel, afin d'y stocker les dépendances. Vérifiez dans votre fichier `~/.bashrc` (ou tout fichier lancé au démarrage de votre session) que la variable ``WORKON_HOME`` est bien définie. Faites ensuite un `source` sur le fichier `virtualenvwrapper.sh` (à adapter en fonction de votre distribution):
 
 .. code-block:: shell
-    
+
     # ~/.bashrc
 
     [...]
@@ -101,16 +101,17 @@ Cette action aura pour effet de créer un nouveau dossier `gwift`, dans lequel o
     |   |-- wsgi.py
     |-- manage.py
 
-Chacun de ces fichiers sert à: 
+Chacun de ces fichiers sert à:
 
- * `settings.py` contient tous les paramètres globaux à notre projet.
- * `urls.py` contient les variables de routes, les adresses utilisées et les fonctions vers lesquelles elles pointent.
- * `wsgi.py` contient la définition de l'interface `WSGI <https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface>`_, qui permettra à votre serveur Web (Nginx, Apache, ...) de faire un pont vers votre projet.
+ * ``settings.py`` contient tous les paramètres globaux à notre projet.
+ * ``urls.py`` contient les variables de routes, les adresses utilisées et les fonctions vers lesquelles elles pointent.
+ * ``manage.py``, pour toutes les commandes de gestion.
+ * ``wsgi.py`` contient la définition de l'interface `WSGI <https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface>`_, qui permettra à votre serveur Web (Nginx, Apache, ...) de faire un pont vers votre projet.
 
 Gestion des dépendances
 =======================
 
-Comme nous venons d'ajouter une dépendance à notre projet, nous allons créer un fichier reprenant tous les dépendances de notre projet. Ceux-ci sont placés normalement dans un fichier `requirements.txt`. Dans un premier temps, ce fichier peut être placé directement à la racine du projet, mais on préférera rapidement le déplacer dans un sous-répertoire spécifique (`requirements`), afin de grouper les dépendances en fonction de leur utilité: 
+Comme nous venons d'ajouter une dépendance à notre projet, nous allons créer un fichier reprenant tous les dépendances de notre projet. Ceux-ci sont placés normalement dans un fichier `requirements.txt`. Dans un premier temps, ce fichier peut être placé directement à la racine du projet, mais on préférera rapidement le déplacer dans un sous-répertoire spécifique (`requirements`), afin de grouper les dépendances en fonction de leur utilité:
 
  * `base.txt`
  * `dev.txt`
