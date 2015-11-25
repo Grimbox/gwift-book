@@ -163,6 +163,18 @@ Si vous décidez de définir un constructeur sur votre modèle, ne surchargez pa
 Relations
 =========
 
+Types de relations
+------------------
+
+ * ForeignKey
+ * ManyToManyField
+ * OneToOneField
+
+[to be continued]
+
+Mise en pratique
+----------------
+
 Dans le cas de nos listes et de leurs souhaits, on a la relation suivante:
 
 .. code-block:: python
