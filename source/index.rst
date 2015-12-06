@@ -16,7 +16,6 @@ Contents:
    intro
    specs
    models
-   shell
    views
    templates
    forms
