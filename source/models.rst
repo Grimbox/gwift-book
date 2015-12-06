@@ -122,11 +122,21 @@ A nouveau, que peut-on constater ?
  * L'ajout d'un champ de type ``ImageField`` nécessite l'installation de ``pillow`` pour la gestion des images. Nous l'ajoutons donc à nos pré-requis, dans le fichier ``requirements/base.txt``.
 
 *******
-Parties
+Parts
 *******
 
-blop
+Les parts constituent la dernière étape de notre modélisation. Elles permettent à un utilisateur de participer au souhait émis par un autre utilisateur. Pour les modéliser, un part est liée d'un côté à un souhait, et d'autre part à un utilisateur. Cela nous donne ceci:
 
+.. code-block:: python
+
+    from django.contrib.auth.models import User
+
+    class Part(models.Model):
+        
+        wish = models.ForeignKey('Wish')
+        user = models.ForeignKey(User)
+
+La classe ``User`` référencée au début du snippet correspond à l'utilisateur géré par Django. Cette instance est accessible à chaque requête transmise au serveur, et est accessible grâce à l'objet ``request.user``, transmis à chaque fonction ou *Class-based-view*. C'est un des avantages d'un framework tout intégré: il vient *batteries-included* et beaucoup de détails ne doivent pas être pris en compte. Pour le moment, nous nous limiterons à ceci. Par la suite, nous verrons comment améliorer la gestion des profils utilisateurs, comment y ajouter des informations et comment gérer les cas particuliers. 
 
 *********
 A retenir
@@ -170,7 +180,8 @@ Types de relations
  * ManyToManyField
  * OneToOneField
 
-[to be continued]
+Dans les examples ci-dessus, nous avons vu les relations multiples (1-N), représentées par des **ForeignKey** d'une classe A vers une classe B. Il existe également les champs de type **ManyToManyField**, afin de représenter une relation N-N. Il existe également les champs de type **OneToOneField**, pour représenter une relation 1-1. 
+Dans notre modèle ci-dessus, nous n'avons jusqu'à présent eu besoin que des relations 1-N: la première entre les listes de souhaits et les souhaits; la seconde entre les souhaits et les parts.
 
 Mise en pratique
 ----------------
