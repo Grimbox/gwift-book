@@ -132,11 +132,31 @@ Les parts constituent la dernière étape de notre modélisation. Elles permette
     from django.contrib.auth.models import User
 
     class Part(models.Model):
-        
+
         wish = models.ForeignKey('Wish')
         user = models.ForeignKey(User)
 
-La classe ``User`` référencée au début du snippet correspond à l'utilisateur géré par Django. Cette instance est accessible à chaque requête transmise au serveur, et est accessible grâce à l'objet ``request.user``, transmis à chaque fonction ou *Class-based-view*. C'est un des avantages d'un framework tout intégré: il vient *batteries-included* et beaucoup de détails ne doivent pas être pris en compte. Pour le moment, nous nous limiterons à ceci. Par la suite, nous verrons comment améliorer la gestion des profils utilisateurs, comment y ajouter des informations et comment gérer les cas particuliers. 
+La classe ``User`` référencée au début du snippet correspond à l'utilisateur géré par Django. Cette instance est accessible à chaque requête transmise au serveur, et est accessible grâce à l'objet ``request.user``, transmis à chaque fonction ou *Class-based-view*. C'est un des avantages d'un framework tout intégré: il vient *batteries-included* et beaucoup de détails ne doivent pas être pris en compte. Pour le moment, nous nous limiterons à ceci. Par la suite, nous verrons comment améliorer la gestion des profils utilisateurs, comment y ajouter des informations et comment gérer les cas particuliers.
+
+Maintenant que la classe ``Part`` est définie, il nous est également possible de calculer le pourcentage d'avancement pour la réalisation d'un souhait. Pour cela, il nous suffit d'ajouter une nouvelle méthode au niveau de la classe ``Wish``, qui va calculer le nombre de parts déjà promises, et nous donnera l'avancement par rapport au nombre total de parts disponibles:
+
+.. code-block:: python
+
+    class Wish(models.Model):
+
+        [...]
+
+        @property
+        def percentage(self):
+            """
+            Calcule le pourcentage de complétion pour un élément.
+            """
+            number_of_linked_parts = Part.objects.filter(wish=self).count()
+            total = self.number_of_parts * self.numbers_available
+            percentage = (number_of_linked_parts / total)
+            return percentage * 100
+
+L'attribut ``@property`` va nous permettre d'appeler directement la méthode ``percentage()`` comme s'il s'agissait d'une propriété de la classe, au même titre que les champs ``number_of_parts`` ou ``numbers_available``. Attention que ce type de méthode fera un appel à la base de données à chaque appel. Il convient de ne pas surcharger ces méthodes de connexions à la base: sur de petites applications, ce type de comportement a très peu d'impacts. Ce n'est plus le cas sur de grosses applications ou sur des méthodes fréquemment appelées. Il convient alors de passer par un mécanisme de **cache**, que nous aborderons plus loin.
 
 *********
 A retenir
@@ -180,7 +200,7 @@ Types de relations
  * ManyToManyField
  * OneToOneField
 
-Dans les examples ci-dessus, nous avons vu les relations multiples (1-N), représentées par des **ForeignKey** d'une classe A vers une classe B. Il existe également les champs de type **ManyToManyField**, afin de représenter une relation N-N. Il existe également les champs de type **OneToOneField**, pour représenter une relation 1-1. 
+Dans les examples ci-dessus, nous avons vu les relations multiples (1-N), représentées par des **ForeignKey** d'une classe A vers une classe B. Il existe également les champs de type **ManyToManyField**, afin de représenter une relation N-N. Il existe également les champs de type **OneToOneField**, pour représenter une relation 1-1.
 Dans notre modèle ci-dessus, nous n'avons jusqu'à présent eu besoin que des relations 1-N: la première entre les listes de souhaits et les souhaits; la seconde entre les souhaits et les parts.
 
 Mise en pratique
@@ -201,7 +221,7 @@ Dans le cas de nos listes et de leurs souhaits, on a la relation suivante:
 
 Depuis le code, à partir de l'instance de la classe ``Item``, on peut donc accéder à la liste en appelant la propriété ``wishlist`` de notre instance. *A contrario*, depuis une instance de type ``Wishlist``, on peut accéder à tous les éléments liés grâce à ``<nom de la propriété>_set``; ici ``item_set``.
 
-Lorsque vous déclarez une relation 1-1, 1-N ou N-N entre deux classes, vou pouvez d'ajouter l'attribut ``related_name``. Cet attribut permet de nommer la relation inverse. 
+Lorsque vous déclarez une relation 1-1, 1-N ou N-N entre deux classes, vou pouvez d'ajouter l'attribut ``related_name``. Cet attribut permet de nommer la relation inverse.
 
 .. code-block:: python
 
