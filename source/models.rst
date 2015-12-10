@@ -77,10 +77,10 @@ Au niveau de notre modélisation:
  * La propriété ``external_id`` est de type ``UUIDField``. Lorsqu'une nouvelle instance sera instanciée, cette propriété prendra la valeur générée par la fonction ``uuid.uuid4()``. *A priori*, chacun des types de champs possède une propriété ``default``, qui permet d'initialiser une valeur sur une nouvelle instance.
 
 ********
-Elements
+Souhaits
 ********
 
-Nos éléments ont besoin des propriétés suivantes:
+Nos souhaits ont besoin des propriétés suivantes:
 
  * un identifiant
  * identifiant de la liste
@@ -100,7 +100,7 @@ Après implémentation, cela ressemble à ceci:
 
     # wish/models.py
 
-    class Item(models.Model):
+    class Wish(models.Model):
 
         wishlist = models.ForeignKey(Wishlist)
         name = models.CharField(max_length=255)
@@ -125,7 +125,17 @@ A nouveau, que peut-on constater ?
 Parts
 *******
 
-Les parts constituent la dernière étape de notre modélisation. Elles permettent à un utilisateur de participer au souhait émis par un autre utilisateur. Pour les modéliser, un part est liée d'un côté à un souhait, et d'autre part à un utilisateur. Cela nous donne ceci:
+
+Les parts ont besoins des propriétés suivantes:
+
+ * un identifiant
+ * identifiant du souhait
+ * identifiant de l'utilisateur si connu
+ * identifiant de la personne si utilisateur non connu
+ * un commentaire
+ * une date de réalisation
+ 
+Elles constituent la dernière étape de notre modélisation. Elles permettent à un utilisateur de participer au souhait émis par un autre utilisateur. Pour les modéliser, un part est liée d'un côté à un souhait, et d'autre part à un utilisateur. Cela nous donne ceci:
 
 .. code-block:: python
 
@@ -133,10 +143,15 @@ Les parts constituent la dernière étape de notre modélisation. Elles permette
 
     class Part(models.Model):
 
-        wish = models.ForeignKey('Wish')
+        wish = models.ForeignKey(Wish)
         user = models.ForeignKey(User)
+	    unknown_user = models.ForeignKey(UnknownUser)
+        comment = models.TextField()
+        done_at = models.DateTimeField()
 
 La classe ``User`` référencée au début du snippet correspond à l'utilisateur géré par Django. Cette instance est accessible à chaque requête transmise au serveur, et est accessible grâce à l'objet ``request.user``, transmis à chaque fonction ou *Class-based-view*. C'est un des avantages d'un framework tout intégré: il vient *batteries-included* et beaucoup de détails ne doivent pas être pris en compte. Pour le moment, nous nous limiterons à ceci. Par la suite, nous verrons comment améliorer la gestion des profils utilisateurs, comment y ajouter des informations et comment gérer les cas particuliers.
+
+La classe ``UnknownUser`` permet de représenter un utilisateur non enregistré sur le site et est définie au point suivant.
 
 Maintenant que la classe ``Part`` est définie, il nous est également possible de calculer le pourcentage d'avancement pour la réalisation d'un souhait. Pour cela, il nous suffit d'ajouter une nouvelle méthode au niveau de la classe ``Wish``, qui va calculer le nombre de parts déjà promises, et nous donnera l'avancement par rapport au nombre total de parts disponibles:
 
@@ -157,6 +172,25 @@ Maintenant que la classe ``Part`` est définie, il nous est également possible 
             return percentage * 100
 
 L'attribut ``@property`` va nous permettre d'appeler directement la méthode ``percentage()`` comme s'il s'agissait d'une propriété de la classe, au même titre que les champs ``number_of_parts`` ou ``numbers_available``. Attention que ce type de méthode fera un appel à la base de données à chaque appel. Il convient de ne pas surcharger ces méthodes de connexions à la base: sur de petites applications, ce type de comportement a très peu d'impacts. Ce n'est plus le cas sur de grosses applications ou sur des méthodes fréquemment appelées. Il convient alors de passer par un mécanisme de **cache**, que nous aborderons plus loin.
+
+*********************
+Utilisateurs inconnus
+*********************
+
+Pour chaque réalisation d'un souhait par quelqu'un, il est nécessaire de sauver les données suivantes, même si l'utilisateur n'est pas enregistré sur le site:
+
+ * un identifiant
+ * un nom
+ * une adresse email
+
+Ce qui donne après implémentation:
+
+.. code-block:: python
+
+    class UnkownUser(models.Model):
+	
+        name = models.CharField(max_length=255)
+        email = models.CharField(max_length=255)
 
 *********
 A retenir

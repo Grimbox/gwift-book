@@ -107,9 +107,10 @@ Les données suivantes peuvent être associées à une réalisation de souhait:
 #### Modélisation
 
 Les données suivantes peuvent être associées à une personne réalisant un souhait:
+
 * un identifiant
 * un nom
-* une adresse email facultative
+* une adresse email
 
 #### Fonctionnalités
 
