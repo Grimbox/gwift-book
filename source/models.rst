@@ -135,13 +135,15 @@ Les parts ont besoins des propriétés suivantes:
  * un commentaire
  * une date de réalisation
  
-Elles constituent la dernière étape de notre modélisation. Elles permettent à un utilisateur de participer au souhait émis par un autre utilisateur. Pour les modéliser, un part est liée d'un côté à un souhait, et d'autre part à un utilisateur. Cela nous donne ceci:
+Elles constituent la dernière étape de notre modélisation et représente la réalisation d'un souhait. Il y aura autant de part d'un souhait que le nombre de souhait à réaliser fois le nombre de part.
+
+Elles permettent à un utilisateur de participer au souhait émis par un autre utilisateur. Pour les modéliser, un part est liée d'un côté à un souhait, et d'autre part à un utilisateur. Cela nous donne ceci:
 
 .. code-block:: python
 
     from django.contrib.auth.models import User
 
-    class Part(models.Model):
+    class WishPart(models.Model):
 
         wish = models.ForeignKey(Wish)
         user = models.ForeignKey(User)
