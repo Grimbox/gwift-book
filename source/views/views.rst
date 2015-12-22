@@ -96,7 +96,7 @@ Rien de très sexy, aucune interaction avec l'utilisateur, très peu d'utilisati
 Class Based Views
 =================
 
-Les classes, de leur côté, implémente le *pattern* objet et permettent d'arriver facilement à un résultat en très peu de temps, parfois même en définissant simplement quelques attributs, et rien d'autre. Pour l'exemple, je vais définir deux classes qui donnent exactement le même résultat que la fonction ``wishlists`` ci-dessus. Une première fois en utilisant une classe générique vierge, et ensuite en utilisant une classe de type ``ListView``.
+Les classes, de leur côté, implémente le *pattern* objet et permettent d'arriver facilement à un résultat en très peu de temps, parfois même en définissant simplement quelques attributs, et rien d'autre. Pour l'exemple, on va définir deux classes qui donnent exactement le même résultat que la fonction ``wishlists`` ci-dessus. Une première fois en utilisant une classe générique vierge, et ensuite en utilisant une classe de type ``ListView``.
 
 Classe générique
 ----------------

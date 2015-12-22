@@ -69,3 +69,14 @@ Par défaut, Django cherchera les templates dans les répertoirer d'installation
             ...
         },
     ]
+
+Builtins
+========
+
+Django vient avec un ensemble de *tags*. On a vu la boucle ``for`` ci-dessus, mais il existe `beaucoup d'autres tags nativement présents <https://docs.djangoproject.com/fr/1.9/ref/templates/builtins/>`_. Les principaux sont par exemple:
+
+ * ``{% if ... %} ... {% elif ... %} ... {% else %} ... {% endif %}``: permet de vérifier une condition et de n'afficher le contenu du bloc que si la condition est vérifiée.
+ * Opérateurs de comparaisons: ``<``, ``>``, ``==``, ``in``, ``not in``.
+ * Regroupements avec le tag ``{% regroup ... by ... as ... %}``.
+ * ``{% url %}``
+ * ...
