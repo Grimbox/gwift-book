@@ -35,7 +35,7 @@ Tests et couverture de code
 ===========================
 
 La couverture de code donne un pourcentage lié à la quantité de code couvert par les testss.
-Attention que celle-ci ne permet pas de vérifier que le code est **bien** testé, elle permet juste de vérifier que le code est **testé**. En Python, il existe le paquet ``coverage``, qui se charge d'évaluer le pourcentage de code couvert par les tests. Si cela vous intéresse, ajoutez-le dans le fichier ``requirements/base.txt``, et lancez une couverture de code grâce à la commande ``coverage``. La configuration peut se faire dans un fichier ``.coveragerc`` que vous placerez à la racine de votre projet, et qui sera lu lors de l'exécution.
+Attention que celle-ci ne permet pas de vérifier que le code est **bien** testé, elle permet juste de vérifier que le code est **testé**. En Python, il existe le paquet `coverage <https://pypi.python.org/pypi/coverage/>`_, qui se charge d'évaluer le pourcentage de code couvert par les tests. Si cela vous intéresse, ajoutez-le dans le fichier ``requirements/base.txt``, et lancez une couverture de code grâce à la commande ``coverage``. La configuration peut se faire dans un fichier ``.coveragerc`` que vous placerez à la racine de votre projet, et qui sera lu lors de l'exécution.
 
 .. code-block:: shell
 
