@@ -14,11 +14,11 @@ On voit bien ici le principe de **contexte**: l'application viendra avec son mod
 Gestion
 =======
 
-Comme expliqué un peu plus haut, le fichier `manage.py` est un *wrapper* sur les commandes `django-admin`. A partir de maintenant, nous n'utiliserons plus que celui-là pour tout ce qui touchera à la gestion de notre projet:
+Comme expliqué un peu plus haut, le fichier ``manage.py`` est un *wrapper* sur les commandes `django-admin`. A partir de maintenant, nous n'utiliserons plus que celui-là pour tout ce qui touchera à la gestion de notre projet:
 
- * `manage.py check` pour vérifier que votre projet ne rencontre aucune erreur
- * `manage.py runserver` pour lancer un serveur de développement
- * `manage.py test` pour découvrir les tests unitaires disponibles et les lancer.
+ * ``manage.py check`` pour vérifier que votre projet ne rencontre aucune erreur
+ * ``manage.py runserver`` pour lancer un serveur de développement
+ * ``manage.py test`` pour découvrir les tests unitaires disponibles et les lancer.
 
 La liste complète peut être affichée avec `manage.py help`. Vous remarquerez que ces commandes sont groupées:
 
