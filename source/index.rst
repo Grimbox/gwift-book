@@ -17,7 +17,6 @@ Contents:
    specs
    models
    views
-   templates
    forms
    admin
 
@@ -27,4 +26,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
