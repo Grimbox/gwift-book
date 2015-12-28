@@ -2,4 +2,4 @@
 Administration
 ==============
 
-.. include admin/advices.rst
+.. include:: admin/advices.rst

@@ -13,7 +13,7 @@ Les morceaux de code seront développés pour Python3.4+ et Django 1.8+. Ils né
 Création de l'environnement
 ===========================
 
-Commencez par créer un environnement virtuel, afin d'y stocker les dépendances. Vérifiez dans votre fichier `~/.bashrc` (ou tout fichier lancé au démarrage de votre session) que la variable ``WORKON_HOME`` est bien définie. Faites ensuite un `source` sur le fichier `virtualenvwrapper.sh` (à adapter en fonction de votre distribution):
+Commencez par créer un environnement virtuel, afin d'y stocker les dépendances. Vérifiez dans votre fichier ``~/.bashrc`` (ou tout fichier lancé au démarrage de votre session) que la variable ``WORKON_HOME`` est bien définie. Faites ensuite un ``source`` sur le fichier ``virtualenvwrapper.sh`` (à adapter en fonction de votre distribution):
 
 .. code-block:: shell
 
@@ -26,7 +26,7 @@ Commencez par créer un environnement virtuel, afin d'y stocker les dépendances
 
 L'intérêt de ceci ? Ne pas devoir se soucier de l'emplacement des environnements virtuels, et pouvoir entièrement les découpler des sources sur lesquelles vous travaillez, en plus d'isoler le code, de créer un containeur pour les dépendances et d'être indépendant des librairies tierces déjà installées sur le système.
 
-Lancez `mkvirtualenv gwift-env`.
+Lancez ``mkvirtualenv gwift-env``.
 
 .. code-block:: shell
 
@@ -42,9 +42,9 @@ Ceci créera l'arborescence de fichiers suivante, qui peut à nouveau être un p
     $ ls gwift-env
     Include/ Lib/ Scripts/
 
-Nous pouvons ensuite l'activer grâce à la commande `source gwift-env/bin/activate` avec `virtualenv` et `workon gwift-env` avec `virtualenvwrapper`.
+Nous pouvons ensuite l'activer grâce à la commande ``source gwift-env/bin/activate`` avec ``virtualenv`` et ``workon gwift-env`` avec ``virtualenvwrapper``.
 
-A présent, tous les binaires présents dans cet environnement prendront le pas sur les binaires du système. De la même manière, une variable *PATH* propre est définie et utilisée, afin que les librairies Python soient stockées dans le répertoire `gwift-env/Lib/site-packages/`. C'est notamment ici que nous retrouverons le code-source de Django, ainsi que des librairies externes une fois que nous les aurons installées.
+A présent, tous les binaires présents dans cet environnement prendront le pas sur les binaires du système. De la même manière, une variable ``PATH`` propre est définie et utilisée, afin que les librairies Python soient stockées dans le répertoire ``gwift-env/Lib/site-packages/``. C'est notamment ici que nous retrouverons le code-source de Django, ainsi que des librairies externes une fois que nous les aurons installées.
 
 .. code-block:: shell
 
@@ -60,7 +60,7 @@ A présent, tous les binaires présents dans cet environnement prendront le pas 
 Fichiers sources
 ================
 
-Nous commençons par créer le répertoire du projet, à savoir `gwift-project`.
+Nous commençons par créer le répertoire du projet, à savoir ``gwift-project``.
 
 .. code-block:: shell
 
@@ -69,7 +69,7 @@ Nous commençons par créer le répertoire du projet, à savoir `gwift-project`.
 
 Comme l'environnement est activé, on peut à présent y installer Django. La librairie restera indépendante du reste du système, et ne polluera pas les autres projets.
 
-C'est parti: `pip install django`!
+C'est parti: ``pip install django``!
 
 .. code-block:: shell
 
@@ -80,15 +80,15 @@ C'est parti: `pip install django`!
     Installing collected packages: django
     Successfully installed django-1.8.4
 
-Les commandes de création d'un nouveau site sont à présent disponibles, la principale étant `django-admin startproject`. Par la suite, nous utiliserons `manage.py`, qui constitue un *wrapper* autour de `django-admin`.
+Les commandes de création d'un nouveau site sont à présent disponibles, la principale étant ``django-admin startproject``. Par la suite, nous utiliserons ``manage.py``, qui constitue un *wrapper* autour de `django-admin`.
 
-Pour démarrer notre projet, nous lançons `django-admin startproject gwift`.
+Pour démarrer notre projet, nous lançons ``django-admin startproject gwift``.
 
 .. code-block:: shell
 
     $ django-admin startproject gwift
 
-Cette action aura pour effet de créer un nouveau dossier `gwift`, dans lequel on trouve la structure suivante:
+Cette action aura pour effet de créer un nouveau dossier ``gwift``, dans lequel on trouve la structure suivante:
 
 .. code-block:: shell
 
@@ -111,14 +111,14 @@ Chacun de ces fichiers sert à:
 Gestion des dépendances
 =======================
 
-Comme nous venons d'ajouter une dépendance à notre projet, nous allons créer un fichier reprenant tous les dépendances de notre projet. Ceux-ci sont placés normalement dans un fichier `requirements.txt`. Dans un premier temps, ce fichier peut être placé directement à la racine du projet, mais on préférera rapidement le déplacer dans un sous-répertoire spécifique (`requirements`), afin de grouper les dépendances en fonction de leur utilité:
+Comme nous venons d'ajouter une dépendance à notre projet, nous allons créer un fichier reprenant tous les dépendances de notre projet. Ceux-ci sont placés normalement dans un fichier ``requirements.txt``. Dans un premier temps, ce fichier peut être placé directement à la racine du projet, mais on préférera rapidement le déplacer dans un sous-répertoire spécifique (``requirements``), afin de grouper les dépendances en fonction de leur utilité:
 
- * `base.txt`
- * `dev.txt`
- * `staging.txt`
- * `production.txt`
+ * ``base.txt``
+ * ``dev.txt``
+ * ``staging.txt``
+ * ``production.txt``
 
-Au début de chaque fichier, il suffira d'ajouter la ligne `-r base.txt`, puis de lancer l'installation grâce à un `pip install -r <nom du fichier>`. De cette manière, il est tout à fait acceptable de n'installer `flake8` et `django-debug-toolbar` qu'en développement par exemple.  Dans l'immédiat, ajoutez simplement `django` dans le fichier `requirements/base.txt`.
+Au début de chaque fichier, il suffira d'ajouter la ligne ``-r base.txt``, puis de lancer l'installation grâce à un ``pip install -r <nom du fichier>``. De cette manière, il est tout à fait acceptable de n'installer `flake8` et `django-debug-toolbar` qu'en développement par exemple.  Dans l'immédiat, ajoutez simplement ``django`` dans le fichier ``requirements/base.txt``.
 
 .. code-block:: shell
 

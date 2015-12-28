@@ -11,16 +11,16 @@ Lors de la définition d'une nouvelle classe, et puisque l'ORM se base sur Activ
 Une représentation textuelle
 ============================
 
-Surcharger la fonction `def __str__(self)` sur la classe permettra de retourner une chaîne de caractère qui représentera l'instance de la classe. Cette information est utilisée un peu partout dans le code, et donnera une meilleure idée de ce qu'on manipule. 
+Surcharger la fonction ``def __str__(self)`` sur la classe permettra de retourner une chaîne de caractère qui représentera l'instance de la classe. Cette information est utilisée un peu partout dans le code, et donnera une meilleure idée de ce qu'on manipule. 
 En plus, c'est aussi ceci qui est appelé lorsque l'admin de Django historisera une action (et ceci sera inaltérable).
 
 URL absolue
 ===========
 
-La méthode `def get_absolute_url(self)` retourne l'URL à laquelle on peut envoyer une requête pour obtenir le maximum d'informations 
-concernant cette instance. 
+La méthode `def get_absolute_url(self)` retourne l'URL à laquelle on peut envoyer une requête pour obtenir le maximum d'informations
+concernant cette instance.
 
-Par exemple: 
+Par exemple:
 
 .. code-block:: python
 
@@ -44,7 +44,7 @@ Meta
 Titre
 =====
 
-Le titre de l'administration peut être modifié de deux manières: 
+Le titre de l'administration peut être modifié de deux manières:
 
  * Soit en modifiant le template de l'administration
  * Soit en ajoutant l'assignation suivante dans le fichier `urls.py`: `admin.site.site_header = "SuperBook Secret Area`.
@@ -52,5 +52,4 @@ Le titre de l'administration peut être modifié de deux manières:
 Greffons
 ========
 
-L'interface d'administration est extensible dans une certaine mesure. Notamment utiliser ``django_extensions`` pour avoir les ForeignKey auto-complétées. 
-
+L'interface d'administration est extensible dans une certaine mesure. Notamment utiliser ``django_extensions`` pour avoir les ForeignKey auto-complétées.
