@@ -26,9 +26,9 @@ Sur cette base, un outil existe et listera l'ensemble des conventions qui ne son
     13      E202 whitespace before '}'
     86      E203 whitespace before ':'
 
-Si vous ne voulez pas être dérangé sur votre manière de coder, et que vous voulez juste avoir un retour sur une analyse de votre code, essayez `pyflakes`: il analysera vos sources à la recherche de sources d'erreurs possibles (imports inutilisés, méthodes inconnues, etc.).
+Si vous ne voulez pas être dérangé sur votre manière de coder, et que vous voulez juste avoir un retour sur une analyse de votre code, essayez ``pyflakes``: il analysera vos sources à la recherche de sources d'erreurs possibles (imports inutilisés, méthodes inconnues, etc.).
 
-Finalement, la solution qui couvre ces deux domaines existe et s'intitule `flake8 <https://github.com/PyCQA/flake8>`_. Sur base la même interface que `pep8`, vous aurez en plus tous les avantages liés à `pyflakes` concernant votre code source.
+Finalement, la solution qui couvre ces deux domaines existe et s'intitule `flake8 <https://github.com/PyCQA/flake8>`_. Sur base la même interface que ``pep8``, vous aurez en plus tous les avantages liés à ``pyflakes`` concernant votre code source.
 
 
 Tests et couverture de code
@@ -44,7 +44,7 @@ Complexité de McCabe
 
 La `complexité cyclomatique <https://fr.wikipedia.org/wiki/Nombre_cyclomatique>`_ (ou complexité de McCabe) peut s'apparenter à une [...]
 
-A nouveau, un greffon pour `flake8` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre `--max-complexity`. Toute fonction dans la complexité est supérieure à 10 est considérée comme trop complexe.
+A nouveau, un greffon pour ``flake8`` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre `--max-complexity`. Toute fonction dans la complexité est supérieure à 10 est considérée comme trop complexe.
 
 // TODO
 
