@@ -20,6 +20,8 @@ Contents:
    templates
    forms
    admin
+   integration
+   production
 
 Indices and tables
 ==================
