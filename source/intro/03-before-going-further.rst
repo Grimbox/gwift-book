@@ -11,7 +11,7 @@ Le langage Python fonctionne avec un système d'améliorations basées sur des p
 
 La PEP qui nous intéresse plus particulièrement pour la suite est la `PEP-8 <https://www.python.org/dev/peps/pep-0008/>`_, ou "Style Guide for Python Code". Elle spécifie des conventions d'organisation et de formatage de code Python, quelles sont les conventions pour l'indentation, le nommage des variables et des classes, etc. En bref, elle décrit comment écrire du code proprement pour que d'autres développeurs puissent le reprendre facilement, ou simplement que votre base de code ne dérive lentement vers un seuil de non-maintenabilité.
 
-Sur cette base, un outil existe et listera l'ensemble des conventions qui ne sont pas correctement suivies dans votre projet: pep8. Pour l'installer, passez par pip. Lancez ensuite la commande pep8 suivie du chemin à analyser (., le nom d'un répertoire, le nom d'un fichier `.py`, ...). Si vous souhaitez uniquement avoir le nombre d'erreur de chaque type, saisissez les options `--statistics -qq`.
+Sur cette base, un outil existe et listera l'ensemble des conventions qui ne sont pas correctement suivies dans votre projet: pep8. Pour l'installer, passez par pip. Lancez ensuite la commande pep8 suivie du chemin à analyser (``.``, le nom d'un répertoire, le nom d'un fichier ``.py``, ...). Si vous souhaitez uniquement avoir le nombre d'erreur de chaque type, saisissez les options ``--statistics -qq``.
 
 .. code-block:: shell
 
@@ -35,9 +35,69 @@ Tests et couverture de code
 ===========================
 
 La couverture de code donne un pourcentage lié à la quantité de code couvert par les testss.
-Attention que celle-ci ne permet pas de vérifier que le code est **bien** testé, elle permet juste de vérifier que le code est **testé**. Pour chaque fonction ou *statement* présent.
+Attention que celle-ci ne permet pas de vérifier que le code est **bien** testé, elle permet juste de vérifier que le code est **testé**. En Python, il existe le paquet ``coverage``, qui se charge d'évaluer le pourcentage de code couvert par les tests. Si cela vous intéresse, ajoutez-le dans le fichier ``requirements/base.txt``, et lancez une couverture de code grâce à la commande ``coverage``. La configuration peut se faire dans un fichier ``.coveragerc`` que vous placerez à la racine de votre projet, et qui sera lu lors de l'exécution.
 
-// TODO
+.. code-block:: shell
+
+    # requirements/base.text
+    [...]
+    coverage
+
+.. code-block:: shell
+
+    # .coveragerc to control coverage.py
+    [run]
+    branch = True
+    omit = ../*migrations*
+
+    [report]
+    ignore_errors = True
+
+    [html]
+    directory = coverage_html_report
+
+.. code-block:: shell
+
+    $ coverage run --source "." manage.py test
+    $ coverage report
+
+    Name                      Stmts   Miss  Cover
+    ---------------------------------------------
+    gwift\gwift\__init__.py       0      0   100%
+    gwift\gwift\settings.py      17      0   100%
+    gwift\gwift\urls.py           5      5     0%
+    gwift\gwift\wsgi.py           4      4     0%
+    gwift\manage.py               6      0   100%
+    gwift\wish\__init__.py        0      0   100%
+    gwift\wish\admin.py           1      0   100%
+    gwift\wish\models.py         49     16    67%
+    gwift\wish\tests.py           1      1     0%
+    gwift\wish\views.py           6      6     0%
+    ---------------------------------------------
+    TOTAL                        89     32    64%
+
+    $ coverage html
+
+Ceci vous affichera non seulement la couverture de code estimée, et générera également vos fichiers sources avec les branches non couvertes. Pour gagner un peu de temps, n'hésitez pas à créer un fichier ``Makefile`` à la racine du projet. L'exemple ci-dessous permettra, grâce à la commande ``make coverage``, d'arriver au même résultat que ci-dessus:
+
+.. code-block:: shell
+
+    # Makefile for gwift
+    #
+
+    # User-friendly check for coverage
+    ifeq ($(shell which coverage >/dev/null 2>&1; echo $$?), 1)
+      $(error The 'coverage' command was not found. Make sure you have coverage installed)
+    endif
+
+    .PHONY: help coverage
+
+    help:
+    	@echo "  coverage to run coverage check of the source files."
+
+    coverage:
+    	coverage run --source='.' manage.py test; coverage report; coverage html;
+    	@echo "Testing of coverage in the sources finished."
 
 Complexité de McCabe
 ====================
