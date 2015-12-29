@@ -60,7 +60,7 @@ Attention à générer un jeton d'authentification suffisamment aléatoire pour 
     UUID('097e547c-08b4-4d4f-a8e8-2a1cf03b8463')
     >>>
 
-Ensuite, on active crée un web hook dans gitlab:
+Ensuite, on crée un web hook dans gitlab:
 
 .. image:: integration/gitlab_web_hook.png
     :align: center
