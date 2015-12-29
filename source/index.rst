@@ -12,7 +12,6 @@ Contents:
    :maxdepth: 2
    :numbered:
 
-   before-we-start
    intro
    specs
    models
@@ -20,6 +19,8 @@ Contents:
    forms
    admin
    docs
+   integration
+   production
 
 Indices and tables
 ==================
