@@ -12,7 +12,6 @@ Contents:
    :maxdepth: 2
    :numbered:
 
-   before-we-start
    intro
    specs
    models
