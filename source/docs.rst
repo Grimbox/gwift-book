@@ -56,3 +56,20 @@ Commencez par installer Sphinx et ajoutez le dans le fichier `requirements/base.
     Creating file ./docs\make.bat.
 
     Finished: An initial directory structure has been created.
+
+Deux-trois petites choses à modifier pour que Sphinx puisse intéragir avec Django. Ouvrez le fichier ``docs/conf.py`` et modifier ou ajoutez les variables suivantes:
+
+.. code-block:: python
+
+    # docs/conf.py
+
+    sys.path.insert(0, os.path.abspath('../gwift'))
+    sys.path.insert(0, os.path.abspath('.'))
+
+    from django.conf import settings
+    settings.configure()
+
+    html_theme = 'sphinx_rtd_theme'
+
+De cette manière, on modifie le thème utilisé lors de la génération des pages HTML, en remplaçant le thème Alabaster par le thème ReadTheDocs, on demande à Sphinx d'initier l'environnement Django existant, et on lui demande également d'aller chercher les informations dans le répertoire courant, mais également dans le répertoire ``../gwift``.
+Sans cela, les références que l'on fera dans la documentation ne seront pas récupérées.
