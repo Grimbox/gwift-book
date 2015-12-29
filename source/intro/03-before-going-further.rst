@@ -2,7 +2,7 @@
 Avant d'aller plus loin...
 **************************
 
-Avant d'aller plus loin, donc, un petit point sur les conventions, les tests (unitaires, orientés comportement, basés sur la documentation, ...) et sur la documentation. Plus que dans tout langage compilé, ceux-ci sont pratiquement obligatoires. Vous pourrez les voir comme une perte de temps dans un premier temps, mais nous vous promettons qu'ils vous en feront gagner par la suite.
+Avant d'aller plus loin, donc, un petit point sur les conventions, les tests (unitaires, orientés comportement, basés sur la documentation, ...), la gestion de verstion du code et sur la documentation. Plus que dans tout langage compilé, ceux-ci sont pratiquement obligatoires. Vous pourrez les voir comme une perte de temps dans un premier temps, mais nous vous promettons qu'ils vous en feront gagner par la suite.
 
 PEP8
 ====
@@ -141,3 +141,11 @@ Lancez ensuite `flake8` avec la commande `flake8 . --exclude="migrations"`. Sur 
 Bref, on le voit: nous n'avons que très peu de modules, et aucun d'eux n'est commenté.
 
 En plus de cette méthode, Django permet également de rendre la documentation accessible depuis son interface d'administration.
+
+Gestion de version du code
+==========================
+
+Il existe plusiseurs outils permettant de gérer les versions du code, dont les plus connus sont `git <https://git-scm.com/>`_ et `mercurial <https://www.mercurial-scm.org/>`_.
+
+Dans notre cas, nous utilisons git et hebergons le code et le livre directement sur le gitlab de `framasoft <https://git.framasoft.org/>`_
+
