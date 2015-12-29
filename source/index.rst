@@ -19,6 +19,7 @@ Contents:
    views
    forms
    admin
+   docs
 
 Indices and tables
 ==================
