@@ -4,16 +4,16 @@ Environnement
 
 Avant de démarrer le développement, il est nécessaire de passer un peu de temps sur la configuration de l'environnement.
 
-Nous allons utiliser `Python <https://www.python.org/>`_, disponible sur la majorité des distributions GNU/Linux, ainsi que sur MacOS, dans des versions parfois différentes. Pour les utilisateurs de Windows, il sera sans doute nécessaire d'installer une version de l'interpréteur et de configurer la variable *PATH* pour votre utilisateur. Ajoutez-y ``virtualenv`` afin de créer un `environnement virtuel <http://sametmax.com/les-environnement-virtuels-python-virtualenv-et-virtualenvwrapper/>`_, puis ``virtualenvwrapper`` pour en faciliter la gestion, et les prérequis seront remplis.
-
 Les morceaux de code seront développés pour Python3.4+ et Django 1.8+. Ils nécessiteront peut-être quelques adaptations pour fonctionner sur une version antérieure.
 
 **Remarque** : les commandes qui seront exécutés dans ce livre le seront depuis un shell sous GNU/Linux. Certaines devrons donc être adaptées si vous êtes dans un autre environnemnet.
 
-Création de l'environnement
-===========================
+Virtualenv
+==========
 
-Commencez par créer un environnement virtuel, afin d'y stocker les dépendances. Vérifiez dans votre fichier ``~/.bashrc`` (ou tout fichier lancé au démarrage de votre session) que la variable ``WORKON_HOME`` est bien définie. Faites ensuite un ``source`` sur le fichier ``virtualenvwrapper.sh`` (à adapter en fonction de votre distribution):
+Nous allons utiliser``virtualenv`` afin de créer un `environnement virtuel <http://sametmax.com/les-environnement-virtuels-python-virtualenv-et-virtualenvwrapper/>`_ pour python et ``virtualenvwrapper`` pour en faciliter la gestion, et les prérequis seront remplis.
+
+Suivant votre OS, il sera sans doute nécessaire d'éditer le fichier ``~/.bashrc`` (ou tout fichier lancé au démarrage de votre session) et de vérifier que la variable ``WORKON_HOME`` est bien définie et de faire un ``source`` sur le fichier ``virtualenvwrapper.sh`` (à adapter en fonction de votre distribution):
 
 .. code-block:: shell
 
@@ -26,7 +26,10 @@ Commencez par créer un environnement virtuel, afin d'y stocker les dépendances
 
 L'intérêt de ceci ? Ne pas devoir se soucier de l'emplacement des environnements virtuels, et pouvoir entièrement les découpler des sources sur lesquelles vous travaillez, en plus d'isoler le code, de créer un containeur pour les dépendances et d'être indépendant des librairies tierces déjà installées sur le système.
 
-Lancez ``mkvirtualenv gwift-env``.
+Création de l'environnement de travail
+======================================
+
+Commencez par créer un environnement virtuel, afin d'y stocker les dépendances. Lancez ``mkvirtualenv gwift-env``.
 
 .. code-block:: shell
 
@@ -39,7 +42,7 @@ Ceci créera l'arborescence de fichiers suivante, qui peut à nouveau être un p
 
 .. code-block:: shell
 
-    $ ls gwift-env
+    $ ls .virtualenvs/gwift-env
     Include/ Lib/ Scripts/
 
 Nous pouvons ensuite l'activer grâce à la commande ``source gwift-env/bin/activate`` avec ``virtualenv`` et ``workon gwift-env`` avec ``virtualenvwrapper``.
