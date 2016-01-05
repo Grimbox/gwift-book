@@ -26,10 +26,10 @@ Suivant votre OS, il sera sans doute nécessaire d'éditer le fichier ``~/.bashr
 
 L'intérêt de ceci ? Ne pas devoir se soucier de l'emplacement des environnements virtuels, et pouvoir entièrement les découpler des sources sur lesquelles vous travaillez, en plus d'isoler le code, de créer un containeur pour les dépendances et d'être indépendant des librairies tierces déjà installées sur le système.
 
-Création de l'environnement de travail
-======================================
+Création de l'environnement virtuel
+===================================
 
-Commencez par créer un environnement virtuel, afin d'y stocker les dépendances. Lancez ``mkvirtualenv gwift-env``.
+Commencons par créer un environnement virtuel, afin d'y stocker les dépendances. Lancez ``mkvirtualenv gwift-env``.
 
 .. code-block:: shell
 
@@ -43,32 +43,36 @@ Ceci créera l'arborescence de fichiers suivante, qui peut à nouveau être un p
 .. code-block:: shell
 
     $ ls .virtualenvs/gwift-env
-    Include/ Lib/ Scripts/
+    bin include lib
 
-Nous pouvons ensuite l'activer grâce à la commande ``source gwift-env/bin/activate`` avec ``virtualenv`` et ``workon gwift-env`` avec ``virtualenvwrapper``.
-
-A présent, tous les binaires présents dans cet environnement prendront le pas sur les binaires du système. De la même manière, une variable ``PATH`` propre est définie et utilisée, afin que les librairies Python soient stockées dans le répertoire ``gwift-env/Lib/site-packages/``. C'est notamment ici que nous retrouverons le code-source de Django, ainsi que des librairies externes une fois que nous les aurons installées.
+Nous pouvons ensuite l'activer grâce à la commande ``workon gwift-env``.
 
 .. code-block:: shell
 
-    $ tree sources/ .virtualenvs/
-    sources/
-    ├── gwift-book
-    ├── gwift-project
-    └── other-project
-    .virtualenvs/
-    ├── env-01
-    └── env-02
+    $ workon gwift-env
+    (gwift-env)$
 
-Fichiers sources
-================
+A présent, tous les binaires présents dans cet environnement prendront le pas sur les binaires du système. De la même manière, une variable ``PATH`` propre est définie et utilisée, afin que les librairies Python y soient stockées. C'est donc dans cet environnement virutel que nous retrouverons le code-source de Django, ainsi que des librairies externes pour python une fois que nous les aurons installées.
+
+Création du répertoire de travail
+=================================
 
 Nous commençons par créer le répertoire du projet, à savoir ``gwift-project``.
 
 .. code-block:: shell
 
-    $ mkdir gwift-project
-    $ cd gwift-project
+    (gwift-env)$ mkdir gwift-project
+    (gwift-env)$ cd gwift-project
+
+Dans ce répertoire, nous pouvons rajouter les répertoires utiles à la gestion d'un projet:
+
+.. code-block:: shell
+
+    (gwift-env)$ mkdir docs requirements
+    (gwift-env)$ touch docs/README.md
+
+Création du projet Django
+=========================
 
 Comme l'environnement est activé, on peut à présent y installer Django. La librairie restera indépendante du reste du système, et ne polluera pas les autres projets.
 
@@ -76,7 +80,7 @@ C'est parti: ``pip install django``!
 
 .. code-block:: shell
 
-    $ pip install django
+    (gwift-env)$ pip install django
     Collecting django
       Downloading Django-1.8.4-py2.py3-none-any.whl (6.2MB)
     100% |################################| 6.2MB 91kB/s  eta 0:00:01
@@ -85,24 +89,24 @@ C'est parti: ``pip install django``!
 
 Les commandes de création d'un nouveau site sont à présent disponibles, la principale étant ``django-admin startproject``. Par la suite, nous utiliserons ``manage.py``, qui constitue un *wrapper* autour de `django-admin`.
 
-Pour démarrer notre projet, nous lançons ``django-admin startproject gwift``.
+Pour démarrer notre projet, nous lançons donc ``django-admin startproject gwift``.
 
 .. code-block:: shell
 
-    $ django-admin startproject gwift
+    (gwift-env)$ django-admin startproject gwift
 
-Cette action aura pour effet de créer un nouveau dossier ``gwift``, dans lequel on trouve la structure suivante:
+Cette action a pour effet de créer un nouveau dossier ``gwift``, dans lequel on trouve la structure suivante:
 
 .. code-block:: shell
 
-    $ tree gwift
+    (gwift-env)$ tree gwift
     gwift
-    |-- gwift
-    |   |-- __init__.py
-    |   |-- settings.py
-    |   |-- urls.py
-    |   |-- wsgi.py
-    |-- manage.py
+    ├── gwift
+    │   ├── __init__.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   └── wsgi.py
+    └── manage.py
 
 Chacun de ces fichiers sert à:
 
@@ -125,5 +129,26 @@ Au début de chaque fichier, il suffira d'ajouter la ligne ``-r base.txt``, puis
 
 .. code-block:: shell
 
-    $ mkdir requirements
-    $ echo django >> requirements/base.txt
+    (gwift-env)$ echo django >> requirements/base.txt
+
+Structure finale de l'environnement
+===================================
+
+Nous avons donc la strucutre finale pour notre environnement de travail:
+
+.. code-block:: shell
+
+    (gwift-env)$ tree ~/gwift-project
+    gwift-project/
+    ├── docs
+    │   └── README.md
+    ├── gwift
+    │   ├── gwift
+    │   │   ├── __init__.py
+    │   │   ├── settings.py
+    │   │   ├── urls.py
+    │   │   └── wsgi.py
+    │   └── manage.py
+    └── requirements
+        └── base.txt
+
