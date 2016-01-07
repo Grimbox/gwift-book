@@ -58,8 +58,8 @@ Attention que celle-ci ne permet pas de vérifier que le code est **bien** test�
 
 .. code-block:: shell
 
-    $ coverage run --source "." manage.py test
-    $ coverage report
+    (gwift-env)$ coverage run --source "." manage.py test
+    (gwift-env)$ coverage report
 
     Name                      Stmts   Miss  Cover
     ---------------------------------------------
@@ -76,7 +76,7 @@ Attention que celle-ci ne permet pas de vérifier que le code est **bien** test�
     ---------------------------------------------
     TOTAL                        89     32    64%
 
-    $ coverage html
+    (gwift-env)$ coverage html
 
 Ceci vous affichera non seulement la couverture de code estimée, et générera également vos fichiers sources avec les branches non couvertes. Pour gagner un peu de temps, n'hésitez pas à créer un fichier ``Makefile`` à la racine du projet. L'exemple ci-dessous permettra, grâce à la commande ``make coverage``, d'arriver au même résultat que ci-dessus:
 
@@ -117,13 +117,13 @@ Dans l'immédiat, nous nous contenterons d'avoir des modules documentés (quelle
 
 .. code-block:: shell
 
-    pip install flake8_docstrings
+    (gwift-env)$ pip install flake8_docstrings
 
 Lancez ensuite `flake8` avec la commande `flake8 . --exclude="migrations"`. Sur notre projet (presque) vide, le résultat sera le suivant:
 
 .. code-block:: shell
 
-    $ flake8 . --exclude="migrations"
+    (gwift-env)$ flake8 . --exclude="migrations"
     .\gwift\manage.py:1:1: D100  Missing docstring in public module
     .\gwift\gwift\__init__.py:1:1: D100  Missing docstring in public module
     .\gwift\gwift\urls.py:1:1: D400  First line should end with a period (not 'n')
