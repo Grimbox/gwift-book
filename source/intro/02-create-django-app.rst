@@ -38,14 +38,14 @@ Cette application servira à structurer les listes de souhaits, les éléments q
 
 .. code-block:: shell
 
-    (gwift-env)$ cd gwift
-    (gwift-env)$ python manage.py startapp wish
+    $ cd gwift
+    $ python manage.py startapp wish
 
 Résultat? Django nous a créé un répertoire ``wish``, dans lequel on trouve les fichiers suivants:
 
 .. code-block:: shell
 
-    (gwift-env)$ ls -l wish
+    $ ls -l wish
     admin.py  __init__.py  migrations  models.py  tests.py  views.py
 
 En résumé, chaque fichier a la fonction suivante:

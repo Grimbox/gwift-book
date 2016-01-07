@@ -50,9 +50,14 @@ Nous pouvons ensuite l'activer grâce à la commande ``workon gwift-env``.
 .. code-block:: shell
 
     $ workon gwift-env
-    (gwift-env)$
+    (gwift-env)$ which python
+    (gwift-env)$ /home/jaguarondi/.virtualenv/gwift-env/bin/python
+
+Le shell signal que nous sommes bien dans l'environnement gwift-env en l'affichant avant le $. Par la suite, nous considérerons que l'environnement virtuel est toujours activé, même si gwift-env n'est pas présent devant chaque $.
 
 A présent, tous les binaires présents dans cet environnement prendront le pas sur les binaires du système. De la même manière, une variable ``PATH`` propre est définie et utilisée, afin que les librairies Python y soient stockées. C'est donc dans cet environnement virutel que nous retrouverons le code-source de Django, ainsi que des librairies externes pour python une fois que nous les aurons installées.
+
+Pour désactiver l'environnement virtuel, il suffira d'utiliser la commande ``deactivate``
 
 Création du répertoire de travail
 =================================
@@ -61,15 +66,15 @@ Nous commençons par créer le répertoire du projet, à savoir ``gwift-project`
 
 .. code-block:: shell
 
-    (gwift-env)$ mkdir gwift-project
-    (gwift-env)$ cd gwift-project
+    $ mkdir gwift-project
+    $ cd gwift-project
 
 Dans ce répertoire, nous pouvons rajouter les répertoires utiles à la gestion d'un projet:
 
 .. code-block:: shell
 
-    (gwift-env)$ mkdir docs requirements
-    (gwift-env)$ touch docs/README.md
+    $ mkdir docs requirements
+    $ touch docs/README.md
 
 Création du projet Django
 =========================
@@ -80,7 +85,7 @@ C'est parti: ``pip install django``!
 
 .. code-block:: shell
 
-    (gwift-env)$ pip install django
+    $ pip install django
     Collecting django
       Downloading Django-1.8.4-py2.py3-none-any.whl (6.2MB)
     100% |################################| 6.2MB 91kB/s  eta 0:00:01
@@ -93,13 +98,13 @@ Pour démarrer notre projet, nous lançons donc ``django-admin startproject gwif
 
 .. code-block:: shell
 
-    (gwift-env)$ django-admin startproject gwift
+    $ django-admin startproject gwift
 
 Cette action a pour effet de créer un nouveau dossier ``gwift``, dans lequel on trouve la structure suivante:
 
 .. code-block:: shell
 
-    (gwift-env)$ tree gwift
+    $ tree gwift
     gwift
     ├── gwift
     │   ├── __init__.py
@@ -129,7 +134,7 @@ Au début de chaque fichier, il suffira d'ajouter la ligne ``-r base.txt``, puis
 
 .. code-block:: shell
 
-    (gwift-env)$ echo django >> requirements/base.txt
+    $ echo django >> requirements/base.txt
 
 Structure finale de l'environnement
 ===================================
@@ -138,7 +143,7 @@ Nous avons donc la strucutre finale pour notre environnement de travail:
 
 .. code-block:: shell
 
-    (gwift-env)$ tree ~/gwift-project
+    $ tree ~/gwift-project
     gwift-project/
     ├── docs
     │   └── README.md
