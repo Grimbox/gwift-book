@@ -11,9 +11,9 @@ Les morceaux de code seront développés pour Python3.4+ et Django 1.8+. Ils né
 Virtualenv
 ==========
 
-Nous allons utiliseri ``virtualenv`` afin de créer un `environnement virtuel <http://sametmax.com/les-environnement-virtuels-python-virtualenv-et-virtualenvwrapper/>`_ pour python et ``virtualenvwrapper`` pour en faciliter la gestion, et les prérequis seront remplis.
+Nous allons utiliser ``virtualenv`` afin de créer un `environnement virtuel <http://sametmax.com/les-environnement-virtuels-python-virtualenv-et-virtualenvwrapper/>`_ pour python et ``virtualenvwrapper`` pour en faciliter la gestion, et les prérequis seront remplis.
 
-Suivant votre OS, il sera sans doute nécessaire d'éditer le fichier ``~/.bashrc`` (ou tout fichier lancé au démarrage de votre session) et de vérifier que la variable ``WORKON_HOME`` est bien définie et de faire un ``source`` sur le fichier ``virtualenvwrapper.sh`` (à adapter en fonction de votre distribution):
+Suivant votre distribution, il sera sans doute nécessaire d'éditer le fichier ``~/.bashrc`` (ou tout fichier lancé au démarrage de votre session) et de vérifier que la variable ``WORKON_HOME`` est bien définie et de faire un ``source`` sur le fichier ``virtualenvwrapper.sh`` (à adapter en fonction de votre distribution):
 
 .. code-block:: shell
 
