@@ -47,3 +47,4 @@ Les classes sont créées, mais vides. Entrons dans les détails.
 
 .. include:: models/console.rst
 
+.. include:: models/metamodel.rst

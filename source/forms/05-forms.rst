@@ -21,12 +21,12 @@ Un **form** peut dépendre d'une autre classe Django. Pour cela, il suffit de fi
             fields = ('name', 'description')
 
 
-De cette manière, notre form dépendra automatiquement des champs déjà déclarés dans la classe `Wishlist`. Cela suit le principe de [DRY](don't repeat yourself), et évite qu'une modification ne pourrisse le code: en testant les deux champs présent dans l'attribut `fields`, nous pourrons nous assurer de faire évoluer le formulaire en fonction du modèle sur lequel il se base.
+De cette manière, notre form dépendra automatiquement des champs déjà déclarés dans la classe ``Wishlist``. Cela suit le principe de `DRY <don't repeat yourself>`_, et évite qu'une modification ne pourrisse le code: en testant les deux champs présent dans l'attribut ``fields``, nous pourrons nous assurer de faire évoluer le formulaire en fonction du modèle sur lequel il se base.
 
 Contrôle du rendu
 =================
 
-Le formulaire permet également de contrôler le rendu qui sera appliqué lors de la génération de la page. Si les champs dépendent du modèle sur lequel se base le formulaire, ces widgets doivent être initialisés dans l'attribut `Meta`. Sinon, ils peuvent l'être directement au niveau du champ.
+Le formulaire permet également de contrôler le rendu qui sera appliqué lors de la génération de la page. Si les champs dépendent du modèle sur lequel se base le formulaire, ces widgets doivent être initialisés dans l'attribut ``Meta``. Sinon, ils peuvent l'être directement au niveau du champ.
 
 .. code-block:: python
 
@@ -41,13 +41,13 @@ Le formulaire permet également de contrôler le rendu qui sera appliqué lors d
             widgets = {
                 'date' : forms.TextInput(
                          attrs={
-                            'class' : 'form-control', 
-                            'data-provide' : 'datepicker', 
-                            'data-date-format' : 'dd/mm/yyyy', 
+                            'class' : 'form-control',
+                            'data-provide' : 'datepicker',
+                            'data-date-format' : 'dd/mm/yyyy',
                             'placeholder' : date.today().strftime("%d/%m/%Y")
-                         }), 
+                         }),
                 'information' : forms.Textarea(
                                 attrs={
-                                    'class' : 'form-control', 
+                                    'class' : 'form-control',
                                     'placeholder' : 'Context (why, where, ...)'
                                 })

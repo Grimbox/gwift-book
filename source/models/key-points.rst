@@ -92,5 +92,3 @@ A partir de maintenant, on peut accéder à nos propriétés de la manière suiv
     [<Item: Item object>]
 
 Remarque: si, dans une classe A, plusieurs relations sont liées à une classe B, Django ne saura pas à quoi correspondra la relation inverse. Pour palier à ce problème et pour gagner en cohérence, on fixe alors une valeur à l'attribut ``related_name``.
-
-
