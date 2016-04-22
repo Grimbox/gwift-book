@@ -26,4 +26,21 @@ Le champ `urlpatterns` associe un ensemble d'adresses à des fonctions. Dans le 
 Reverse
 =======
 
-Chaque
+En associant un nom ou un libellé à chaque URL, il est possible de récupérer sa *traduction*. Cela implique par contre de ne plus toucher à ce libellé par la suite...
+
+Dans le fichier ``urls.py``, on associe le libellé ``wishlists`` à l'URL ``r'^$`` (c'est-à-dire la racine du site):  
+
+.. code-block:: python
+
+    from wish.views import WishListList
+
+    urlpatterns = [
+        url(r'^admin/', include(admin.site.urls)),
+        url(r'^$', WishListList.as_view(), name='wishlists'),
+    ]
+
+De cette manière, dans nos templates, on peut à présent construire un lien vers la racine avec le tags suivant: 
+
+.. code-block:: html
+
+    <a href="{% url 'wishlists' %}">{{ yearvar }} Archive</a>

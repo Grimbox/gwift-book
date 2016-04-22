@@ -9,13 +9,13 @@ On en a déjà parlé plus haut, il existe un standard en Python pour la défini
 Python étant un langage interprété fortement typé, il est plus que conseillé, au même titre que les tests unitaires, de documenter son code.
 Cela impose une certaine rigueur, mais améliore énormément la qualité (et la reprise) du code par une tierce personne. Cela implique aussi de **tout** documenter: les modules, les paquets, les classes, les fonctions, méthodes, ... Tout doit avoir un *docstring* associé :-).
 
-Plusieurs modules de documentation existent, mais nous allons nous concentrer sur Sphinx, qui semble être le plus complet et qui permet d'héberger directement sa documentation sur ReadTheDocs.org. Nous allons également faire en sorte que cette documentation soit compatible avec Django, puisque c'est le but de notre projet.
+Plusieurs modules de documentation existent, mais nous allons nous concentrer sur Sphinx, qui semble être le plus complet et qui permet d'héberger directement sa documentation sur `ReadTheDocs.org <https://readthedocs.org/>`_. Nous allons également faire en sorte que cette documentation soit compatible avec Django, puisque c'est le but de notre projet.
 
 ------
 Sphinx
 ------
 
-Commencez par installer Sphinx et ajoutez le dans le fichier `requirements/base.txt`. *A priori*, il n'est pas nécessaire de spécifier une version: Sphinx est un outil périphérique, qui ne dépendra pas des autres librairies. Une fois que ce sera fait, exécutez la commande ``sphinx-quickstart``, afin d'initier la documentation pour notre projet:
+Commencez par installer Sphinx et ajoutez le dans le fichier ``requirements/base.txt``. *A priori*, il n'est pas nécessaire de spécifier une version: Sphinx est un outil périphérique, qui ne dépendra pas des autres librairies. Une fois que ce sera fait, exécutez la commande ``sphinx-quickstart``, afin d'initier la documentation pour notre projet:
 
 .. code-block:: shell
 

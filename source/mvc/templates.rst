@@ -78,5 +78,53 @@ Django vient avec un ensemble de *tags*. On a vu la boucle ``for`` ci-dessus, ma
  * ``{% if ... %} ... {% elif ... %} ... {% else %} ... {% endif %}``: permet de vérifier une condition et de n'afficher le contenu du bloc que si la condition est vérifiée.
  * Opérateurs de comparaisons: ``<``, ``>``, ``==``, ``in``, ``not in``.
  * Regroupements avec le tag ``{% regroup ... by ... as ... %}``.
- * ``{% url %}``
+ * ``{% url %}`` pour construire facilement une URL
  * ...
+
+Non-builtins
+============
+
+En plus des quelques tags survolés ci-dessus, il est également possible de construire ses propres tags. La structure est un peu bizarre, car elle consiste à ajouter un paquet dans une de vos applications, à y définir un nouveau module et à y définir un ensemble de fonctions. Chacune de ces fonctions correspondra à un tag appelable depuis vos templates.
+
+Il existe trois types de tags *non-builtins*: 
+
+ 1. Les filtres - on peut les appeler grâce au *pipe* ``|`` directement après une valeur dans le template. 
+ 2. Les tags simples - ils peuvent prendre une valeur ou plusieurs en paramètre et retourne une nouvelle valeur. Pour les appeler, c'est *via* les tags ``{% nom_de_la_fonction param1 param2 ... %}``.
+ 3. Les tags d'inclusion: ils retournent un contexte (ie. un dictionnaire), qui est ensuite passé à un nouveau template. 
+
+Pour l'implémentation:
+
+ 1. On prend l'application ``wish`` et on y ajoute un répertoire ``templatetags``, ainsi qu'un fichier ``__init__.py``. 
+ 2. Dans ce nouveau paquet, on ajoute un nouveau module que l'on va appeler ``tools.py``
+ 3. Dans ce module, pour avoir un aperçu des possibilités, on va définir trois fonctions (une pour chaque type de tags possible).
+ 
+.. code-block:: shell
+
+    [Inclure un tree du dossier template tags]
+
+.. code-block:: python
+    
+    # wish/tools.py
+    
+    # coding=utf-8
+
+    from django import template
+
+    from wish.models import Wishlist
+
+    register = template.Library()
+
+    @register.filter(is_safe=True)
+    def add_xx(value):
+        return '%sxx' % value
+
+    @register.simple_tag
+    def current_time(format_string):
+        return datetime.datetime.now().strftime(format_string)
+
+    @register.inclusion_tag('wish/templatetags/wishlists_list.html')
+    def wishlists_list():
+        return { 'list': Wishlist.objects.all() }  
+    
+    
+Pour plus d'informations, la `documentation officielle est un bon début <https://docs.djangoproject.com/en/stable/howto/custom-template-tags/#writing-custom-template-tags>`_.
