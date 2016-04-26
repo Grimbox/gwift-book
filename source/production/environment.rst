@@ -85,23 +85,9 @@ Et le contenu de local.py, avec la clé secrète et les paramètres pour se conn
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = 'strong_secret_key'
 
-    # Password validation
-    # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
-    AUTH_PASSWORD_VALIDATORS = [
-        {
-            'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-        },
-        {
-            'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        },
-        {
-            'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-        },
-        {
-            'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-        },
-    ]
-    
+    # Allowed host needed to be defined in production
+    ALLOWED_HOSTS = ["sever_name.com", "www.sever_name.com"]
+
     # DB
     DATABASES = {
         'default': {
@@ -124,7 +110,7 @@ Finalement, on peut mettre à jour la DB et créer un super utilisateur:
 Test
 ====
 
-On peut tester si tout fonctionne bien en lancant le server avec django
+On peut tester si tout fonctionne bien en lançant le server avec django
 
 .. code-block:: shell
 
