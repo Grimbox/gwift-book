@@ -132,7 +132,7 @@ On peut tester si tout fonctionne bien en lancant le server avec django
     
 Et en se rendant sur server_name.com:8000/admin, on obtient:
 
-.. image:: admin_without_static.png
+.. image:: production/admin_without_static.png
     :align: center
 
 Comme on peut le voir, il n'y a pas de mise en forme de la page car les fichiers statics ne sont pas encore servis. Il le seront pas nginx.
