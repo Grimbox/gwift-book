@@ -27,5 +27,6 @@ Ne pas oublier la génération des fichiers statiques !
 .. include:: production/postgresql.rst
 .. include:: production/environment.rst
 .. include:: production/gunicorn.rst
+.. include:: production/monitoring.rst
 .. include:: production/nginx.rst
 .. include:: production/fabric.rst
