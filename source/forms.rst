@@ -14,6 +14,8 @@ Le flux à suivre est le suivant:
 
 On définit un form comme une classe. Comme pour l'ORM, des attributs Meta peuvent être ajoutés, afin de récupérer automatiquement des
 
+.. include:: forms/05-forms.rst
+
 ##########
 Conclusion
 ##########
