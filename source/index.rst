@@ -15,7 +15,7 @@ Contents:
    intro
    specs
    models
-   views
+   mvc
    forms
    admin
    docs
