@@ -88,7 +88,7 @@ A présent, ajoutez quelques listes de souhaits grâce à un *shell*, puis lance
 
 Lancez le serveur grâce à la commande ``python manage.py runserver``, ouvrez un navigateur quelconque et rendez-vous à l'adresse `http://localhost:8000 <http://localhost:8000>`_. Vous devriez obtenir le résultat suivant:
 
-.. image:: views/my-first-wishlists.png
+.. image:: mvc/my-first-wishlists.png
 	 :align: center
 
 Rien de très sexy, aucune interaction avec l'utilisateur, très peu d'utilisation des variables contextuelles, mais c'est un bon début! =)
