@@ -21,6 +21,7 @@ Contents:
    docs
    integration
    production
+   summary
 
 Indices and tables
 ==================
