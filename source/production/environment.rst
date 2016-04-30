@@ -63,6 +63,7 @@ Le fichier ``production.txt`` contient les librairies pour gunicorn et PostgreSQ
 
     gunicorn
     psycopg2
+    setproctitle
 
 Configuration
 =============
