@@ -74,8 +74,25 @@ Quelques remarques:
 
  * La première ligne du fichier inclut le *tag* ``{% load staticfiles %}``. On y reviendra par la suite, mais en gros, cela permet de faciliter la gestion des fichiers statiques, notamment en les appelent grâce à la commande ``{% static 'img/header.png' %}`` ou ``{% static 'css/app_style.css' %}``. 
  * La balise ``<head />`` est bourée d'appel vers des ressources stockées sur des :abbr:`CDN (Content Delivery Networks)`.
- * Les balises ``{% block content %} {% endblock %}`` permettent de faire hériter du contenu depuis une autre page. 
+ * Les balises ``{% block content %} {% endblock %}`` permettent de faire hériter du contenu depuis une autre page. On l'utilise notamment dans notre page ``templates/wish/list.html``.
  * Pour l'entête et le bas de page, on fait appel aux balises ``{% include 'nom_du_fichier.html' %}``: ces fichiers sont des fichiers physiques, placés sur le filesystem, juste à côté du fichier ``base.html``. De façon bête et méchante, cela inclut juste du contenu HTML. Le contenu des fichiers ``_menu_items.html`` et ``_footer.html`` est copié ci-dessous.
+ 
+.. code-block:: html
+
+    <!-- gwift/templates/wish/list.html -->
+    
+    {% extends "base.html" %}
+
+    {% block content %}
+        <p>Mes listes de souhaits</p>
+        <ul>
+        {% for wishlist in wishlists %}
+            <li>{{ wishlist.name }}: {{ wishlist.description }}</li>
+        {% endfor %}
+        </ul>
+    {% endblock %}
+
+
  
 .. code-block:: html
 
