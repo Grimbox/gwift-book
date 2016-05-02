@@ -7,4 +7,5 @@ Les vues agrègent donc les informations à partir d'un des composants et les fo
 
 .. include:: mvc/views.rst
 .. include:: mvc/templates.rst
+.. include:: mvc/layout.rst
 .. include:: mvc/urls.rst
