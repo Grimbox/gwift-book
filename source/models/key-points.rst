@@ -92,3 +92,11 @@ A partir de maintenant, on peut accéder à nos propriétés de la manière suiv
     [<Item: Item object>]
 
 Remarque: si, dans une classe A, plusieurs relations sont liées à une classe B, Django ne saura pas à quoi correspondra la relation inverse. Pour palier à ce problème et pour gagner en cohérence, on fixe alors une valeur à l'attribut ``related_name``.
+
+Querysets & managers
+--------------------
+
+ * http://stackoverflow.com/questions/12681653/when-to-use-or-not-use-iterator-in-the-django-orm
+ * https://docs.djangoproject.com/en/1.9/ref/models/querysets/#django.db.models.query.QuerySet.iterator
+ * http://blog.etianen.com/blog/2013/06/08/django-querysets/
+
