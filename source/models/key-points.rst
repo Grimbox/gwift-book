@@ -78,7 +78,7 @@ A partir de maintenant, on peut accéder à nos propriétés de la manière suiv
 
 .. code-block:: python
 
-    # $ python manage.py shell
+    # python manage.py shell
 
     >>> from wish.models import Wishlist, Item
     >>> w = Wishlist('Liste de test', 'description')
