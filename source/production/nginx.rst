@@ -7,6 +7,12 @@ FrontEnd
 
 Nginx est là pour agir en tant que front-end Web. A moins d'avoir configuré un mécanisme de cache type `Varnish <https://www.varnish-cache.org/>`_, c'est lui qui va recevoir la requête envoyée par l'utilisateur, gérer les fichiers et les informations statiques, et transmettre toute la partie dynamique vers Gunicorn. 
 
+Pour l'installer, on effectue la commande suivante:
+
+.. code-block:: shell
+
+    $$$ aptitude install nginx
+
 L'exemple ci-dessous se compose de plusieurs grandes parties: commune (par défaut), static, uploads, racine.
 
 Partie commune
@@ -18,7 +24,7 @@ Partie commune
  * keepalive ?? 
  * La compression Gzip doit-elle être activée ?
  * Avec quels paramètres ? [gzip_comp_level 7, gzip_proxied any] 
- * Quels types de fichiers GZip doit-il prendre en compte ? [
+ * Quels types de fichiers GZip doit-il prendre en compte ?
  * Où les fichiers de logs doivent-ils être stockés ? [/logs/access.log & /logs/error.log]
 
 Fichiers statiques
@@ -36,13 +42,33 @@ Si vous souhaitez implémenter un mécanisme d'accès géré, supprimez cette pa
 Racine
 ------
 
-La partie racine de votre domaine ou sous-domaine fera simplement le *pass_through* vers l'instance Gunicorn. En gros, et comme déjà expliqué, Gunicorn tourne en local sur un port (eg. 8001); la requête qui arrive sur le port 80 ou 443 est prise en compte par NGinx, puis transmise à Gunicorn sur le port 8001. Ceci est complétement transparent pour l'utilisateur de notre application.
+La partie racine de votre domaine ou sous-domaine fera simplement le *pass_through* vers l'instance Gunicorn via un socket unix. En gros, et comme déjà expliqué, Gunicorn tourne en local sur un port (eg. 8001); la requête qui arrive sur le port 80 ou 443 est prise en compte par NGinx, puis transmise à Gunicorn sur le port 8001. Ceci est complétement transparent pour l'utilisateur de notre application.
+
+On délare un upstream pour préciser à nginx comment envoyer les requêtes à gunicorn:
+
+.. code-block:: shell
+
+    upstream gwift_server {                                                                                                                                                                                                                      
+        # fail_timeout=0 means we always retry an upstream even if it failed                                                                                                                                                                       
+        # to return a good HTTP response (in case the Unicorn master nukes a                                                                                                                                                                       
+        # single worker for timing out).                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                    
+        server unix:/directory/to/gunicorn.sock fail_timeout=0;                                                                                                                                                                         
+    }
 
 Au final
 --------
 
 .. code-block:: shell
 
+    upstream gwift_server {                                                                                                                                                                                                                      
+        # fail_timeout=0 means we always retry an upstream even if it failed                                                                                                                                                                       
+        # to return a good HTTP response (in case the Unicorn master nukes a                                                                                                                                                                       
+        # single worker for timing out).                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                    
+        server unix:/directory/to/gunicorn.sock fail_timeout=0;                                                                                                                                                                         
+    }
+    
     server {
         listen 80;
         client_max_body_size 4G;
@@ -58,7 +84,7 @@ Au final
         error_log {{ cwd }}/logs/error.log;
 
         location /static/ {
-                alias {{ static_root }}/;
+                alias /webapps/gwift/gwift/static;
                 gzip on;
                 gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/x-js;
                 gzip_comp_level 9;
@@ -80,9 +106,22 @@ Au final
                 proxy_set_header Host $http_host;
                 proxy_redirect off;
 
-                proxy_pass http://127.0.0.1:{{ proxy_port }};
+                proxy_pass http://gwift_server;
         }   
     }
+
+Dans notre cas, et à adbater suivant les besoins, nous avans créé le fichier ``/etc/nginx/sites-available/gwift`` et créé un lien symbolique dans ``/etc/nginx/sites-enabled/gwift`` pour l'activer. Ensuite, nous pouvons redémarer nginx:
+
+.. code-block:: shell
+
+    $$$ service nginx restart
+
+Et maintenant, si on se connecte à notre server sur www.sever_name.com/admin, nous obtenons le site suivant:
+
+.. image:: production/admin_with_static.png
+    :align: center
+
+Où l'on peut voir que la mise en forme est correcte, ce qui signifie que les fichiers statics sont bien servis par nginx.
 
 Modules complémentaires
 =======================
