@@ -42,7 +42,7 @@ Si vous souhaitez implémenter un mécanisme d'accès géré, supprimez cette pa
 Racine
 ------
 
-La partie racine de votre domaine ou sous-domaine fera simplement le *pass_through* vers l'instance Gunicorn via un socket unix. En gros, et comme déjà expliqué, Gunicorn tourne en local sur un port (eg. 8001); la requête qui arrive sur le port 80 ou 443 est prise en compte par NGinx, puis transmise à Gunicorn sur le port 8001. Ceci est complétement transparent pour l'utilisateur de notre application.
+La partie racine de votre domaine ou sous-domaine fera simplement le *pass_through* vers l'instance Gunicorn via un socket unix. En gros, et comme déjà expliqué, Gunicorn tourne en local et écoute un socket; la requête qui arrive sur le port 80 ou 443 est prise en compte par NGinx, puis transmise à Gunicorn sur le socket. Ceci est complétement transparent pour l'utilisateur de notre application.
 
 On délare un upstream pour préciser à nginx comment envoyer les requêtes à gunicorn:
 
@@ -72,7 +72,7 @@ Au final
     server {
         listen 80;
         client_max_body_size 4G;
-        server_name {{ domain_name }};
+        server_name sever_name.com www.sever_name.com;
         keepalive_timeout 5;
 
         gzip on;
@@ -110,13 +110,13 @@ Au final
         }   
     }
 
-Dans notre cas, et à adbater suivant les besoins, nous avans créé le fichier ``/etc/nginx/sites-available/gwift`` et créé un lien symbolique dans ``/etc/nginx/sites-enabled/gwift`` pour l'activer. Ensuite, nous pouvons redémarer nginx:
+Dans notre cas, et à adapter suivant les besoins, nous avons créé le fichier ``/etc/nginx/sites-available/gwift``, ainsi qu'un lien symbolique dans ``/etc/nginx/sites-enabled/gwift`` pour l'activer. Ensuite, nous pouvons redémarer nginx:
 
 .. code-block:: shell
 
     $$$ service nginx restart
 
-Et maintenant, si on se connecte à notre server sur www.sever_name.com/admin, nous obtenons le site suivant:
+Si on se connecte à notre server sur www.sever_name.com/admin, nous obtenons le site suivant:
 
 .. image:: production/admin_with_static.png
     :align: center

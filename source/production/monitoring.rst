@@ -24,8 +24,7 @@ On crée ensuite une fichier de configuration, ``/etc/supervisor/conf.d/gwift.co
     redirect_stdout=true                                                  ; Redirect program output to the log file
     redirect_stderr=true                                                  ; Redirect program error to the log file
     
-On peut alors démarer supervisor:
-
+On peut alors démarer supervisord:
 
 .. code-block:: shell
 

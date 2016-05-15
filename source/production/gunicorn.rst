@@ -17,7 +17,7 @@ Et en se rendant sur server_name.com:8000/admin, on obtient la même chose qu'av
 .. image:: production/admin_without_static.png
     :align: center
     
-Nous allons maintenant créer un ficheir qui se chargera de lancer gunicorn correctement, que l'on sauve dans ``/webapps/gwift/gwift/bin/gunicorn_start``:
+Nous allons maintenant créer un fichier qui se chargera de lancer gunicorn correctement, que l'on sauve dans ``/webapps/gwift/gwift/bin/gunicorn_start``:
 
 .. code-block:: shell
 
