@@ -1,12 +1,16 @@
-****************
+================
 Authentification
-****************
+================
 
 Comme on l'a vu dans la partie sur le modèle, nous souhaitons que le créateur d'une liste puisse retrouver facilement les éléments qu'il aura créé. Ce dont nous n'avons pas parlé cependant, c'est la manière dont l'utilisateur va pouvoir créer son compte et s'authentifier. La `document <https://docs.djangoproject.com/en/stable/topics/auth/>`_ est très complète, nous allons essayer de la simplifier au maximum. Accrochez-vous, le sujet peut être complexe.
 
+****************************
+Mécanisme d'authentification
+****************************
+
 On peut résumer le mécanisme d'authentification de la manière suivante:
 
- * Si vous voulez modifier les informations liées à un utilisateur, orientez-vous vers la modification du modèle. Comme nous le verrons ci-dessous, il existe trois manières de prendre ces modifications en compte.
+ * Si vous voulez modifier les informations liées à un utilisateur, orientez-vous vers la modification du modèle. Comme nous le verrons ci-dessous, il existe trois manières de prendre ces modifications en compte. Voir également `ici <https://docs.djangoproject.com/en/1.9/topics/auth/customizing/>`_.
  * Si vous souhaitez modifier la manière dont l'utilisateur se connecte, alors vous devrez modifier le *backend*.
  
 Modification du modèle
@@ -39,6 +43,43 @@ Avant de commencer, sachez que cette étape doit être effectuée **avant la pre
 
     AUTH_USER_MODEL = 'myapp.MyUser'
 
-Notez bien qu'**il ne faut pas** spécifier le package ``.models`` dans cette injection de dépendances.  
+Notez bien qu'**il ne faut pas** spécifier le package ``.models`` dans cette injection de dépendances: le schéma à indiquer est bien ``<nom de l'application>.<nom de la classe>``.  
 
-Ce qui n'existe pas par contre, ce sont les vues. Django propose donc tout le mécanisme de gestion des utilisateurs, excepté le visuel (hors administration). 
+Backend
+=======
+
+[blabla...]
+
+
+*********
+Templates
+*********
+
+Ce qui n'existe pas par contre, ce sont les vues. Django propose donc tout le mécanisme de gestion des utilisateurs, excepté le visuel (hors administration). En premier lieu, ces paramètres sont fixés dans le fichier `settings <https://docs.djangoproject.com/en/1.8/ref/settings/#auth>`_. On y trouve par exemple les paramètres suivants:
+
+ * ``LOGIN_REDIRECT_URL``: si vous ne spécifiez pas le paramètre ``next``, l'utilisateur sera automatiquement redirigé vers cette page.
+ * ``LOGIN_URL``: l'URL de connexion à utiliser. Par défaut, l'utilisateur doit se rendre sur la page ``/accounts/login``. 
+
+
+***********************
+Social-Authentification
+***********************
+
+Voir ici : `python social auth <https://github.com/omab/python-social-auth>`_
+
+Un petit mot sur OAuth
+----------------------
+
+OAuth
+=====
+
+OAuth est un standard libre définissant un ensemble de méthodes à implémenter pour l'accès (l'autorisation) à une API. Son fonctionnement se base sur un système de jetons (Tokens), attribués par le possesseur de la ressource à laquelle un utilisateur souhaite accéder.
+
+Le client initie la connexion en demandant un jeton au serveur. Ce jeton est ensuite utilisée tout au long de la connexion, pour accéder aux différentes ressources offertes par ce serveur. `wikipedia <http://en.wikipedia.org/wiki/OAuth>`_.
+
+Une introduction à OAuth est `disponible ici <http://hueniverse.com/oauth/guide/intro/>`_. Elle introduit le protocole comme étant une `valet key`, une clé que l'on donne à la personne qui va garer votre voiture pendant que vous profitez des mondanités. Cette clé donne un accès à votre voiture, tout en bloquant un ensemble de fonctionnalités. Le principe du protocole est semblable en ce sens: vous vous réservez un accès total à une API, tandis que le système de jetons permet d'identifier une personne, tout en lui donnant un accès restreint à votre application. 
+
+L'utilisation de jetons permet notamment de définir une durée d'utilisation et une portée d'utilisation. L'utilisateur d'un service A peut par exemple autoriser un service B à accéder à des ressources qu'il possède, sans pour autant révéler son nom d'utilisateur ou son mot de passe.
+
+L'exemple repris au niveau du `workflow <http://hueniverse.com/oauth/guide/workflow/>`_ est le suivant : un utilisateur(trice), Jane, a uploadé des photos sur le site faji.com (A). Elle souhaite les imprimer au travers du site beppa.com (B).
+Au moment de la commande, le site beppa.com envoie une demande au site faji.com pour accéder aux ressources partagées par Jane. Pour cela, une nouvelle page s'ouvre pour l'utilisateur, et lui demande d'introduire sa "pièce d'identité". Le site A, ayant reçu une demande de B, mais certifiée par l'utilisateur, ouvre alors les ressources et lui permet d'y accéder.
