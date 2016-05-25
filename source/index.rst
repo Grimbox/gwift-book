@@ -17,6 +17,7 @@ Contents:
    models
    mvc
    forms
+   auth
    admin
    docs
    integration

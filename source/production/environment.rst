@@ -74,7 +74,7 @@ Il ne nous reste plus qu'à mettre à jour la DB. On commance par créer le fich
 
     (gwift)gwift@gwift:~$ touch gwift/gwift/settings/local.py
 
-Et le contenu de local.py, avec la clé secrète et les paramètres pour se connecter à la DB:
+Et le contenu de local.py, avec la clé secrète, les paramètres pour se connecter à la DB et l'endroit où mettre les fichiers statics (voir point suivant):
 
 .. code-block:: python
 
@@ -88,6 +88,12 @@ Et le contenu de local.py, avec la clé secrète et les paramètres pour se conn
 
     # Allowed host needed to be defined in production
     ALLOWED_HOSTS = ["sever_name.com", "www.sever_name.com"]
+    
+    # Be sure to force https for csrf cookie
+    CSRF_COOKIE_SECURE = True
+
+    # Same for session cookie
+    SESSION_COOKIE_SECURE = True
 
     # DB
     DATABASES = {
@@ -100,6 +106,13 @@ Et le contenu de local.py, avec la clé secrète et les paramètres pour se conn
             'PORT': '',                      # Set to empty string for default.
         }
     }
+    
+    # Add static root
+    STATIC_ROOT = "/webapps/gwift/gwift/static"
+
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static"),
+    ]
 
 Finalement, on peut mettre à jour la DB et créer un super utilisateur:
 
@@ -107,6 +120,24 @@ Finalement, on peut mettre à jour la DB et créer un super utilisateur:
 
     (gwift)gwift@gwift:~$ python manage.py migrate
     (gwift)gwift@gwift:~$ python manage.py createsuperuser
+
+Fichiers statics
+================
+
+Django n'est pas fait pour servir les fichiers statics. Tous les fichiers statics doivent donc être déplacés dans un répertoire pour que Nginx puisse les servir facilement.
+
+On commence par créer le répertoire où mettre les fichiers statics comme configuré dans le fichier local.py:
+
+.. code-block:: shell
+
+    (gwift)gwift@gwift:~$ mkdir /webapps/gwift/gwift/static
+    
+Et on utilise django pour copier tous les fichiers statics au bon endroit:
+
+.. code-block:: shell
+
+    (gwift)gwift@gwift:~$ python manage.py collectstatic
+
 
 Test
 ====

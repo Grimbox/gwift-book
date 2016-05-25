@@ -44,3 +44,11 @@ De cette manière, dans nos templates, on peut à présent construire un lien ve
 .. code-block:: html
 
     <a href="{% url 'wishlists' %}">{{ yearvar }} Archive</a>
+
+De la même manière, on peut également récupérer l'URL de destination pour n'importe quel libellé, de la manière suivante:
+
+.. code-block:: python
+
+    from django.core.urlresolvers import reverse_lazy
+    
+    wishlists_url = reverse_lazy('wishlists')
