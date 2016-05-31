@@ -4,7 +4,7 @@ Gwift
 
 Pour commencer, nous allons nous concentrer sur la création d'un site ne contenant qu'une seule application, même si en pratique le site contiendra déjà plusieurs applications fournies pas django, comme nous le verrons plus loin.
 
-Pour prendre un exemple concret, nous allons créer un site permettant de gérer des listes de souhaits, que nous appellerons `gwift` (pour `GiFTs and WIshlisTs` :)).
+Pour prendre un exemple concret, nous allons créer un site permettant de gérer des listes de souhaits, que nous appellerons ``gwift`` (pour ``GiFTs and WIshlisTs`` :)).
 
 La première chose à faire est de définir nos besoins du point de vue de l'utilisateur, c'est-à-dire ce que nous souhaitons qu'un utilisateur puisse faire avec l'application.
 
