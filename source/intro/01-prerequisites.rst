@@ -6,7 +6,7 @@ Avant de démarrer le développement, il est nécessaire de passer un peu de tem
 
 Les morceaux de code seront développés pour Python3.4+ et Django 1.8+. Ils nécessiteront peut-être quelques adaptations pour fonctionner sur une version antérieure.
 
-**Remarque** : les commandes qui seront exécutés dans ce livre le seront depuis un shell sous GNU/Linux. Certaines devrons donc être adaptées si vous êtes dans un autre environnemnet.
+**Remarque** : les commandes qui seront exécutés dans ce livre le seront depuis un shell sous GNU/Linux. Certaines devront donc être adaptées si vous êtes dans un autre environnemnet.
 
 Virtualenv
 ==========
@@ -53,9 +53,9 @@ Nous pouvons ensuite l'activer grâce à la commande ``workon gwift-env``.
     (gwift-env)$ which python
     (gwift-env)$ /home/jaguarondi/.virtualenv/gwift-env/bin/python
 
-Le shell signal que nous sommes bien dans l'environnement gwift-env en l'affichant avant le $. Par la suite, nous considérerons que l'environnement virtuel est toujours activé, même si gwift-env n'est pas présent devant chaque $.
+Le *shell* signale que nous sommes bien dans l'environnement ``gwift-env`` en l'affichant avant le ``$``. Par la suite, nous considérerons que l'environnement virtuel est toujours activé, même si ``gwift-env`` n'est pas présent devant chaque ``$``.
 
-A présent, tous les binaires présents dans cet environnement prendront le pas sur les binaires du système. De la même manière, une variable ``PATH`` propre est définie et utilisée, afin que les librairies Python y soient stockées. C'est donc dans cet environnement virutel que nous retrouverons le code-source de Django, ainsi que des librairies externes pour python une fois que nous les aurons installées.
+A présent, tous les binaires de cet environnement prendront le pas sur les binaires du système. De la même manière, une variable ``PATH`` propre est définie et utilisée, afin que les librairies Python y soient stockées. C'est donc dans cet environnement virtuel que nous retrouverons le code source de Django, ainsi que des librairies externes pour Python une fois que nous les aurons installées.
 
 Pour désactiver l'environnement virtuel, il suffira d'utiliser la commande ``deactivate``
 
@@ -113,6 +113,20 @@ Cette action a pour effet de créer un nouveau dossier ``gwift``, dans lequel on
     │   └── wsgi.py
     └── manage.py
 
+Si vous le souhaitez, et pour plus de clarté, renommez le premier dossier ``gwift`` en ``src``, par exemple: cela évitera d'avoir une structure hiérarchique type ``gwift-project/gwift/gwift``, mais plutôt quelque chose comme ``gwift-project/src/gwift``, sur le modèle ``{projet}/{sources}/{application}``. On a à présent:
+
+.. code-block:: shell
+
+    $ tree src
+    src
+    ├── gwift
+    │   ├── __init__.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   └── wsgi.py
+    └── manage.py
+
+
 Chacun de ces fichiers sert à:
 
  * ``settings.py`` contient tous les paramètres globaux à notre projet.
@@ -123,7 +137,7 @@ Chacun de ces fichiers sert à:
 Gestion des dépendances
 =======================
 
-Comme nous venons d'ajouter une dépendance à notre projet, nous allons créer un fichier reprenant tous les dépendances de notre projet. Ceux-ci sont placés normalement dans un fichier ``requirements.txt``. Dans un premier temps, ce fichier peut être placé directement à la racine du projet, mais on préférera rapidement le déplacer dans un sous-répertoire spécifique (``requirements``), afin de grouper les dépendances en fonction de leur utilité:
+Comme nous venons d'ajouter une dépendance à notre projet, nous allons créer un fichier reprenant tous les dépendances de notre projet. Celles-ci sont normalement placées dans un fichier ``requirements.txt``. Dans un premier temps, ce fichier peut être placé directement à la racine du projet, mais on préférera rapidement le déplacer dans un sous-répertoire spécifique (``requirements``), afin de grouper les dépendances en fonction de leur utilité:
 
  * ``base.txt``
  * ``dev.txt``
@@ -147,7 +161,7 @@ Nous avons donc la strucutre finale pour notre environnement de travail:
     gwift-project/
     ├── docs
     │   └── README.md
-    ├── gwift
+    ├── src
     │   ├── gwift
     │   │   ├── __init__.py
     │   │   ├── settings.py
