@@ -7,7 +7,7 @@ Avant d'aller plus loin, donc, un petit point sur les conventions, les tests (un
 PEP8
 ====
 
-Le langage Python fonctionne avec un système d'améliorations basées sur des propositions: les PEP, ou "Python Enhancement Proposal". Chacune d'entre elles doit être approuvée par le `Benevolent Dictator For Life <http://fr.wikipedia.org/wiki/Benevolent_Dictator_for_Life>`_.
+Le langage Python fonctionne avec un système d'améliorations basées sur des propositions: les PEP, ou "**Python Enhancement Proposal**". Chacune d'entre elles doit être approuvée par le `Benevolent Dictator For Life <http://fr.wikipedia.org/wiki/Benevolent_Dictator_for_Life>`_.
 
 La PEP qui nous intéresse plus particulièrement pour la suite est la `PEP-8 <https://www.python.org/dev/peps/pep-0008/>`_, ou "Style Guide for Python Code". Elle spécifie des conventions d'organisation et de formatage de code Python, quelles sont les conventions pour l'indentation, le nommage des variables et des classes, etc. En bref, elle décrit comment écrire du code proprement pour que d'autres développeurs puissent le reprendre facilement, ou simplement que votre base de code ne dérive lentement vers un seuil de non-maintenabilité.
 
@@ -104,7 +104,7 @@ Complexité de McCabe
 
 La `complexité cyclomatique <https://fr.wikipedia.org/wiki/Nombre_cyclomatique>`_ (ou complexité de McCabe) peut s'apparenter à une [...]
 
-A nouveau, un greffon pour ``flake8`` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre `--max-complexity`. Toute fonction dans la complexité est supérieure à 10 est considérée comme trop complexe.
+A nouveau, un greffon pour ``flake8`` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre ``--max-complexity``. Toute fonction dans la complexité est supérieure à 10 est considérée comme trop complexe.
 
 // TODO
 
@@ -113,29 +113,29 @@ Documentation
 
 Il existe plusieurs manières de générer la documentation d'un projet. Les plus connues sont `Sphinx <http://sphinx-doc.org/>`_ et `MkDocs <http://www.mkdocs.org/>`_. Le premier a l'avantage d'être plus reconnu dans la communauté Python que l'autre, de pouvoir *parser* le code pour en extraire la documentation et de pouvoir lancer des `tests orientés documentation <https://duckduckgo.com/?q=documentation+driven+development&t=ffsb>`_. A contrario, votre syntaxe devra respecter `ReStructuredText <https://en.wikipedia.org/wiki/ReStructuredText>`_. Le second a l'avantage d'avoir une syntaxe plus simple à apprendre et à comprendre, mais est plus limité dans son résultat.
 
-Dans l'immédiat, nous nous contenterons d'avoir des modules documentés (quelle que soit la méthode Sphinx/MkDocs/...). Dans la continuié de `Flake8`, il existe un greffon qui vérifie la présence de commentaires au niveau des méthodes et modules développés.
+Dans l'immédiat, nous nous contenterons d'avoir des modules documentés (quelle que soit la méthode Sphinx/MkDocs/...). Dans la continuié de ``Flake8``, il existe un greffon qui vérifie la présence de commentaires au niveau des méthodes et modules développés.
 
 .. code-block:: shell
 
     $ pip install flake8_docstrings
 
-Lancez ensuite `flake8` avec la commande `flake8 . --exclude="migrations"`. Sur notre projet (presque) vide, le résultat sera le suivant:
+Lancez ensuite `flake8` avec la commande ``flake8 . --exclude="migrations"``. Sur notre projet (presque) vide, le résultat sera le suivant:
 
 .. code-block:: shell
 
     $ flake8 . --exclude="migrations"
-    .\gwift\manage.py:1:1: D100  Missing docstring in public module
-    .\gwift\gwift\__init__.py:1:1: D100  Missing docstring in public module
-    .\gwift\gwift\urls.py:1:1: D400  First line should end with a period (not 'n')
-    .\gwift\wish\__init__.py:1:1: D100  Missing docstring in public module
-    .\gwift\wish\admin.py:1:1: D100  Missing docstring in public module
-    .\gwift\wish\admin.py:1:1: F401 'admin' imported but unused
-    .\gwift\wish\models.py:1:1: D100  Missing docstring in public module
-    .\gwift\wish\models.py:1:1: F401 'models' imported but unused
-    .\gwift\wish\tests.py:1:1: D100  Missing docstring in public module
-    .\gwift\wish\tests.py:1:1: F401 'TestCase' imported but unused
-    .\gwift\wish\views.py:1:1: D100  Missing docstring in public module
-    .\gwift\wish\views.py:1:1: F401 'render' imported but unused
+    .\src\manage.py:1:1: D100  Missing docstring in public module
+    .\src\gwift\__init__.py:1:1: D100  Missing docstring in public module
+    .\src\gwift\urls.py:1:1: D400  First line should end with a period (not 'n')
+    .\src\wish\__init__.py:1:1: D100  Missing docstring in public module
+    .\src\wish\admin.py:1:1: D100  Missing docstring in public module
+    .\src\wish\admin.py:1:1: F401 'admin' imported but unused
+    .\src\wish\models.py:1:1: D100  Missing docstring in public module
+    .\src\wish\models.py:1:1: F401 'models' imported but unused
+    .\src\wish\tests.py:1:1: D100  Missing docstring in public module
+    .\src\wish\tests.py:1:1: F401 'TestCase' imported but unused
+    .\src\wish\views.py:1:1: D100  Missing docstring in public module
+    .\src\wish\views.py:1:1: F401 'render' imported but unused
 
 
 Bref, on le voit: nous n'avons que très peu de modules, et aucun d'eux n'est commenté.
