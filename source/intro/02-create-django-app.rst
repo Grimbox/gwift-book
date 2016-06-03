@@ -2,7 +2,7 @@
 Une application Django
 **********************
 
-Comme on l'a vu ci-dessus, ``django-admin`` permet de créer un nouveau projet. Django fait une distinction entre un **projet** et une **application**:
+Comme on l'a vu ci-dessus, ``django-admin`` permet de créer un nouveau projet. On fait ici une distinction entre un **projet** et une **application**:
 
  * **Projet**: ensemble des applications, paramètres, pages HTML, middlwares, dépendances, etc., qui font que votre code fait ce qu'il est sensé faire.
  * **Application**: *contexte* éventuellement indépendant, permettant d'effectuer une partie isolée de ce que l'on veut faire.
@@ -20,7 +20,7 @@ Comme expliqué un peu plus haut, le fichier ``manage.py`` est un *wrapper* sur 
  * ``manage.py runserver`` pour lancer un serveur de développement
  * ``manage.py test`` pour découvrir les tests unitaires disponibles et les lancer.
 
-La liste complète peut être affichée avec ``manage.py help``. Vous remarquerez que ces commandes sont groupées:
+La liste complète peut être affichée avec ``manage.py help``. Vous remarquerez que ces commandes sont groupées selon différentes catégories:
 
  * **auth**: création d'un nouveau super-utilisateur, changer le mot de passe pour un utilisateur existant.
  * **django**: vérifier la *compliance* du projet, lancer un *shell*, *dumper* les données de la base, effectuer une migration du schéma, ...
@@ -38,7 +38,7 @@ Cette application servira à structurer les listes de souhaits, les éléments q
 
 .. code-block:: shell
 
-    $ cd gwift
+    $ cd src
     $ python manage.py startapp wish
 
 Résultat? Django nous a créé un répertoire ``wish``, dans lequel on trouve les fichiers suivants:

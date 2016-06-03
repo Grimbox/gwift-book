@@ -10,13 +10,14 @@ Il sera nécessaire de s'authentifier pour :
  * Ajouter un nouvel élément à une liste
  
 Il ne sera pas nécessaire de s'authentifier pour :
+
  * Faire une promesse d'offre pour un élément appartenant à une liste, associée à un utilisateur.
 
 L'utilisateur ayant créé une liste pourra envoyer un email directement depuis le site aux personnes avec qui il souhaite partager sa liste, cet email contenant un lien permettant d'accéder à cette liste.
 
-A chaque souhait, on pourrait de manière facultative ajouter un prix. Dans ce cas, le souhait pourrait aussi être subdivisé en plusieurs parts, de manière à ce que plusieurs personnes puissent participer à sa réalisation.
+A chaque souhait, on pourrait de manière facultative ajouter un prix. Dans ce cas, le souhait pourrait aussi être subdivisé en plusieurs parties, de manière à ce que plusieurs personnes puissent participer à sa réalisation.
 
-Un souhait pourrait aussi être réalisé plusieurs fois.
+Un souhait pourrait aussi être réalisé plusieurs fois. Ceci revient à dupliquer le souhait en question.
 
 ********************
 Besoins fonctionnels
