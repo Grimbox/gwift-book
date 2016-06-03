@@ -15,6 +15,7 @@ Contents:
    intro
    specs
    models
+   tests
    mvc
    forms
    auth

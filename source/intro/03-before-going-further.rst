@@ -49,12 +49,15 @@ Attention que celle-ci ne permet pas de v√©rifier que le code est **bien** test√
     [run]
     branch = True
     omit = ../*migrations*
+    plugins = 
+        django_coverage_plugin
 
     [report]
     ignore_errors = True
 
     [html]
     directory = coverage_html_report
+    
 
 .. code-block:: shell
 

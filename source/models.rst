@@ -35,7 +35,7 @@ Cela nous donne ceci:
 
 Les classes sont créées, mais vides. Entrons dans les détails.
 
-[Ajouter pourquoi on hérite de ``models.Model``, etc.)
+.. todo:: Ajouter pourquoi on hérite de ``models.Model``, etc.
 
 .. include:: models/models.rst
 

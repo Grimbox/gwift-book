@@ -82,9 +82,9 @@ A nouveau, que peut-on constater ?
  * Comme cité ci-dessus, chaque champ possède des attributs spécifiques. Le champ ``DecimalField`` possède par exemple les attributs ``max_digits`` et ``decimal_places``, qui nous permettra de représenter une valeur comprise entre 0 et plus d'un milliard (avec deux chiffres décimaux).
  * L'ajout d'un champ de type ``ImageField`` nécessite l'installation de ``pillow`` pour la gestion des images. Nous l'ajoutons donc à nos pré-requis, dans le fichier ``requirements/base.txt``.
 
-*******
+*****
 Parts
-*******
+*****
 
 
 Les parts ont besoins des propriétés suivantes:
@@ -107,34 +107,15 @@ Elles permettent à un utilisateur de participer au souhait émis par un autre u
     class WishPart(models.Model):
 
         wish = models.ForeignKey(Wish)
-        user = models.ForeignKey(User)
-	    unknown_user = models.ForeignKey(UnknownUser)
-        comment = models.TextField()
-        done_at = models.DateTimeField()
+        user = models.ForeignKey(User, null=True)
+	    unknown_user = models.ForeignKey(UnknownUser, null=True)
+        comment = models.TextField(null=True, blank=True)
+        done_at = models.DateTimeField(auto_now_add=True)
 
 La classe ``User`` référencée au début du snippet correspond à l'utilisateur géré par Django. Cette instance est accessible à chaque requête transmise au serveur, et est accessible grâce à l'objet ``request.user``, transmis à chaque fonction ou *Class-based-view*. C'est un des avantages d'un framework tout intégré: il vient *batteries-included* et beaucoup de détails ne doivent pas être pris en compte. Pour le moment, nous nous limiterons à ceci. Par la suite, nous verrons comment améliorer la gestion des profils utilisateurs, comment y ajouter des informations et comment gérer les cas particuliers.
 
 La classe ``UnknownUser`` permet de représenter un utilisateur non enregistré sur le site et est définie au point suivant.
 
-Maintenant que la classe ``Part`` est définie, il nous est également possible de calculer le pourcentage d'avancement pour la réalisation d'un souhait. Pour cela, il nous suffit d'ajouter une nouvelle méthode au niveau de la classe ``Wish``, qui va calculer le nombre de parts déjà promises, et nous donnera l'avancement par rapport au nombre total de parts disponibles:
-
-.. code-block:: python
-
-    class Wish(models.Model):
-
-        [...]
-
-        @property
-        def percentage(self):
-            """
-            Calcule le pourcentage de complétion pour un élément.
-            """
-            number_of_linked_parts = Part.objects.filter(wish=self).count()
-            total = self.number_of_parts * self.numbers_available
-            percentage = (number_of_linked_parts / total)
-            return percentage * 100
-
-L'attribut ``@property`` va nous permettre d'appeler directement la méthode ``percentage()`` comme s'il s'agissait d'une propriété de la classe, au même titre que les champs ``number_of_parts`` ou ``numbers_available``. Attention que ce type de méthode fera un appel à la base de données à chaque appel. Il convient de ne pas surcharger ces méthodes de connexions à la base: sur de petites applications, ce type de comportement a très peu d'impacts. Ce n'est plus le cas sur de grosses applications ou sur des méthodes fréquemment appelées. Il convient alors de passer par un mécanisme de **cache**, que nous aborderons plus loin.
 
 *********************
 Utilisateurs inconnus
@@ -144,15 +125,15 @@ Pour chaque réalisation d'un souhait par quelqu'un, il est nécessaire de sauve
 
  * un identifiant
  * un nom
- * une adresse email
+ * une adresse email. Cette adresse email sera unique dans notre base de données, pour ne pas créer une nouvelle occurence si un même utilisateur participe à la réalisation de plusieurs souhaits.
 
-Ce qui donne après implémentation:
+Ceci nous donne après implémentation:
 
 .. code-block:: python
 
     class UnkownUser(models.Model):
 	
         name = models.CharField(max_length=255)
-        email = models.CharField(max_length=255)
+        email = models.CharField(email = models.CharField(max_length=255, unique=True)
 
 
