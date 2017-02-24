@@ -57,7 +57,7 @@ Et installer les dépendances:
 
 Le fichier ``production.txt`` contient les librairies pour gunicorn et PostgreSQL:
 
-.. code-block:: txt
+.. code-block:: shell
 
     -r base.txt
 
