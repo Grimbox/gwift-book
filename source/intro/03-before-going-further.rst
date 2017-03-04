@@ -30,12 +30,27 @@ Si vous ne voulez pas être dérangé sur votre manière de coder, et que vous v
 
 Finalement, la solution qui couvre ces deux domaines existe et s'intitule `flake8 <https://github.com/PyCQA/flake8>`_. Sur base la même interface que ``pep8``, vous aurez en plus tous les avantages liés à ``pyflakes`` concernant votre code source.
 
+Tests
+=====
 
-Tests et couverture de code
-===========================
+Comme tout bon *framework* qui se respecte, Django embarque tout un environnement facilitant le lancement de tests; chaque application est créée par défaut avec un fichier **tests.py**, qui inclut la classe ``TestCase`` depuis le package ``django.test``:
 
-La couverture de code donne un pourcentage lié à la quantité de code couvert par les testss.
-Attention que celle-ci ne permet pas de vérifier que le code est **bien** testé, elle permet juste de vérifier que le code est **testé**. En Python, il existe le paquet `coverage <https://pypi.python.org/pypi/coverage/>`_, qui se charge d'évaluer le pourcentage de code couvert par les tests. Si cela vous intéresse, ajoutez-le dans le fichier ``requirements/base.txt``, et lancez une couverture de code grâce à la commande ``coverage``. La configuration peut se faire dans un fichier ``.coveragerc`` que vous placerez à la racine de votre projet, et qui sera lu lors de l'exécution.
+.. code-block:: python
+
+    from django.test import TestCase
+    
+    class TestModel(TestCase):
+        def test_str(self):
+            raise NotImplementedError('Not implemented yet')
+
+Idéalement, chaque fonction ou méthode doit être testée afin de bien en valider le fonctionnement, indépendamment du reste des composants. Cela permet d'isoler chaque bloc de manière unitaire, et permet de ne pas rencontrer de régression lors de l'ajout d'une nouvelle fonctionnalité ou de la modification d'une existante. Il existe plusieurs types de tests (intégration, comportement, ...); on ne parlera ici que des tests unitaires.
+
+Avoir des tests, c'est bien. S'assurer que tout est testé, c'est mieux. C'est là qu'il est utile d'avoir le pourcentage de code couvert par les différents tests, pour savoir ce qui peut être amélioré.
+
+Couverture de code
+==================
+
+La couverture de code est une analyse qui donne un pourcentage lié à la quantité de code couvert par les tests. Attention qu'il ne s'agit pas de vérifier que le code est **bien** testé, mais juste de vérifier **quelle partie** du code est testée. En Python, il existe le paquet `coverage <https://pypi.python.org/pypi/coverage/>`_, qui se charge d'évaluer le pourcentage de code couvert par les tests. Ajoutez-le dans le fichier ``requirements/base.txt``, et lancez une couverture de code grâce à la commande ``coverage``. La configuration peut se faire dans un fichier ``.coveragerc`` que vous placerez à la racine de votre projet, et qui sera lu lors de l'exécution.
 
 .. code-block:: shell
 
@@ -81,7 +96,7 @@ Attention que celle-ci ne permet pas de vérifier que le code est **bien** test�
 
     $ coverage html
 
-Ceci vous affichera non seulement la couverture de code estimée, et générera également vos fichiers sources avec les branches non couvertes. Pour gagner un peu de temps, n'hésitez pas à créer un fichier ``Makefile`` à la racine du projet. L'exemple ci-dessous permettra, grâce à la commande ``make coverage``, d'arriver au même résultat que ci-dessus:
+Ceci vous affichera non seulement la couverture de code estimée, et générera également vos fichiers sources avec les branches non couvertes. Pour gagner un peu de temps, n'hésitez pas à créer un fichier ``Makefile`` que vous placerez à la racine du projet. L'exemple ci-dessous permettra, grâce à la commande ``make coverage``, d'arriver au même résultat que ci-dessus:
 
 .. code-block:: shell
 
@@ -105,7 +120,30 @@ Ceci vous affichera non seulement la couverture de code estimée, et générera 
 Complexité de McCabe
 ====================
 
-La `complexité cyclomatique <https://fr.wikipedia.org/wiki/Nombre_cyclomatique>`_ (ou complexité de McCabe) peut s'apparenter à une [...]
+La `complexité cyclomatique <https://fr.wikipedia.org/wiki/Nombre_cyclomatique>`_ (ou complexité de McCabe) peut s'apparenter à une mesure de complexité du code parcouru en fonction du nombre de branches trouvées. Une branche, c'est un embranchement: quand le cycle d'exécution du code rencontre une condition, il peut soit rentrer dedans, soit passer directement à la suite. Par exemple:
+
+.. code-block:: python
+
+    if True == True:
+        pass # never happens
+    
+    # continue ...
+
+La condition existe, mais on ne passera jamais dedans. A l'inverse, le code suivant aura une complexité pourrie à cause du nombre de conditions imbriquées:
+
+.. code-block:: python
+
+    def compare(a, b, c, d, e):
+        if a == b:
+            if b == c:
+                if d == e:
+                    print('Yeah!')
+
+Potentiellement, les tests unitaires qui seront nécessaires à couvrir tous les cas de figure seront au nombre de quatre: le cas par défaut (a est différent de b, rien ne se passe), puis les autres cas, jusqu'à arriver à l'impression à l'écran. 
+
+La complexité cyclomatique d'un bloc est évaluée sur base du nombre d'embranchements possibles; par défaut, sa valeur est de 1. Si on rencontre une condition, elle passera à 2, etc. Le nombre de tests unitaires nécessaires à la couverture d'un bloc est au minimum égal à la complexité cyclomatique de ce bloc. Une possibilité pour améliorer la maintenance du code est de faire baisser ce nombre, et de le conserver sous un certain seuil. Certains recommandent de le garder sous une complexité de 10; d'autres de 5.
+
+Evidemment, si on refactorise un bloc pour en extraire une méthode, cela n'améliorera pas sa complexité cyclomatique globale
 
 A nouveau, un greffon pour ``flake8`` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre ``--max-complexity``. Toute fonction dans la complexité est supérieure à 10 est considérée comme trop complexe.
 
