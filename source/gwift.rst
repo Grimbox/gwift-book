@@ -10,4 +10,18 @@ La première chose à faire est de définir nos besoins du point de vue de l'uti
 
 Ensuite, nous pourrons traduire ces besoins en fonctionnalités et finalement effectuer le développement
 
-.. include:: specs/00-specs.rst
+.. include:: gwift/00-specs.rst
+.. include:: gwift/01-models.rst
+.. include:: gwift/tests.rst
+
+.. todo:: Ajouter pourquoi on hérite de ``models.Model``, etc.
+
+.. include:: gwift/key-points.rst
+
+.. include:: gwift/refactoring.rst
+
+.. include:: gwift/user-management.rst
+
+.. include:: gwift/console.rst
+
+.. include:: gwift/metamodel.rst

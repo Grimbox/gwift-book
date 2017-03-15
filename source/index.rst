@@ -13,16 +13,13 @@ Contents:
    :numbered:
 
    intro
-   specs
-   models
-   tests
+   gwift
+   integration
+   production
    mvc
    forms
    auth
    admin
-   docs
-   integration
-   production
    summary
 
 Indices and tables

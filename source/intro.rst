@@ -16,3 +16,5 @@ Django se présente comme un `Framework Web pour perfectionnistes ayant des dead
 .. include:: intro/02-create-django-app.rst
 
 .. include:: intro/03-before-going-further.rst
+
+.. include:: intro/04-docs.rst

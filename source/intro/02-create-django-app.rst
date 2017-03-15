@@ -1,6 +1,6 @@
-**********************
-Une application Django
-**********************
+*******************
+L'espace de travail
+*******************
 
 Comme on l'a vu ci-dessus, ``django-admin`` permet de créer un nouveau projet. On fait ici une distinction entre un **projet** et une **application**:
 

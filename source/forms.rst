@@ -1,6 +1,6 @@
-===========
-Formulaires
-===========
+========================================
+Formulaires: comment valider des données
+========================================
 
 Quand on parle de ``forms``, on ne parle pas uniquement de formulaires Web. On pourrait considérer qu'il s'agit de leur objectif principal, mais on peut également voir un peu plus loin: on peut en fait voir les ``forms`` comme le point d'entrée pour chaque donnée arrivant dans notre application: il s'agit en quelque sorte d'un ensemble de règles complémentaires à celles déjà présentes au niveau du modèle.
 
