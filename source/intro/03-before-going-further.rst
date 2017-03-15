@@ -1,8 +1,46 @@
-**************************
-Avant d'aller plus loin...
-**************************
+****************************************
+Construire des applications maintenables
+****************************************
 
-Avant d'aller plus loin, donc, un petit point sur les conventions, les tests (unitaires, orientés comportement, basés sur la documentation, ...), la gestion de verstion du code et sur la documentation. Plus que dans tout langage compilé, ceux-ci sont pratiquement obligatoires. Vous pourrez les voir comme une perte de temps dans un premier temps, mais nous vous promettons qu'ils vous en feront gagner par la suite.
+Pour cette section, je me base d'un résumé de l'ebook **Building Maintenable Software** disponible chez `O'Reilly <http://shop.oreilly.com/product/0636920049555.do`_ qui vaut clairement le détour pour poser les bases d'un projet.
+
+Ce livre répartit un ensemble de conseils parmi quatre niveaux de composants:
+
+ * Les méthodes et fonctions
+ * Les classes
+ * Les composants
+ * Et de manière plus générale.
+
+Au niveau des méthodes et fonctions
+===================================
+
+ * Gardez vos méthodes/fonctions courtes. Pas plus de 15 lignes, en comptant les commentaires. Des exceptions sont possibles, mais dans une certaine mesure uniquement (pas plus de 6.9% de plus de 60 lignes; pas plus de 22.3% de plus de 30 lignes, au plus 43.7% de plus de 15 lignes et au moins 56.3% en dessous de 15 lignes). Oui, c'est dur à tenir, mais faisable.
+ * Conserver une complexité de McCabe en dessous de 5, c'est-à-dire avec quatre branches au maximum. A nouveau, si on a une méthode avec une complexité cyclomatique de 15, la séparer en 3 fonctions avec une complexité de 5 conservera globalement le nombre 15, mais rendra le code de chacune de ces méthodes plus lisible, plus maintenable.
+ * N'écrivez votre code qu'une seule fois: évitez les duplications, copie, etc., c'est juste mal: imaginez qu'un bug soit découvert dans une fonction; il devra alors être corrigé dans toutes les fonctions qui auront été copiées/collées. C'est aussi une forme de régression.
+ * Conservez de petites interfaces. Quatre paramètres, pas plus. Au besoin, refactorisez certains paramètres dans une classe, plus facile à tester.
+
+Au niveau des classes
+=====================
+
+ * Privilégiez un couplage faible entre vos classes. Ceci n'est pas toujours possible, mais dans la mesure du possible, éclatez vos classes en fonction de leur domaine de compétences. L'implémentation du service ``UserNotificationsService`` ne doit pas forcément se trouver embarqué dans une classe ``UserService``. De même, pensez à passer par une interface (commune à plusieurs classes), afin d'ajouter une couche d'abstraction. La classe appellante n'aura alors que les méthodes offertes par l'interface comme points d'entrée.
+
+Au niveau des composants
+========================
+
+ * Tout comme pour les classes, il faut conserver un couplage faible au niveau des composants également. Une manière d'arriver à ce résultat est de conserver un nombre de points d'entrée restreint, et d'éviter qu'on ne puisse contacter trop facilement des couches séparées de l'architecture. Pour une architecture n-tiers par exemple, la couche d'abstraction à la base de données ne peut être connue que des services; sans cela, au bout de quelques semaines, n'importe quelle couche de présentation risque de contacter directement la base de données, "juste parce qu'elle en a la possibilité". Vous pourrez également passer par des interfaces, afin de réduire le nombre de points d'entrée connus par un composant externe (qui ne connaîtra par exemple que `IFileTransfer` avec ses méthodes `put` et `get`, et non pas les détails d'implémentation complet d'une classe `FtpFileTransfer` ou `SshFileTransfer`).
+ * Conserver un bon balancement au niveau des composants: évitez qu'un composant **A** ne soit un énorme mastodonte, alors que le composant juste à côté n'est capable que d'une action. De cette manière, les nouvelles fonctionnalités seront mieux réparties parmi les différents systèmes, et les responsabilités plus faciles à gérer. Un conseil est d'avoir un nombre de composants compris entre 6 et 12 (idéalement, 12), et que ces composants soit approximativement de même taille.
+
+De manière plus générale
+========================
+
+ * Conserver une densité de code faible: il n'est évidemment pas possible d'implémenter n'importe quelle nouvelle fonctionnalité en moins de 20 lignes de code; l'idée ici est que la réécriture du projet ne prenne pas plus de 20 hommes/mois. Pour cela, il faut (activement) passer du temps à réduire la taille du code existant: soit en faisant du refactoring (intensif?), soit en utilisant des librairies existantes, soit en explosant un système existant en plusieurs sous-systèmes communiquant entre eux. Mais surtout en évitant de copier/coller bêtement du code existant.
+ * Automatiser les tests, ajouter un environnement d'intégration continue dès le début du projet et vérifier par des outils les points ci-dessus.
+
+***********
+En pratique
+***********
+
+Par rapport aux points repris ci-dessus, l'environnement Python et le framework Django proposent un ensemble d'outils intégrés qui permettent de répondre à chaque point. Avant d'aller plus loin, donc, un petit point sur les conventions, les tests (unitaires, orientés comportement, basés sur la documentation, ...), la gestion de version du code et sur la documentation. Plus que dans tout langage compilé, ceux-ci sont pratiquement obligatoires. Vous pourrez les voir comme une perte de temps dans un premier temps, mais nous vous promettons qu'ils vous en feront gagner par la suite.
 
 PEP8
 ====
@@ -136,18 +174,30 @@ La condition existe, mais on ne passera jamais dedans. A l'inverse, le code suiv
     def compare(a, b, c, d, e):
         if a == b:
             if b == c:
-                if d == e:
-                    print('Yeah!')
+                if c == d:
+                    if d == e:
+                        print('Yeah!')
+                        return 1
 
-Potentiellement, les tests unitaires qui seront nécessaires à couvrir tous les cas de figure seront au nombre de quatre: le cas par défaut (a est différent de b, rien ne se passe), puis les autres cas, jusqu'à arriver à l'impression à l'écran. 
+Potentiellement, les tests unitaires qui seront nécessaires à couvrir tous les cas de figure seront au nombre de quatre: le cas par défaut (a est différent de b, rien ne se passe), puis les autres cas, jusqu'à arriver à l'impression à l'écran et à la valeur de retour. La complexité cyclomatique d'un bloc est évaluée sur base du nombre d'embranchements possibles; par défaut, sa valeur est de 1. Si on rencontre une condition, elle passera à 2, etc. 
 
-La complexité cyclomatique d'un bloc est évaluée sur base du nombre d'embranchements possibles; par défaut, sa valeur est de 1. Si on rencontre une condition, elle passera à 2, etc. Le nombre de tests unitaires nécessaires à la couverture d'un bloc est au minimum égal à la complexité cyclomatique de ce bloc. Une possibilité pour améliorer la maintenance du code est de faire baisser ce nombre, et de le conserver sous un certain seuil. Certains recommandent de le garder sous une complexité de 10; d'autres de 5.
+Pour l'exemple ci-dessous, on va en fait devoir vérifier au moins chacun des cas pour s'assurer que la couverture est complète. On devrait donc trouver:
 
-Evidemment, si on refactorise un bloc pour en extraire une méthode, cela n'améliorera pas sa complexité cyclomatique globale
+ 1. Un test pour entrer (ou non) dans la condition ``a == b``
+ 2. Un test pour entrer (ou non) dans la condition ``b == c``
+ 3. Un test pour entrer (ou non) dans la condition ``c == d``
+ 4. Un test pour entrer (ou non) dans la condition ``d == e``
+ 5. Et s'assurer que n'importe quel autre cas retournera la valeur ``None``.
+ 
+On a donc bien besoin de minimum cinq tests pour couvrir l'entièreté des cas présentés.
 
-A nouveau, un greffon pour ``flake8`` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre ``--max-complexity``. Toute fonction dans la complexité est supérieure à 10 est considérée comme trop complexe.
+Le nombre de tests unitaires nécessaires à la couverture d'un bloc est au minimum égal à la complexité cyclomatique de ce bloc. Une possibilité pour améliorer la maintenance du code est de faire baisser ce nombre, et de le conserver sous un certain seuil. Certains recommandent de le garder sous une complexité de 10; d'autres de 5.
 
-// TODO
+.. note::
+
+    Evidemment, si on refactorise un bloc pour en extraire une méthode, cela   n'améliorera pas sa complexité cyclomatique globale
+
+A nouveau, un greffon pour ``flake8`` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre ``--max-complexity``. Toute fonction dans la complexité est supérieure à cette valeur sera considérée comme trop complexe.
 
 Documentation
 =============
@@ -155,6 +205,10 @@ Documentation
 Il existe plusieurs manières de générer la documentation d'un projet. Les plus connues sont `Sphinx <http://sphinx-doc.org/>`_ et `MkDocs <http://www.mkdocs.org/>`_. Le premier a l'avantage d'être plus reconnu dans la communauté Python que l'autre, de pouvoir *parser* le code pour en extraire la documentation et de pouvoir lancer des `tests orientés documentation <https://duckduckgo.com/?q=documentation+driven+development&t=ffsb>`_. A contrario, votre syntaxe devra respecter `ReStructuredText <https://en.wikipedia.org/wiki/ReStructuredText>`_. Le second a l'avantage d'avoir une syntaxe plus simple à apprendre et à comprendre, mais est plus limité dans son résultat.
 
 Dans l'immédiat, nous nous contenterons d'avoir des modules documentés (quelle que soit la méthode Sphinx/MkDocs/...). Dans la continuié de ``Flake8``, il existe un greffon qui vérifie la présence de commentaires au niveau des méthodes et modules développés.
+
+.. note::
+
+    voir si il ne faudrait pas mieux passer par pydocstyle.
 
 .. code-block:: shell
 
@@ -182,6 +236,11 @@ Lancez ensuite `flake8` avec la commande ``flake8 . --exclude="migrations"``. Su
 Bref, on le voit: nous n'avons que très peu de modules, et aucun d'eux n'est commenté.
 
 En plus de cette méthode, Django permet également de rendre la documentation accessible depuis son interface d'administration.
+
+PyLint
+======
+
+PyLint est la version **++**, pour ceux qui veulent un code propre et sans bavure.
 
 Gestion de version du code
 ==========================
