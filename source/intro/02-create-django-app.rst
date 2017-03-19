@@ -16,7 +16,7 @@ Gestion
 
 Comme expliqué un peu plus haut, le fichier ``manage.py`` est un *wrapper* sur les commandes ``django-admin``. A partir de maintenant, nous n'utiliserons plus que celui-là pour tout ce qui touchera à la gestion de notre projet:
 
- * ``manage.py check`` pour vérifier que votre projet ne rencontre aucune erreur
+ * ``manage.py check`` pour vérifier (en surface...) que votre projet ne rencontre aucune erreur
  * ``manage.py runserver`` pour lancer un serveur de développement
  * ``manage.py test`` pour découvrir les tests unitaires disponibles et les lancer.
 
@@ -38,7 +38,6 @@ Cette application servira à structurer les listes de souhaits, les éléments q
 
 .. code-block:: shell
 
-    $ cd src
     $ python manage.py startapp wish
 
 Résultat? Django nous a créé un répertoire ``wish``, dans lequel on trouve les fichiers suivants:

@@ -68,6 +68,11 @@ Si vous ne voulez pas être dérangé sur votre manière de coder, et que vous v
 
 Finalement, la solution qui couvre ces deux domaines existe et s'intitule `flake8 <https://github.com/PyCQA/flake8>`_. Sur base la même interface que ``pep8``, vous aurez en plus tous les avantages liés à ``pyflakes`` concernant votre code source.
 
+PEP257
+======
+
+.. todo:: à remplir avec ``pydocstyle``.
+
 Tests
 =====
 
@@ -95,6 +100,7 @@ La couverture de code est une analyse qui donne un pourcentage lié à la quanti
     # requirements/base.text
     [...]
     coverage
+    django_coverage_plugin
 
 .. code-block:: shell
 
@@ -111,6 +117,8 @@ La couverture de code est une analyse qui donne un pourcentage lié à la quanti
     [html]
     directory = coverage_html_report
     
+
+.. todo:: le bloc ci-dessous est à revoir pour isoler la configuration.
 
 .. code-block:: shell
 
@@ -158,7 +166,7 @@ Ceci vous affichera non seulement la couverture de code estimée, et générera 
 Complexité de McCabe
 ====================
 
-La `complexité cyclomatique <https://fr.wikipedia.org/wiki/Nombre_cyclomatique>`_ (ou complexité de McCabe) peut s'apparenter à une mesure de complexité du code parcouru en fonction du nombre de branches trouvées. Une branche, c'est un embranchement: quand le cycle d'exécution du code rencontre une condition, il peut soit rentrer dedans, soit passer directement à la suite. Par exemple:
+La `complexité cyclomatique <https://fr.wikipedia.org/wiki/Nombre_cyclomatique>`_ (ou complexité de McCabe) peut s'apparenter à mesure de difficulté de compréhension du code, en fonction du nombre d'embranchements trouvés dans une même section. Quand le cycle d'exécution du code rencontre une condition, il peut soit rentrer dedans, soit passer directement à la suite. Par exemple:
 
 .. code-block:: python
 
@@ -241,6 +249,8 @@ PyLint
 ======
 
 PyLint est la version **++**, pour ceux qui veulent un code propre et sans bavure.
+
+.. todo:: à développer
 
 Gestion de version du code
 ==========================

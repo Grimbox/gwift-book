@@ -61,25 +61,9 @@ A présent, tous les binaires de cet environnement prendront le pas sur les bina
 
 Pour désactiver l'environnement virtuel, il suffira d'utiliser la commande ``deactivate``
 
-Création du répertoire de travail
-=================================
 
-Nous commençons par créer le répertoire du projet, à savoir ``gwift-project``.
-
-.. code-block:: shell
-
-    $ mkdir gwift-project
-    $ cd gwift-project
-
-Dans ce répertoire, nous pouvons rajouter les répertoires utiles à la gestion d'un projet:
-
-.. code-block:: shell
-
-    $ mkdir docs requirements
-    $ touch docs/README.md
-
-Création du projet Django
-=========================
+Installation de Django et création du répertoire de travail
+===========================================================
 
 Comme l'environnement est activé, on peut à présent y installer Django. La librairie restera indépendante du reste du système, et ne polluera pas les autres projets.
 
@@ -89,10 +73,10 @@ C'est parti: ``pip install django``!
 
     $ pip install django
     Collecting django
-      Downloading Django-1.8.4-py2.py3-none-any.whl (6.2MB)
-    100% |################################| 6.2MB 91kB/s  eta 0:00:01
+      Downloading Django-X.Y.Z
+    100% |################################|
     Installing collected packages: django
-    Successfully installed django-1.8.4
+    Successfully installed django-X.Y.Z
 
 Les commandes de création d'un nouveau site sont à présent disponibles, la principale étant ``django-admin startproject``. Par la suite, nous utiliserons ``manage.py``, qui constitue un *wrapper* autour de `django-admin`.
 
@@ -115,19 +99,27 @@ Cette action a pour effet de créer un nouveau dossier ``gwift``, dans lequel on
     │   └── wsgi.py
     └── manage.py
 
-Si vous le souhaitez, et pour plus de clarté, renommez le premier dossier ``gwift`` en ``src``, par exemple: cela évitera d'avoir une structure hiérarchique type ``gwift-project/gwift/gwift``, mais plutôt quelque chose comme ``gwift-project/src/gwift``, sur le modèle ``{projet}/{sources}/{application}``. On a à présent:
+C'est sans ce répertoire que vont vivre tous les fichiers liés au projet. Le but est de faire en sorte que toutes les opérations (maintenance, déploiement, écriture, tests, ...) puissent se faire à partir d'un seul point d'entrée. Tant qu'on y est, nous pouvons rajouter les répertoires utiles à la gestion de notre projet, à savoir la documentation, les dépendances et le README:
 
 .. code-block:: shell
 
-    $ tree src
-    src
+    $ mkdir docs requirements
+    $ touch docs/README.md
+
+
+.. code-block:: shell
+
+    $ tree gwift
+    gwift
     ├── gwift
     │   ├── __init__.py
     │   ├── settings.py
     │   ├── urls.py
     │   └── wsgi.py
     └── manage.py
-
+    |-- docs/
+    |-- requirements/
+    |-- README
 
 Chacun de ces fichiers sert à:
 
@@ -135,6 +127,10 @@ Chacun de ces fichiers sert à:
  * ``urls.py`` contient les variables de routes, les adresses utilisées et les fonctions vers lesquelles elles pointent.
  * ``manage.py``, pour toutes les commandes de gestion.
  * ``wsgi.py`` contient la définition de l'interface `WSGI <https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface>`_, qui permettra à votre serveur Web (Nginx, Apache, ...) de faire un pont vers votre projet.
+ 
+.. todo:: refaire un beau ``tree`` tout propre, à l'occasion. 
+
+.. todo:: déplacer la configuration dans un répertoire ``config`` à part.
 
 Gestion des dépendances
 =======================
@@ -152,6 +148,8 @@ Au début de chaque fichier, il suffira d'ajouter la ligne ``-r base.txt``, puis
 
     $ echo django >> requirements/base.txt
 
+Par la suite, il vous faudra **absolument** spécifier les versions à utiliser: les librairies que vous utilisez comme dépendances évoluent, de la même manière que vos projets. Des fonctions sont cassées, certaines signatures sont modifiées, des comportements sont altérés, etc. Si vous voulez être sûr et certain que le code que vous avez écrit continue à fonctionner, spécifiez la version de chaque librairie de dépendances. Avec les mécanismes d'intégration continue et de tests unitaires, on verra plus loin comment se prémunir d'un changement inattendu.
+
 Structure finale de l'environnement
 ===================================
 
@@ -160,16 +158,15 @@ Nous avons donc la strucutre finale pour notre environnement de travail:
 .. code-block:: shell
 
     $ tree ~/gwift-project
-    gwift-project/
+    gwift
     ├── docs
     │   └── README.md
-    ├── src
-    │   ├── gwift
-    │   │   ├── __init__.py
-    │   │   ├── settings.py
-    │   │   ├── urls.py
-    │   │   └── wsgi.py
-    │   └── manage.py
+    ├── gwift
+    │   ├── __init__.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   └── wsgi.py
+    │   manage.py
     └── requirements
         └── base.txt
 
