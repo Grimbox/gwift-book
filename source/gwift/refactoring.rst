@@ -2,7 +2,7 @@
 Refactoring
 ***********
 
-On constate que plusieurs classes possèdent les propriétés ``created_at`` et ``updated_at``, initialisées aux mêmes valeurs. Pour gagner en cohérence, nous allons créer une classe dans laquelle nous définirons ces deux champs, et nous ferons en sorte que les classes ``Wishlist``, ``Item`` et ``Part`` en héritent. Django gère trois sortes d'héritage:
+On constate que plusieurs classes possèdent les mêmes propriétés ``created_at`` et ``updated_at``, initialisées aux mêmes valeurs. Pour gagner en cohérence, nous allons créer une classe dans laquelle nous définirons ces deux champs, et nous ferons en sorte que les classes ``Wishlist``, ``Item`` et ``Part`` en héritent. Django gère trois sortes d'héritage:
 
  * L'héritage par classe abstraite
  * L'héritage classique
@@ -75,6 +75,8 @@ L'héritage classique est généralement déconseillé, car il peut introduire t
  * Une table ``Wishlist``
  * Une table ``Item``
  * Une table ``Part``.
+ 
+A nouveau, en analysant la sortie SQL de cette modélisation, on obtient ceci:
 
 .. code-block:: sql
 

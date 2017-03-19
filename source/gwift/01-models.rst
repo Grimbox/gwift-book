@@ -1,3 +1,41 @@
+************
+Modélisation
+************
+
+L'ORM de Django permet de travailler uniquement avec une définition de classes, et de faire en sorte que le lien avec la base de données soit géré uniquement de manière indirecte, par Django lui-même. On peut schématiser ce comportement par  une classe = une table.
+
+Comme on l'a vu dans la description des fonctionnalités, on va *grosso modo* avoir besoin des éléments suivants:
+
+ * Des listes de souhaits
+ * Des éléments qui composent ces listes
+ * Des parts pouvant composer chacun de ces éléments
+ * Des utilisateurs pour gérer tout ceci.
+
+Nous proposons dans un premier temps d'éluder la gestion des utilisateurs, et de simplement se concentrer sur les fonctionnalités principales.
+Cela nous donne ceci:
+
+.. code-block:: python
+
+    # wish/models.py
+
+    from django.db import models
+
+
+    class Wishlist(models.Model):
+        pass
+
+
+    class Item(models.Model):
+        pass
+
+
+    class Part(models.Model):
+        pass
+
+
+Les classes sont créées, mais vides. Entrons dans les détails.
+
+
 ******************
 Listes de souhaits
 ******************
@@ -11,7 +49,7 @@ Comme déjà décrit précédemment, les listes de souhaits peuvent s'apparenter
  * une date de création
  * une date de modification
 
-Notre classe ``Wishlist`` peut être décrite de la manière suivante:
+Notre classe ``Wishlist`` peut être définie de la manière suivante:
 
 .. code-block:: python
 
@@ -23,13 +61,12 @@ Notre classe ``Wishlist`` peut être décrite de la manière suivante:
         description = models.TextField()
         created_at = models.DateTimeField(auto_now_add=True)
         updated_at = models.DateTimeField(auto_now=True)
-        external_id = models.UUIDField(unique=True, default=uuid.uuid4,
-                                        editable=False)
+        external_id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
 Que peut-on constater?
 
- * Que s'il n'est pas spécifié, un identifiant ``id`` sera automatiquement généré et accessible dans le modèle.
- * Que chaque type de champs (``DateTimeField``, ``CharField``, ``UUIDField``, ...) a ses propres paramètres d'initialisation. Il est intéressant de les apprendre ou de se référer à la documentation en cas de doute.
+ * Que s'il n'est pas spécifié, un identifiant ``id`` sera automatiquement généré et accessible dans le modèle. Si vous souhaitez malgré tout spécifier que ce soit un champ en particulier qui devienne la clé primaire, il suffit de l'indiquer grâce à l'attribut ``primary_key=True``.
+ * Que chaque type de champs (``DateTimeField``, ``CharField``, ``UUIDField``, etc.) a ses propres paramètres d'initialisation. Il est intéressant de les apprendre ou de se référer à la documentation en cas de doute.
 
 Au niveau de notre modélisation:
 
@@ -44,13 +81,13 @@ Souhaits
 Nos souhaits ont besoin des propriétés suivantes:
 
  * un identifiant
- * identifiant de la liste
+ * l'identifiant de la liste auquel le souhait est lié
  * un nom
  * une description
  * le propriétaire
  * une date de création
  * une date de modification
- * une image
+ * une image permettant de le représenter.
  * un nombre (1 par défaut)
  * un prix facultatif
  * un nombre de part facultatif, si un prix est fourni.
@@ -98,7 +135,7 @@ Les parts ont besoins des propriétés suivantes:
  
 Elles constituent la dernière étape de notre modélisation et représente la réalisation d'un souhait. Il y aura autant de part d'un souhait que le nombre de souhait à réaliser fois le nombre de part.
 
-Elles permettent à un utilisateur de participer au souhait émis par un autre utilisateur. Pour les modéliser, un part est liée d'un côté à un souhait, et d'autre part à un utilisateur. Cela nous donne ceci:
+Elles permettent à un utilisateur de participer au souhait émis par un autre utilisateur. Pour les modéliser, une part est liée d'un côté à un souhait, et d'autre part à un utilisateur. Cela nous donne ceci:
 
 .. code-block:: python
 
@@ -108,11 +145,11 @@ Elles permettent à un utilisateur de participer au souhait émis par un autre u
 
         wish = models.ForeignKey(Wish)
         user = models.ForeignKey(User, null=True)
-	    unknown_user = models.ForeignKey(UnknownUser, null=True)
+        unknown_user = models.ForeignKey(UnknownUser, null=True)
         comment = models.TextField(null=True, blank=True)
         done_at = models.DateTimeField(auto_now_add=True)
 
-La classe ``User`` référencée au début du snippet correspond à l'utilisateur géré par Django. Cette instance est accessible à chaque requête transmise au serveur, et est accessible grâce à l'objet ``request.user``, transmis à chaque fonction ou *Class-based-view*. C'est un des avantages d'un framework tout intégré: il vient *batteries-included* et beaucoup de détails ne doivent pas être pris en compte. Pour le moment, nous nous limiterons à ceci. Par la suite, nous verrons comment améliorer la gestion des profils utilisateurs, comment y ajouter des informations et comment gérer les cas particuliers.
+La classe ``User`` référencée au début du snippet correspond à l'utilisateur qui sera connecté. Ceci est géré par Django. Lorsqu'une requête est effectuée et est transmise au serveur, cette information sera disponible grâce à l'objet ``request.user``, transmis à chaque fonction ou *Class-based-view*. C'est un des avantages d'un framework tout intégré: il vient *batteries-included* et beaucoup de détails ne doivent pas être pris en compte. Pour le moment, nous nous limiterons à ceci. Par la suite, nous verrons comment améliorer la gestion des profils utilisateurs, comment y ajouter des informations et comment gérer les cas particuliers.
 
 La classe ``UnknownUser`` permet de représenter un utilisateur non enregistré sur le site et est définie au point suivant.
 
@@ -120,6 +157,8 @@ La classe ``UnknownUser`` permet de représenter un utilisateur non enregistré 
 *********************
 Utilisateurs inconnus
 *********************
+
+.. todo:: je supprimerais pour que tous les utilisateurs soient gérés au même endroit.
 
 Pour chaque réalisation d'un souhait par quelqu'un, il est nécessaire de sauver les données suivantes, même si l'utilisateur n'est pas enregistré sur le site:
 
@@ -135,43 +174,5 @@ Ceci nous donne après implémentation:
 	
         name = models.CharField(max_length=255)
         email = models.CharField(email = models.CharField(max_length=255, unique=True)
-
-
-************
-Modélisation
-************
-
-L'ORM de Django permet de travailler uniquement avec une définition de classes, et de faire en sorte que le lien avec la base de données soit géré uniquement de manière indirecte, par Django lui-même. On peut schématiser ce comportement par  une classe = une table.
-
-Comme on l'a vu dans la description des fonctionnalités, on va *grosso modo* avoir besoin des éléments suivants:
-
- * Des listes de souhaits
- * Des éléments qui composent ces listes
- * Des parts pouvant composer chacun de ces éléments
- * Des utilisateurs pour gérer tout ceci.
-
-Nous proposons dans un premier temps d'éluder la gestion des utilisateurs, et de simplement se concentrer sur les fonctionnalités principales.
-Cela nous donne ceci:
-
-.. code-block:: python
-
-    # wish/models.py
-
-    from django.db import models
-
-
-    class Wishlist(models.Model):
-        pass
-
-
-    class Item(models.Model):
-        pass
-
-
-    class Part(models.Model):
-        pass
-
-
-Les classes sont créées, mais vides. Entrons dans les détails.
 
 

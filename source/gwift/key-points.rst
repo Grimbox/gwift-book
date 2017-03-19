@@ -30,6 +30,8 @@ Si vous décidez de définir un constructeur sur votre modèle, ne surchargez pa
             i.save()
             return i
 
+Mieux encore: on pourrait passer par un ``ModelManager`` pour limiter le couplage; l''accès à une information stockée en base de données ne se ferait dès lors qu'au travers de cette instance et pas directement au travers du modèle. De cette manière, on limite le couplage des classes et on centralise l'accès.
+
 Relations
 =========
 
@@ -40,7 +42,7 @@ Types de relations
  * ManyToManyField
  * OneToOneField
 
-Dans les examples ci-dessus, nous avons vu les relations multiples (1-N), représentées par des **ForeignKey** d'une classe A vers une classe B. Il existe également les champs de type **ManyToManyField**, afin de représenter une relation N-N. Il existe également les champs de type **OneToOneField**, pour représenter une relation 1-1.
+Dans les examples ci-dessus, nous avons vu les relations multiples (1-N), représentées par des **ForeignKey** d'une classe A vers une classe B. Il existe également les champs de type **ManyToManyField**, afin de représenter une relation N-N. Les champs de type **OneToOneField**, pour représenter une relation 1-1.
 Dans notre modèle ci-dessus, nous n'avons jusqu'à présent eu besoin que des relations 1-N: la première entre les listes de souhaits et les souhaits; la seconde entre les souhaits et les parts.
 
 Mise en pratique
@@ -61,7 +63,7 @@ Dans le cas de nos listes et de leurs souhaits, on a la relation suivante:
 
 Depuis le code, à partir de l'instance de la classe ``Item``, on peut donc accéder à la liste en appelant la propriété ``wishlist`` de notre instance. *A contrario*, depuis une instance de type ``Wishlist``, on peut accéder à tous les éléments liés grâce à ``<nom de la propriété>_set``; ici ``item_set``.
 
-Lorsque vous déclarez une relation 1-1, 1-N ou N-N entre deux classes, vou pouvez d'ajouter l'attribut ``related_name``. Cet attribut permet de nommer la relation inverse.
+Lorsque vous déclarez une relation 1-1, 1-N ou N-N entre deux classes, vous pouvez ajouter l'attribut ``related_name`` afin de nommer la relation inverse.
 
 .. code-block:: python
 

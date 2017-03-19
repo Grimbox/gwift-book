@@ -2,7 +2,7 @@
 Besoins utilisateurs
 ********************
 
-Nous souhaitons développer un site où un utilisateur donné peut créer une liste contenant des souhaits et où d'autres utilisateurs, authentifiés ou non, peuvent choisir les souhaits qu'ils souhaitent réaliser.
+Nous souhaitons développer un site où un utilisateur donné peut créer une liste contenant des souhaits et où d'autres utilisateurs, authentifiés ou non, peuvent choisir les souhaits à la réalisation desquels ils souhaitent participer.
 
 Il sera nécessaire de s'authentifier pour : 
 
@@ -26,7 +26,9 @@ Besoins fonctionnels
 Gestion des utilisateurs
 ========================
 
-Pour gérer les utilisateurs, nous utiliserons ce que Django met par défaut à notre disposition.
+Pour gérer les utilisateurs, nous allons faire en sorte de surcharger ce que Django propose: par défaut, on a une la possibilité de gérer des utilisateurs (identifiés par une adresse email, un nom, un prénom, ...) mais sans plus.
+
+Ce qu'on peut souhaiter, c'est que l'utilisateur puisse s'authentifier grâce à une plateforme connue (Facebook, Twitter, Google, etc.), et qu'il puisse un minimum gérer son profil.
 
 Gestion des listes
 ==================
@@ -37,10 +39,10 @@ Modèlisation
 Les données suivantes doivent être associées à une liste:
 
  * un identifiant
- * un identifiant externe
+ * un identifiant externe (un GUID, par exemple)
  * un nom
  * une description
- * le propriétaire
+ * le propriétaire, associé à l'utilisateur qui l'aura créée
  * une date de création
  * une date de modification
 
@@ -68,10 +70,10 @@ Les données suivantes peuvent être associées à un souhait:
  * le propriétaire
  * une date de création
  * une date de modification
- * une image
+ * une image, afin de représenter l'objet ou l'idée
  * un nombre (1 par défaut)
  * un prix facultatif
- * un nombre de part facultatif, si un prix est fourni.
+ * un nombre de part, facultatif également, si un prix est fourni.
 
 Fonctionnalités
 ---------------
@@ -81,7 +83,7 @@ Fonctionnalités
  * Il faut pouvoir fractionner un souhait uniquement si un prix est donné.
  * Il faut pouvoir accéder à un souhait, avec un utilisateur authentifié ou non.
  * Il faut pouvoir réaliser un souhait ou une partie seulement, avec un utilisateur authentifié ou non.
- * Un souhait en cours de réalisation et composé de différente part ne peut plus être modifié.
+ * Un souhait en cours de réalisation et composé de différentes parts ne peut plus être modifié.
  * Un souhait en cours de réalisation ou réalisé ne peut plus être supprimé.
  * On peut modifier le nombre de fois qu'un souhait doit être réalisé dans la limite des réalisations déjà effectuées.
  
@@ -102,8 +104,8 @@ Les données suivantes peuvent être associées à une réalisation de souhait:
 Fonctionnalités
 ---------------
 
- * L'utilisateur doit pouvoir voir si un souhait est réalisé, en partie ou non.
- * L'utilisateur doit pouvoir voir la ou les personnes ayant réaliser un souhait.
+ * L'utilisateur doit pouvoir voir si un souhait est réalisé, en partie ou non. Il doit également avoir un pourcentage de complétion sur la possibilité de réalisation de son souhait, entre 0% et 100%.
+ * L'utilisateur doit pouvoir voir la ou les personnes ayant réalisé un souhait.
  * Il y a autant de réalisation que de parts de souhait réalisées ou de nombre de fois que le souhait est réalisé.
  
 Gestion des personnes réalisants les souhaits et qui ne sont pas connues

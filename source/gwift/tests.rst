@@ -164,8 +164,11 @@ En relançant la couverture de code, on voit à présent que nous arrivons à 99
     ------------------------------------------------------------------
     TOTAL                               87      0      4      1    99%
 
+En continuant de cette manière (ie. Ecriture du code et des tests, vérification de la couverture de code), on se fixe un objectif idéal dès le début du projet. En prenant un développement en cours de route, fixez-vous comme objectif de ne jamais faire baisser la couverture de code.
+
 *********************
 Quelques liens utiles
 *********************
 
  * `Django factory boy <https://github.com/rbarrois/django-factory_boy/tree/v1.0.0>`_
+
