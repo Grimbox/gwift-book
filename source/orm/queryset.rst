@@ -1,0 +1,11 @@
+Queryset & managers
+===================
+
+L'ORM de Django propose par défaut deux objets hyper importants: 
+
+* Les managers, qui consistent en un point d'entrée pour accéder aux objets persistants
+* Les querysets, qui permettent de filtrer des ensembles ou sous-ensemble d'objets. Les querysets peuvent s'imbriquer, pour ajouter
+d'autres filtres à des filtres existants.
+
+En plus de cela, il faut bien tenir compte des propriétés `Meta` de la classe: si elle contient déjà un ordre par défaut, celui-ci
+sera pris en compte pour l'ensemble des requêtes effectuées sur cette classe.
