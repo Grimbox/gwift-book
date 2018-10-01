@@ -53,3 +53,14 @@ Greffons
 ========
 
 L'interface d'administration est extensible dans une certaine mesure. Notamment utiliser ``django_extensions`` pour avoir les ForeignKey auto-complétées.
+
+Prefetch
+========
+
+https://hackernoon.com/all-you-need-to-know-about-prefetching-in-django-f9068ebe1e60?gi=7da7b9d3ad64
+
+https://medium.com/@hakibenita/things-you-must-know-about-django-admin-as-your-app-gets-bigger-6be0b0ee9614
+
+En gros, le problème de l'admin est que si on fait des requêtes imbriquées, on va flinguer l'application et le chargement de la page.
+La solution consiste à utiliser la propriété `list_select_related` de la classe d'Admin, afin d'appliquer une jointure par défaut et 
+et gagner en performances.
