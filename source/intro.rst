@@ -1,6 +1,6 @@
-============
+************
 Introduction
-============
+************
 
 Django se présente comme un `Framework Web pour perfectionnistes ayant des deadlines <https://www.djangoproject.com/>`_. 
 

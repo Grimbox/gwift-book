@@ -6,20 +6,59 @@
 Welcome to Gwift's documentation!
 =================================
 
-Contents:
+#####################
+Deep dive into Django
+#####################
 
 .. toctree::
    :maxdepth: 2
    :numbered:
 
    intro
+
+#################
+Espace de travail 
+#################
+
+.. toctree::
+   :maxdepth: 2
+   :numbered:
+
    gwift
    integration
+
+
+#################################
+Déploiement et mise en production
+#################################
+
+.. toctree::
+   :maxdepth: 2
+   :numbered:
+
    production
+
+################################
+Modélisation et concepts de base
+################################
+
+.. toctree::
+   :maxdepth: 2
+   :numbered:
+
+   admin
    mvc
    forms
    auth
-   admin
+
+#########
+En résumé
+#########
+
+.. toctree::
+   :maxdepth: 2
+   :numbered:
+
    summary
 
 Indices and tables

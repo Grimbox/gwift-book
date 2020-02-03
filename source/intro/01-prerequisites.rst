@@ -1,6 +1,6 @@
-*************
+=============
 Environnement
-*************
+=============
 
 Avant de démarrer le développement, il est nécessaire de passer un peu de temps sur la configuration de l'environnement.
 
@@ -9,7 +9,7 @@ Les morceaux de code seront développés pour Python3.4+ et Django 1.8+. Ils né
 **Remarque** : les commandes qui seront exécutés dans ce livre le seront depuis un shell sous GNU/Linux. Certaines devront donc être adaptées si vous êtes dans un autre environnemnet.
 
 Virtualenv
-==========
+----------
 
 .. todo:: J'avais aussi lu que l'utilisation du module ``venv`` était plus conseillée pour Python3. A vérifier à l'occasion.
 
@@ -29,7 +29,7 @@ Suivant votre distribution, il sera sans doute nécessaire d'éditer le fichier 
 L'intérêt de ceci ? Ne pas devoir se soucier de l'emplacement des environnements virtuels, et pouvoir entièrement les découpler des sources sur lesquelles vous travaillez, en plus d'isoler le code, de créer un containeur pour les dépendances et d'être indépendant des librairies tierces déjà installées sur le système.
 
 Création de l'environnement virtuel
-===================================
+-----------------------------------
 
 Commencons par créer un environnement virtuel, afin d'y stocker les dépendances. Lancez ``mkvirtualenv gwift-env``.
 
