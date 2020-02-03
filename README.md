@@ -14,6 +14,12 @@ Les lexers Pygments disponibles se trouvent sur cette page: http://pygments.org/
 apt install texlive-latex-base latexmk texlive-latex-extra texlive-xetex
 ```
 
+## Sortie en PDF
+
+```bash
+pandoc -s --toc gwift.rst -o output.pdf --pdf-engine=xelatex
+```
+
 ## Environnement
 
 ```bash
