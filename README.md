@@ -6,3 +6,19 @@ Les lexers Pygments disponibles se trouvent sur cette page: http://pygments.org/
 
  * `shell`
  * `python`
+
+
+## Dépendances
+
+```bash
+apt install texlive-latex-base latexmk texlive-latex-extra texlive-xetex
+```
+
+## Environnement
+
+```bash
+cd ~/
+python3 -m venv .venvs/gwift-book
+source .venvs/gwift-book/bin/activate
+pip install -r requirements/base.txt
+```
