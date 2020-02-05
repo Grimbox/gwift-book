@@ -1,0 +1,11 @@
+=== Flake8
+
+
+=== Black
+
+
+=== pytest
+
+
+=== mypy
+

@@ -1,0 +1,8 @@
+=== Environnements virtuels
+
+On va commencer avec la partie la moins funky, mais la plus utile, dans la vie d'un développeur: la gestion et l'isolation des dépendances.
+
+Il est tout à fait possible de s'en passer complètement dans le cadre de "petits" projets ou d'applications déployées sur des machines dédiées, et de fonctionner à grand renforts de "sudo" et d'installation globale des dépendances. Cette pratique est cependant fortement déconseillée pour plusieurs raisons: 
+
+. Pour la reproductibilité d'une 
+. il est tout à fait envisagable que deux applications soient déployées sur un même hôte, et nécessitent chacune deux versions différentes d'une même dépendance.
