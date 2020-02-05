@@ -21,6 +21,13 @@ Comme on l'a vu dans la première partie, Django est un framework complet, inté
 
 Supervisor, nginx, gunicorn, utilisateurs, groupes, ...
 
+[plantuml]
+--
+entity Nginx
+entity "Gunicorn (sockets/HTTP)" as gunicorn
+database PGSQL
+--
+
 Aussi : Docker, Heroku, Digital Ocean, Scaleway, OVH, ... Bref, sur Debian et CentOS pour avoir un panel assez large. On oublie Windows.
 
 

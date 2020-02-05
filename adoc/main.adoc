@@ -1,6 +1,11 @@
 = Deep dive into Django
 Cédric Declerfayt <jaguarondi27@gmail.com>; Fred Pauchet <fred@grimbox.be>
+:doctype: book
 :toc:
+:sectnums:
+:chapter-label: Chapitre
+:preface-title: Préface
+:source-highlighter: rouge
 
 On ne va pas se mentir: il existe enormément de tutoriaux très bien réalisés sur "Comment réaliser une application Django" et autres "Déployer votre code en 2 minutes". On se disait juste que ces tutoriaux restaient relativement haut-niveau et se limitaient à un contexte donné. 
 
@@ -8,21 +13,27 @@ L'idée du texte ci-dessous est de jeter les bases d'un bon développement, en s
 
 Ces idées ne s'appliquent pas uniquement à Django et à son cadre de travail, ni même au langage Python. Juste que ces deux bidules sont de bons candidats et que le cadre de travail est bien défini et suffisamment flexible.
 
-Pour cela, on présentera différents outils (mypy, flake, black, ...), la rédaction de tests unitaires et d'intégration pour limiter les régressions, les règles de nomenclature et de contrôle du contenu, ainsi que les bonnes étapes pour arriver à un déploiement rapide et fonctionnel en peu d'étapes.
+Pour cela, on présentera différents outils (mypy, flake8, black, ...), la rédaction de tests unitaires et d'intégration pour limiter les régressions, les règles de nomenclature et de contrôle du contenu, ainsi que les bonnes étapes à suivre pour arriver à un déploiement rapide et fonctionnel avec peu d'efforts.
 
-Dans tout à un seul et même endroit. Oui. :-)
+Et tout ça à un seul et même endroit. Oui. :-)
 
 Bonne lecture.
 
-include::toolchain/index.adoc[]
+== Environnement de travail
 
-include::deploy/index.adoc[]
+include::toolchain/venvs.adoc[]
+
+include::toolchain/tools.adoc[]
+
 
 == Déploiement
 Et sécurisation du serveur.
 
+include::deploy/index.adoc[]
+
 == Modélisation
-Et administration.
+
+include::models/admin.adoc[]
 
 == Go Live !
 Et supervision.

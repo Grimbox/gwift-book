@@ -4,5 +4,5 @@ On va commencer avec la partie la moins funky, mais la plus utile, dans la vie d
 
 Il est tout à fait possible de s'en passer complètement dans le cadre de "petits" projets ou d'applications déployées sur des machines dédiées, et de fonctionner à grand renforts de "sudo" et d'installation globale des dépendances. Cette pratique est cependant fortement déconseillée pour plusieurs raisons: 
 
-. Pour la reproductibilité d'une 
+. Pour la reproductibilité d'un environnement spécifique. Cela évite notamment les réponses type "Ca juste marche chez moi", puisqu'on a la possibilité de construire un environnement sain et appliquer des dépendances identiques, quelle que soit la machine hôte.
 . il est tout à fait envisagable que deux applications soient déployées sur un même hôte, et nécessitent chacune deux versions différentes d'une même dépendance.

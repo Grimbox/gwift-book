@@ -1,11 +1,20 @@
-=== Flake8
+=== Chaîne d'outils
+
+==== Flake8
+
+[source,python]
+--
+from datetime import datetime
+
+datetime.today()
+datetime(2020, 2, 5)
+--
+
+==== Black
 
 
-=== Black
+==== pytest
 
 
-=== pytest
-
-
-=== mypy
+==== mypy
 

@@ -3,6 +3,4 @@
 
 Et configuration de l'espace de travail.
 
-include::venvs.adoc[]
 
-include::tools.adoc[]
