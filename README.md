@@ -41,3 +41,9 @@ asciidoctor -a rouge-style=monokai -a pdf-themesdir=resources/themes -a pdf-them
 
 asciidoctor-pdf -a rouge-style=monokai -a pdf-themesdir=resources/themes -a pdf-theme=gwift main.adoc -t -r asciidoctor-diagram
 ```
+
+## Configuration de l'espace utilisateur 
+
+```bash
+source /usr/share/powerline/bindings/bash/powerline.sh
+```

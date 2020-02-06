@@ -1,14 +1,98 @@
 === Chaîne d'outils
 
-==== Flake8
+Le langage Python fonctionne avec un système d’améliorations basées sur des propositions: les PEP, ou “Python Enhancement Proposal”. 
+
+Celle qui va nous intéresser pour cette section est la https://www.python.org/dev/peps/pep-0008/[PEP 8 -- Style Guide for Python Code]. Elle spécifie comment du code Python doit être organisé ou formaté, quelles sont les conventions pour l’indentation, le nommage des variables et des classes, … En bref, elle décrit comment écrire du code proprement pour que d’autres développeurs puissent le reprendre facilement, ou simplement que votre base de code ne dérive lentement vers un seuil de non-maintenabilité.
+
+==== pep8, flake8, pylint
+
+Un outil existe et listera l’ensemble des conventions qui ne sont pas correctement suivies dans votre projet: pep8. Pour l’installer, passez par pip. Lancez ensuite la commande pep8 suivie du chemin à analyser (., le nom d’un répertoire, le nom d’un fichier .py, ...).
+
+Si vous ne voulez pas être dérangé sur votre manière de coder, et que vous voulez juste avoir un retour sur une analyse de votre code, essayez pyflakes: il analaysera vos sources à la recherche d’erreurs (imports inutilsés, méthodes inconnues, etc.).
+
+Et finalement, si vous voulez grouper les deux, il existe flake8. Sur base la même interface que pep8, vous aurez en plus des avertissements concernant le code source.
 
 [source,python]
 --
 from datetime import datetime
 
-datetime.today()
-datetime(2020, 2, 5)
+"""On stocke la date du jour dans la variable ToD4y"""
+
+ToD4y = datetime.today()
+
+def print_today(ToD4y):
+    today = ToD4y
+    print(ToD4y)
+
+def GetToday():
+    return ToD4y
+
+
+if __name__ == "__main__":
+    t =   Get_Today()
+    print(t)
+
+
 --
+
+L'exécution de la commande flake8 . retourne ceci:
+
+[source,bash]
+--
+test.py:7:1: E302 expected 2 blank lines, found 1
+test.py:8:5: F841 local variable 'today' is assigned to but never used
+test.py:11:1: E302 expected 2 blank lines, found 1
+test.py:16:8: E222 multiple spaces after operator
+test.py:16:11: F821 undefined name 'Get_Today'
+test.py:18:1: W391 blank line at end of file
+--
+
+On trouve des erreurs:
+
+* de *conventions*: le nombre de lignes qui séparent deux fonctions, le nombre d'espace après un opérateur, une ligne vide à la fin du fichier, ... Ces _erreurs_ n'en sont pas vraiment, elles indiquent juste de potentiels problèmes de communication si le code devait être lu ou compris par une autre personne.
+* de *définition*: une variable assignée mais pas utilisée ou une lexème non trouvé. Cette dernière information indique clairement un bug potentiel. 
+
+L'étape d'après consiste à invoquer pylint. Lui, il est directement moins conciliant:
+
+[source,text]
+--
+$ pylint test.py
+************* Module test
+test.py:16:6: C0326: Exactly one space required after assignment
+    t =   Get_Today()
+      ^ (bad-whitespace)
+test.py:18:0: C0305: Trailing newlines (trailing-newlines)
+test.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+test.py:3:0: W0105: String statement has no effect (pointless-string-statement)
+test.py:5:0: C0103: Constant name "ToD4y" doesn't conform to UPPER_CASE naming style (invalid-name)
+test.py:7:16: W0621: Redefining name 'ToD4y' from outer scope (line 5) (redefined-outer-name)
+test.py:7:0: C0103: Argument name "ToD4y" doesn't conform to snake_case naming style (invalid-name)
+test.py:7:0: C0116: Missing function or method docstring (missing-function-docstring)
+test.py:8:4: W0612: Unused variable 'today' (unused-variable)
+test.py:11:0: C0103: Function name "GetToday" doesn't conform to snake_case naming style (invalid-name)
+test.py:11:0: C0116: Missing function or method docstring (missing-function-docstring)
+test.py:16:4: C0103: Constant name "t" doesn't conform to UPPER_CASE naming style (invalid-name)
+test.py:16:10: E0602: Undefined variable 'Get_Today' (undefined-variable)
+
+--------------------------------------------------------------------
+Your code has been rated at -5.45/10
+--
+
+En gros, j'ai programmé comme une grosse bouse anémique (et oui, le score d'évaluation du code permet bien d'aller en négatif). En vrac, on trouve des problèmes liés:
+
+* au nommage (C0103) et à la mise en forme (C0305, C0326, W0105)
+* à des variables non définies (E0602)
+* de la documentation manquante (C0114, C0116)
+* de la redéfinition de variables (W0621).
+
+
+Pour reprendre la http://pylint.pycqa.org/en/latest/user_guide/message-control.html[documentation], chaque code possède sa signification (ouf!): 
+
+* C convention related checks
+* R refactoring related checks
+* W various warnings
+* E errors, for probable bugs in the code
+* F fatal, if an error occurred which prevented pylint from doing further* processing.
 
 ==== Black
 
