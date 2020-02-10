@@ -1,0 +1,233 @@
+### Connexion et préparation du serveur
+
+[source,bash]
+----
+yum update
+groupadd --system webapps
+groupadd --system gunicorn_sockets
+useradd --system --gid webapps --shell /bin/bash --home /home/medplan medplan
+mkdir -p /home/medplan
+chown medplan:webapps /home/medplan
+---
+
+### Installation des dépendances systèmes
+
+[source,bash]
+----
+yum install python36 git tree -y
+ 
+# CentOS 7 ne dispose que de la version 3.7 d'SQLite. On a besoin d'une version 3.8 au minimum:
+wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-devel-3.8.11-1.fc21.x86_64.rpm
+wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-3.8.11-1.fc21.x86_64.rpm
+sudo yum install sqlite-3.8.11-1.fc21.x86_64.rpm sqlite-devel-3.8.11-1.fc21.x86_64.rpm -y
+----
+
+### Préparation de l'environnement utilisateur
+
+[source,bash]
+----
+su - medplan
+cp /etc/skel/.bashrc .
+cp /etc/skel/.bash_profile .
+ssh-keygen
+mkdir bin
+mkdir .venvs
+mkdir webapps
+python3.6 -m venv .venvs/medplan
+source .venvs/medplan/bin/activate
+cd /home/medplan/webapps
+git clone git@vmwmedtools:institutionnel/medplan.git
+----
+
+La clé SSH doit ensuite être renseignée au niveau du dépôt, afin de pouvoir y accéder. 
+
+A ce stade, on devrait déjà avoir quelque chose de fonctionnel en démarrant les commandes suivantes:
+
+[source,bash]
+----
+# en tant qu'utilisateur 'medplan'
+ 
+source .venvs/medplan/bin/activate
+pip install -U pip
+pip install -r requirements/base.txt
+pip install gunicorn
+cd webapps/medplan
+gunicorn config.wsgi:application --bind localhost:3000 --settings=config.settings_production
+----
+
+### Configuration de l'application
+
+[source,bash]
+----
+SECRET_KEY=<set your secret key here>
+ALLOWED_HOSTS=*
+STATIC_ROOT=/var/www/medplan/static
+----
+
+### Création des répertoires de logs
+
+[source,text]
+----
+mkdir -p /var/www/medplan/static
+----
+
+### Création du répertoire pour le socket 
+
+Dans le fichier /etc/tmpfiles.d/medplan.conf:
+D /var/run/webapps 0775 medplan gunicorn_sockets -
+
+Suivi de la création par systemd :
+systemd-tmpfiles --create
+
+### Gunicorn
+
+[source,bash]
+----
+#!/bin/bash
+ 
+# defines settings for gunicorn
+NAME="Medplan"
+DJANGODIR=/home/medplan/webapps/medplan
+SOCKFILE=/var/run/webapps/gunicorn_medplan.sock
+USER=medplan
+GROUP=gunicorn_sockets
+NUM_WORKERS=5
+DJANGO_SETTINGS_MODULE=config.settings_production
+DJANGO_WSGI_MODULE=config.wsgi
+ 
+echo "Starting $NAME as `whoami`"
+ 
+source /home/medplan/.venvs/medplan/bin/activate
+cd $DJANGODIR
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+ 
+exec gunicorn ${DJANGO_WSGI_MODULE}:application \
+--name $NAME \
+--workers $NUM_WORKERS \
+--user $USER \
+--bind=unix:$SOCKFILE \
+--log-level=debug \
+--log-file=-
+----
+
+### Supervision
+
+[source,bash]
+----
+yum install supervisor -y
+----
+
+On crée ensuite le fichier /etc/supervisord.d/medplan.ini:
+
+[source,bash]
+----
+[program:medplan]
+command=/home/medplan/bin/start_gunicorn.sh
+user=medplan
+stdout_logfile=/var/log/medplan/medplan.log
+autostart=true
+autorestart=unexpected
+redirect_stdout=true
+redirect_stderr=true
+
+Et on crée les répertoires de logs, on démarre supervisord et on vérifie qu'il tourne correctement:
+mkdir /var/log/medplan
+chown medplan:nagios /var/log/medplan
+ 
+systemctl enable supervisord
+systemctl start supervisord.service
+systemctl status supervisord.service
+● supervisord.service - Process Monitoring and Control Daemon
+   Loaded: loaded (/usr/lib/systemd/system/supervisord.service; enabled; vendor preset: disabled)
+   Active: active (running) since Tue 2019-12-24 10:08:09 CET; 10s ago
+  Process: 2304 ExecStart=/usr/bin/supervisord -c /etc/supervisord.conf (code=exited, status=0/SUCCESS)
+ Main PID: 2310 (supervisord)
+   CGroup: /system.slice/supervisord.service
+           ├─2310 /usr/bin/python /usr/bin/supervisord -c /etc/supervisord.conf
+           ├─2313 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
+           ├─2317 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
+           ├─2318 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
+           ├─2321 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
+           ├─2322 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
+           └─2323 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
+ls /var/run/webapps/
+----
+
+### Ouverture des ports
+
+[source,text]
+----
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --permanent --zone=public --add-service=https
+firewall-cmd --reload
+----
+
+### Installation d'Nginx
+
+[source]
+----
+yum install nginx -y
+usermod -a -G gunicorn_sockets nginx
+----
+
+On configure ensuite le fichier /etc/nginx/conf.d/medplan.conf:
+
+----
+upstream medplan_app {
+        server unix:/var/run/webapps/gunicorn_medplan.sock fail_timeout=0;
+}
+
+server {
+        listen 80;
+        server_name <server_name>;
+        root /var/www/medplan;
+        error_log /var/log/nginx/medplan_error.log;
+        access_log /var/log/nginx/medplan_access.log;
+ 
+        client_max_body_size 4G;
+        keepalive_timeout 5;
+ 
+        gzip on;
+        gzip_comp_level 7;
+        gzip_proxied any;
+        gzip_types gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
+ 
+ 
+        location /static/ {
+                access_log off;
+                expires 30d;
+                add_header Pragma public;
+                add_header Cache-Control "public";
+                add_header Vary "Accept-Encoding";
+                try_files $uri $uri/ =404;
+        }
+ 
+        location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $http_host;
+                proxy_redirect off;
+ 
+                proxy_pass http://medplan_app;
+        }
+}
+----
+
+### Configuration des sauvegardes
+
+Les sauvegardes ont été configurées avec borg: yum install borgbackup.
+
+C'est l'utilisateur medplan qui s'en occupe.
+
+----
+mkdir -p /home/medplan/borg-backups/
+cd /home/medplan/borg-backups/
+borg init medplan.borg -e=none
+borg create medplan.borg::{now} ~/bin ~/webapps
+----
+
+Et dans le fichier crontab :
+
+----
+0 23 * * * /home/medplan/bin/backup.sh
+----
