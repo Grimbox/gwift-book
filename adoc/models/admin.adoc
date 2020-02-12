@@ -1,4 +1,31 @@
 == Modélisation et conception avancée
 
+Dans ce chapitre, on va parler de plusieurs concepts utiles au développement rapide d'une application. On parlera de modélisation, de migrations, d'administration auto-générée. 
+
+=== Modélisation
+
+On va aborder la modélisation des objets en elle-même, qui s'apparente à la conception de la base de données. Django utilise un modèle https://fr.wikipedia.org/wiki/Mapping_objet-relationnel[ORM] - c'est-à-dire que chaque objet peut s'apparenter à une table SQL, mais en ajoutant une couche propre au paradigme orienté objet. Il sera ainsi possible de définir facilement des notions d'héritage (tout en restant dans une forme d'héritage simple), la possibilité d'utiliser des propriétés spécifiques, des classes intermédiaires, ... 
+
+L'avantage de tout ceci est que tout reste au niveau du code. Si l'on revient sur la méthodologie des douze facteurs, ce point concerne principalement la minimisation de la divergence entre les environnements d'exécution. Déployer une nouvelle instance de l'application pourra être réalisé directement à partir d'une seule et même commande, dans la mesure où *tout est embarqué au niveau du code*.
+
+Assez de blabla, on démarre !
+
+
+=== Migrations
+
+Les migrations (comprendre les "migrations du schéma de base de données") sont intimement liées à la représentation d'un contexte fonctionnel. L'ajout d'une nouvelle information, d'un nouveau champ ou d'une nouvelle fonction s'accompagne souvent/parfois de tables de données à mettre à jour, de champs  étendre.
+
+
+
 === Administration
+
+Woké. On va commencer par la *partie à ne _surtout_ (__surtout__ !!) pas faire en premier dans un projet Django*. Mais on va la faire quand même. La raison principale est que cette partie est tellement puissante et performante, qu'elle pourrait laisser penser qu'il est possible de réaliser une application complète rien qu'en configurant l'administration.
+
+C'est faux.
+
+L'administration est une sorte de tour de contrôle évoluée; en se basant sur un modèle de données programmé et construit dynamiquement les formulaires associés. Elle joue avec les clés primaires, étrangères et les champs et types de champs par https://fr.wikipedia.org/wiki/Introspection[introspection]. Elle peut être configurée, mais dans un périmètre relativement restreint; quoi que vous fassiez, il y a un moment où la courbe de paramétrage sera tellement ardue que vous aurez plus facile à développer ce nouveau concept en utilisant les autres concepts de Django.
+
+Elle doit rester dans les mains d'administrateurs ou de gestionnaires, et dans leurs mains à eux uniquement. Il n'est pas question de donner des droits à des utilisateurs lambda. Indépendamment de la manière dont vous allez l'utiliser et la configurer, vous finirez malgré tout par devoir développer une "vraie" application, destinée aux utilisateurs classiques, et répondant à leurs besoins uniquement.
+
+Une bonne idée consiste à développer l'administration dans un premier temps, en *gardant en tête qu'il sera nécessaire de développer des concepts spécifiques*. Dans cet objectif, l'administration est un outil exceptionel, qui permet de valider un modèle, créer des objets rapidement et vérifier les liens qui existent entre eux. 
 
