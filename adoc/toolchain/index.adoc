@@ -1,6 +1,0 @@
- 
-== Configuration de l'environnement
-
-Et configuration de l'espace de travail.
-
-

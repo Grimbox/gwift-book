@@ -21,9 +21,13 @@ Bonne lecture.
 
 == Environnement de travail
 
+include::toolchain/12-factors.adoc[]
+
 include::toolchain/venvs.adoc[]
 
 include::toolchain/tools.adoc[]
+
+include::toolchain/external_tools.adoc[]
 
 
 == Déploiement
@@ -31,9 +35,15 @@ Et sécurisation du serveur.
 
 include::deploy/index.adoc[]
 
+include::deploy/centos.adoc[]
+
 == Modélisation
 
 include::models/admin.adoc[]
 
 == Go Live !
 Et supervision.
+
+== En bonus
+
+include::tools/code-snippets.adoc[]

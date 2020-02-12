@@ -1,0 +1,10 @@
+=== Snippets utiles (et forcément dispensables)
+
+==== Récupération du dernier tag Git en Python
+
+L'idée ici est simplement de pouvoir afficher le numéro de version ou le hash d'exécution du code, sans avoir à se connecter au dépôt. Cela apporte une certaine transparence, *sous réserve que le code soit géré par Git*. Si vous suivez scrupuleusement les 12 facteurs, la version de l'application déployée n'est plus sensée conserver un lien avec votre dépôt d'origine... Si vous déployez votre code en utilisant un `git fetch` puis un `git checkout <tag_name>`, le morceau de code ci-dessous pourra vous intéresser :-)
+
+[source,python]
+----
+
+----
