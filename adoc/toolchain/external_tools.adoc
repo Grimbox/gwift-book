@@ -1,0 +1,8 @@
+### graphviz
+
+En utilisant django_extensions (! bien suivre les étapes d'installation !). 
+
+[source,text]
+----
+ C:\app\graphviz\bin\dot.exe graph.dot -Tpng -o graph.png
+----
