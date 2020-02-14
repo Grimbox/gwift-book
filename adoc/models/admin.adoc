@@ -1,27 +1,4 @@
-== Modélisation et conception avancée
-
-Dans ce chapitre, on va parler de plusieurs concepts utiles au développement rapide d'une application. On parlera de modélisation, de migrations, d'administration auto-générée. 
-
-=== Modélisation
-
-On va aborder la modélisation des objets en elle-même, qui s'apparente à la conception de la base de données. 
-
-Django utilise un modèle https://fr.wikipedia.org/wiki/Mapping_objet-relationnel[ORM] - c'est-à-dire que chaque objet peut s'apparenter à une table SQL, mais en ajoutant une couche propre au paradigme orienté objet. Il sera ainsi possible de définir facilement des notions d'héritage (tout en restant dans une forme d'héritage simple), la possibilité d'utiliser des propriétés spécifiques, des classes intermédiaires, ... 
-
-L'avantage de tout ceci est que tout reste au niveau du code. Si l'on revient sur la méthodologie des douze facteurs, ce point concerne principalement la minimisation de la divergence entre les environnements d'exécution. Déployer une nouvelle instance de l'application pourra être réalisé directement à partir d'une seule et même commande, dans la mesure où *tout est embarqué au niveau du code*.
-
-Assez de blabla, on démarre !
-
-
-=== Migrations
-
-Les migrations (comprendre les "migrations du schéma de base de données") sont intimement liées à la représentation d'un contexte fonctionnel. L'ajout d'une nouvelle information, d'un nouveau champ ou d'une nouvelle fonction peut s'accompagner de tables de données à mettre à jour ou de champs à étendre.
-
-Toujours dans une optique de centralisation, les migrations sont directement embarquées au niveau du code. Le développeur s'occupe de créer les migrations en fonction des actions à entreprendre; ces migrations peuvent être retravaillées, _squashées_, ... et feront partie intégrante du processus de mise à jour de l'application.
-
-
-
-=== Administration
+== Administration
 
 Woké. On va commencer par la *partie à ne _surtout_ (__surtout__ !!) pas faire en premier dans un projet Django*. Mais on va la faire quand même. La raison principale est que cette partie est tellement puissante et performante, qu'elle pourrait laisser penser qu'il est possible de réaliser une application complète rien qu'en configurant l'administration.
 
@@ -35,3 +12,39 @@ Elle doit rester dans les mains d'administrateurs ou de gestionnaires, et dans l
 
 Une bonne idée consiste à développer l'administration dans un premier temps, en *gardant en tête qu'il sera nécessaire de développer des concepts spécifiques*. Dans cet objectif, l'administration est un outil exceptionel, qui permet de valider un modèle, de créer des objets rapidement et de valider les liens qui existent entre eux. C'est un excellent outil de prototypage et de preuve de concept.
 
+=== Quelques conseils
+
+. Surchargez la méthode `__str__(self)` pour chaque classe que vous aurez définie dans le modèle. Cela permettra de construire une représentation textuelle qui représentera l'instance de votre classe. Cette information sera utilisée un peu partout dans le code, et donnera une meilleure idée de ce que l'on manipule. En plus, cette méthode est également appelée lorsque l'administration historisera une action (et comme cette étape sera inaltérable, autant qu'elle soit fixée dans le début). 
+
+. La méthode `get_absolute_url(self)` retourne l'URL à laquelle on peut accéder pour obtenir les détails d'une instance. Par exemple:
+
+[source,python]
+----
+def get_absolute_url(self):
+    return reverse('myapp.views.details', args=[self.id])
+----
+
+. Les attributs `Meta`:
+
+[source,python]
+----
+class Meta:
+	ordering = ['-field1', 'field2']
+	verbose_name = 'my class in singular'
+	verbose_name_plural = 'my class when is in a list!'
+----
+
+. Le titre:
+
+	* Soit en modifiant le template de l'administration
+	* Soit en ajoutant l'assignation suivante dans le fichier `urls.py`: `admin.site.site_header = "SuperBook Secret Area`.
+
+. Prefetch
+
+https://hackernoon.com/all-you-need-to-know-about-prefetching-in-django-f9068ebe1e60?gi=7da7b9d3ad64
+
+https://medium.com/@hakibenita/things-you-must-know-about-django-admin-as-your-app-gets-bigger-6be0b0ee9614
+
+En gros, le problème de l'admin est que si on fait des requêtes imbriquées, on va flinguer l'application et le chargement de la page.
+La solution consiste à utiliser la propriété `list_select_related` de la classe d'Admin, afin d'appliquer une jointure par défaut et 
+et gagner en performances.

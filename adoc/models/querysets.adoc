@@ -1,5 +1,4 @@
-Queryset & managers
-===================
+== Queryset & managers
 
 L'ORM de Django propose par défaut deux objets hyper importants: 
 

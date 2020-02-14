@@ -1,4 +1,4 @@
-== Déploiement
+== Un peu de théorie... Les principales étapes
 
 On va déjà parler de déploiement. Si vous avez suivi les étapes jusqu'ici, vous devriez à peine disposer d'un espace de travail proprement configuré, d'un modèle relativement basique et d'une configuration avec une base de données simpliste. En bref, vous avez quelque chose qui fonctionne, mais qui ressemble de très loin à ce que vous souhaitez au final.
 

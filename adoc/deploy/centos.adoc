@@ -1,4 +1,4 @@
-### Connexion et préparation du serveur
+== Déploiement sur CentOS
 
 [source,bash]
 ----
@@ -8,9 +8,9 @@ groupadd --system gunicorn_sockets
 useradd --system --gid webapps --shell /bin/bash --home /home/medplan medplan
 mkdir -p /home/medplan
 chown medplan:webapps /home/medplan
----
+----
 
-### Installation des dépendances systèmes
+=== Installation des dépendances systèmes
 
 [source,bash]
 ----
@@ -22,7 +22,7 @@ wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sq
 sudo yum install sqlite-3.8.11-1.fc21.x86_64.rpm sqlite-devel-3.8.11-1.fc21.x86_64.rpm -y
 ----
 
-### Préparation de l'environnement utilisateur
+=== Préparation de l'environnement utilisateur
 
 [source,bash]
 ----
@@ -55,7 +55,7 @@ cd webapps/medplan
 gunicorn config.wsgi:application --bind localhost:3000 --settings=config.settings_production
 ----
 
-### Configuration de l'application
+=== Configuration de l'application
 
 [source,bash]
 ----
@@ -64,22 +64,30 @@ ALLOWED_HOSTS=*
 STATIC_ROOT=/var/www/medplan/static
 ----
 
-### Création des répertoires de logs
+=== Création des répertoires de logs
 
 [source,text]
 ----
 mkdir -p /var/www/medplan/static
 ----
 
-### Création du répertoire pour le socket 
+=== Création du répertoire pour le socket 
 
-Dans le fichier /etc/tmpfiles.d/medplan.conf:
+Dans le fichier `/etc/tmpfiles.d/medplan.conf`:
+
+[source,text]
+----
 D /var/run/webapps 0775 medplan gunicorn_sockets -
+----
 
 Suivi de la création par systemd :
-systemd-tmpfiles --create
 
-### Gunicorn
+[source,text]
+----
+systemd-tmpfiles --create
+----
+
+=== Gunicorn
 
 [source,bash]
 ----
@@ -111,14 +119,14 @@ exec gunicorn ${DJANGO_WSGI_MODULE}:application \
 --log-file=-
 ----
 
-### Supervision
+=== Supervision
 
 [source,bash]
 ----
 yum install supervisor -y
 ----
 
-On crée ensuite le fichier /etc/supervisord.d/medplan.ini:
+On crée ensuite le fichier `/etc/supervisord.d/medplan.ini`:
 
 [source,bash]
 ----
@@ -130,11 +138,15 @@ autostart=true
 autorestart=unexpected
 redirect_stdout=true
 redirect_stderr=true
+----
 
 Et on crée les répertoires de logs, on démarre supervisord et on vérifie qu'il tourne correctement:
+
+[source,bash]
+----
 mkdir /var/log/medplan
 chown medplan:nagios /var/log/medplan
- 
+
 systemctl enable supervisord
 systemctl start supervisord.service
 systemctl status supervisord.service
@@ -154,7 +166,7 @@ systemctl status supervisord.service
 ls /var/run/webapps/
 ----
 
-### Ouverture des ports
+=== Ouverture des ports
 
 [source,text]
 ----
@@ -163,7 +175,7 @@ firewall-cmd --permanent --zone=public --add-service=https
 firewall-cmd --reload
 ----
 
-### Installation d'Nginx
+=== Installation d'Nginx
 
 [source]
 ----
@@ -171,7 +183,7 @@ yum install nginx -y
 usermod -a -G gunicorn_sockets nginx
 ----
 
-On configure ensuite le fichier /etc/nginx/conf.d/medplan.conf:
+On configure ensuite le fichier `/etc/nginx/conf.d/medplan.conf`:
 
 ----
 upstream medplan_app {
@@ -213,9 +225,9 @@ server {
 }
 ----
 
-### Configuration des sauvegardes
+=== Configuration des sauvegardes
 
-Les sauvegardes ont été configurées avec borg: yum install borgbackup.
+Les sauvegardes ont été configurées avec borg: `yum install borgbackup`.
 
 C'est l'utilisateur medplan qui s'en occupe.
 

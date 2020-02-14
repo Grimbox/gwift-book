@@ -1,4 +1,4 @@
-=== Environnements virtuels
+== Environnements virtuels
 
 On va commencer avec la partie la moins funky, mais la plus utile, dans la vie d'un développeur: la gestion et l'isolation des dépendances.
 
@@ -8,6 +8,146 @@ Il est tout à fait possible de s'en passer complètement dans le cadre de "peti
 . Il est tout à fait envisagable que deux applications soient déployées sur un même hôte, et nécessitent chacune deux versions différentes d'une même dépendance.
 
 > But it works on my machine! Then, we'll ship your machine.
-> --A famous meme, And this is how Docker was born.
+> -- A famous meme, And this is how Docker was born.
+
+Nous allons utiliser le module `venv` afin de créer un `environnement virtuel <http://sametmax.com/les-environnement-virtuels-python-virtualenv-et-virtualenvwrapper/>`_ pour python.
+
+NOTE: auparavant, on utilisait `virtualenvwrapper`. mais cela fait plusieurs années que je ne l'utilise plus. On l'intègre quand même ?
+
+=== Création de l'environnement virtuel
+
+Commencons par créer un environnement virtuel, afin d'y stocker les dépendances. Lancez `python3 -m venv gwift-env`.
+
+[source,bash]
+---
+Intégrer les résultats de la création de l'environnement
+---
+
+Ceci créera l'arborescence de fichiers suivante, qui peut à nouveau être un peu différente en fonction du système d'exploitation:
+
+.. code-block:: shell
+
+    $ ls .virtualenvs/gwift-env
+    bin include lib
+
+Nous pouvons ensuite l'activer grâce à la commande `source gwift-env`.
+
+[source,bash]
+---
+Intégrer les résultats de l'accès de l'environnement
+---
+
+Le *shell* signale que nous sommes bien dans l'environnement ``gwift-env`` en l'affichant avant le ``$``. Par la suite, nous considérerons que l'environnement virtuel est toujours activé, même si ``gwift-env`` n'est pas présent devant chaque ``$``.
+
+A présent, tous les binaires de cet environnement prendront le pas sur les binaires du système. De la même manière, une variable ``PATH`` propre est définie et utilisée, afin que les librairies Python y soient stockées. C'est donc dans cet environnement virtuel que nous retrouverons le code source de Django, ainsi que des librairies externes pour Python une fois que nous les aurons installées.
+
+Pour désactiver l'environnement virtuel, il suffira d'utiliser la commande ``deactivate``
 
 
+=== Installation de Django et création du répertoire de travail
+
+Comme l'environnement est activé, on peut à présent y installer Django. La librairie restera indépendante du reste du système, et ne polluera pas les autres projets.
+
+C'est parti: ``pip install django``!
+
+.. code-block:: shell
+
+    $ pip install django
+    Collecting django
+      Downloading Django-X.Y.Z
+    100% |################################|
+    Installing collected packages: django
+    Successfully installed django-X.Y.Z
+
+Les commandes de création d'un nouveau site sont à présent disponibles, la principale étant ``django-admin startproject``. Par la suite, nous utiliserons ``manage.py``, qui constitue un *wrapper* autour de `django-admin`.
+
+Pour démarrer notre projet, nous lançons donc ``django-admin startproject gwift``.
+
+[source,bash]
+----
+$ django-admin startproject gwift
+----
+
+Cette action a pour effet de créer un nouveau dossier ``gwift``, dans lequel on trouve la structure suivante:
+
+[source,bash]
+----
+$ tree gwift
+gwift
+├── gwift
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py
+----
+
+C'est sans ce répertoire que vont vivre tous les fichiers liés au projet. Le but est de faire en sorte que toutes les opérations (maintenance, déploiement, écriture, tests, ...) puissent se faire à partir d'un seul point d'entrée. Tant qu'on y est, nous pouvons rajouter les répertoires utiles à la gestion de notre projet, à savoir la documentation, les dépendances et le README:
+
+[source,bash]
+----
+$ mkdir docs requirements
+$ touch docs/README.md
+----
+
+[source,bash]
+----
+$ tree gwift
+gwift
+├── gwift
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py
+|-- docs/
+|-- requirements/
+|-- README
+----
+
+Chacun de ces fichiers sert à:
+
+ * ``settings.py`` contient tous les paramètres globaux à notre projet.
+ * ``urls.py`` contient les variables de routes, les adresses utilisées et les fonctions vers lesquelles elles pointent.
+ * ``manage.py``, pour toutes les commandes de gestion.
+ * ``wsgi.py`` contient la définition de l'interface `WSGI <https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface>`_, qui permettra à votre serveur Web (Nginx, Apache, ...) de faire un pont vers votre projet.
+
+NOTE: déplacer la configuration dans un répertoire ``config`` à part.
+
+=== Gestion des dépendances
+
+Comme nous venons d'ajouter une dépendance à notre projet, nous allons créer un fichier reprenant tous les dépendances de notre projet. Celles-ci sont normalement placées dans un fichier ``requirements.txt``. Dans un premier temps, ce fichier peut être placé directement à la racine du projet, mais on préférera rapidement le déplacer dans un sous-répertoire spécifique (``requirements``), afin de grouper les dépendances en fonction de leur utilité:
+
+ * ``base.txt``
+ * ``dev.txt``
+ * ``staging.txt``
+ * ``production.txt``
+
+Au début de chaque fichier, il suffira d'ajouter la ligne ``-r base.txt``, puis de lancer l'installation grâce à un ``pip install -r <nom du fichier>``. De cette manière, il est tout à fait acceptable de n'installer `flake8` et `django-debug-toolbar` qu'en développement par exemple.  Dans l'immédiat, ajoutez simplement ``django`` dans le fichier ``requirements/base.txt``.
+
+[source,bash]
+----
+$ echo django >> requirements/base.txt
+----
+
+Par la suite, il vous faudra **absolument** spécifier les versions à utiliser: les librairies que vous utilisez comme dépendances évoluent, de la même manière que vos projets. Des fonctions sont cassées, certaines signatures sont modifiées, des comportements sont altérés, etc. Si vous voulez être sûr et certain que le code que vous avez écrit continue à fonctionner, spécifiez la version de chaque librairie de dépendances. Avec les mécanismes d'intégration continue et de tests unitaires, on verra plus loin comment se prémunir d'un changement inattendu.
+
+=== Structure finale de l'environnement
+
+Nous avons donc la strucutre finale pour notre environnement de travail:
+
+[source,bash]
+----
+$ tree ~/gwift-project
+gwift
+├── docs
+│   └── README.md
+├── gwift
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+│   manage.py
+└── requirements
+    └── base.txt
+----

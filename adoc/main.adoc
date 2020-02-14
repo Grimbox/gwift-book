@@ -1,4 +1,4 @@
-= Deep dive into Django
+= Minor swing with Django
 Cédric Declerfayt <jaguarondi27@gmail.com>; Fred Pauchet <fred@grimbox.be>
 :doctype: book
 :toc:
@@ -13,37 +13,75 @@ L'idée du texte ci-dessous est de jeter les bases d'un bon développement, en s
 
 Ces idées ne s'appliquent pas uniquement à Django et à son cadre de travail, ni même au langage Python. Juste que ces deux bidules sont de bons candidats et que le cadre de travail est bien défini et suffisamment flexible.
 
+Django se présente comme un `Framework Web pour perfectionnistes ayant des deadlines <https://www.djangoproject.com/>`_. 
+
+Django suit quelques principes <https://docs.djangoproject.com/en/dev/misc/design-philosophies/>:
+
+ * Faible couplage et forte cohésion, pour que chaque composant ait son indépendance.
+ * Moins de code, plus de fonctionnalités.
+ * `Don't repeat yourself <https://fr.wikipedia.org/wiki/Sec>`_: ne pas se répéter!
+ * Rapidité du développement (après une courbe d'apprentissage relativement ardue, malgré tout)
+
+Mis côté à côté, l'application de ces principes permet une meilleure stabilité du projet. Dans la suite de ce chapitre, on verra comment configurer l'environnement, comment installer Django de manière isolée et comment démarrer un nouveau projet. On verra comment gérer correctement les dépendances, les versions et comment applique un score sur note code.
+
+Finalement, on verra aussique la configuration proposée par défaut par le framework n'est pas idéale pour la majorité des cas.
+
 Pour cela, on présentera différents outils (mypy, flake8, black, ...), la rédaction de tests unitaires et d'intégration pour limiter les régressions, les règles de nomenclature et de contrôle du contenu, ainsi que les bonnes étapes à suivre pour arriver à un déploiement rapide et fonctionnel avec peu d'efforts.
 
 Et tout ça à un seul et même endroit. Oui. :-)
 
 Bonne lecture.
 
-== Environnement de travail
+= Environnement de travail
+
+Avant de démarrer le développement, il est nécessaire de passer un peu de temps sur la configuration de l'environnement.
+
+Les morceaux de code seront développés pour Python3.4+ et Django 1.8+. Ils nécessiteront peut-être quelques adaptations pour fonctionner sur une version antérieure.
+
+**Remarque** : les commandes qui seront exécutés dans ce livre le seront depuis un shell sous GNU/Linux. Certaines devront donc être adaptées si vous êtes dans un autre environnemnet.
 
 include::toolchain/12-factors.adoc[]
 
 include::toolchain/venvs.adoc[]
+
+include::toolchain/django.adoc[]
+
+include::toolchain/maintainable-applications.adoc[]
 
 include::toolchain/tools.adoc[]
 
 include::toolchain/external_tools.adoc[]
 
 
-== Déploiement
+= Déploiement
 Et sécurisation du serveur.
 
 include::deploy/index.adoc[]
 
 include::deploy/centos.adoc[]
 
-== Modélisation
+= Modélisation
+
+Dans ce chapitre, on va parler de plusieurs concepts utiles au développement rapide d'une application. On parlera de modélisation, de migrations, d'administration auto-générée. 
+
+include::models/models.adoc[]
+
+include::models/querysets.adoc[]
+
+include::models/forms.adoc[]
+
+include::models/migrations.adoc[]
 
 include::models/admin.adoc[]
 
-== Go Live !
-Et supervision.
+= Go Live !
 
-== En bonus
+== Supervision des logs
 
-include::tools/code-snippets.adoc[]
+== feedbacks utilisateurs
+
+
+
+= En bonus
+
+include::bonus/code-snippets.adoc[]

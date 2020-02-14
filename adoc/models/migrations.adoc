@@ -1,0 +1,6 @@
+== Migrations
+
+Les migrations (comprendre les "migrations du schéma de base de données") sont intimement liées à la représentation d'un contexte fonctionnel. L'ajout d'une nouvelle information, d'un nouveau champ ou d'une nouvelle fonction peut s'accompagner de tables de données à mettre à jour ou de champs à étendre.
+
+Toujours dans une optique de centralisation, les migrations sont directement embarquées au niveau du code. Le développeur s'occupe de créer les migrations en fonction des actions à entreprendre; ces migrations peuvent être retravaillées, _squashées_, ... et feront partie intégrante du processus de mise à jour de l'application.
+

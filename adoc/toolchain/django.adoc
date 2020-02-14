@@ -1,6 +1,4 @@
-*******************
-L'espace de travail
-*******************
+== Django
 
 Comme on l'a vu ci-dessus, ``django-admin`` permet de créer un nouveau projet. On fait ici une distinction entre un **projet** et une **application**:
 
@@ -11,8 +9,7 @@ Pour ``gwift``, on va notamment avoir une application pour la gestion des listes
 
 On voit bien ici le principe de **contexte**: l'application viendra avec son modèle, ses tests, ses vues et son paramétrage. Elle pourra éventuellement être réutilisée dans un autre projet. C'est en ça que consistent les `paquets Django <https://www.djangopackages.com/>`_ déjà disponibles: ce sont simplement de petites applications empaquetées pour être réutilisées (eg. `Django-Rest-Framework <https://github.com/tomchristie/django-rest-framework>`_, `Django-Debug-Toolbar <https://github.com/django-debug-toolbar/django-debug-toolbar>`_, ...).
 
-Gestion
-=======
+=== Gestion
 
 Comme expliqué un peu plus haut, le fichier ``manage.py`` est un *wrapper* sur les commandes ``django-admin``. A partir de maintenant, nous n'utiliserons plus que celui-là pour tout ce qui touchera à la gestion de notre projet:
 
@@ -29,23 +26,24 @@ La liste complète peut être affichée avec ``manage.py help``. Vous remarquere
 
 Nous verrons plus tard comment ajouter de nouvelles commandes.
 
-Structure d'une application
-===========================
+=== Structure d'une application
 
 Maintenant que l'on a vu à quoi servait ``manage.py``, on peut créer notre nouvelle application grâce à la commande ``manage.py startapp <label>``.
 
 Cette application servira à structurer les listes de souhaits, les éléments qui les composent et les parties que chaque utilisateur pourra offrir. Essayez de trouver un nom éloquent, court et qui résume bien ce que fait l'application. Pour nous, ce sera donc ``wish``. C'est parti pour ``manage.py startapp wish``!
 
-.. code-block:: shell
-
-    $ python manage.py startapp wish
+[source,bash]
+----
+$ python manage.py startapp wish
+----
 
 Résultat? Django nous a créé un répertoire ``wish``, dans lequel on trouve les fichiers suivants:
 
-.. code-block:: shell
-
-    $ ls -l wish
-    admin.py  __init__.py  migrations  models.py  tests.py  views.py
+[source,bash]
+----
+$ ls -l wish
+admin.py  __init__.py  migrations  models.py  tests.py  views.py
+----
 
 En résumé, chaque fichier a la fonction suivante:
 
@@ -54,4 +52,13 @@ En résumé, chaque fichier a la fonction suivante:
  * ``migrations/``, dossier dans lequel seront stockées toutes les différentes migrations de notre application.
  * ``models.py`` pour représenter et structurer nos données.
  * ``tests.py`` pour les tests unitaires.
+
+
+=== Tests unitaires
+
+Plein de trucs à compléter ici ;-) Est-ce qu'on passe par pytest ou par le framework intégré ? Quels sont les avantages de l'un % à l'autre ?
  * ``views.py`` pour définir ce que nous pouvons faire avec nos données.
+
+
+
+

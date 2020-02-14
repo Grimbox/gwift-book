@@ -1,4 +1,12 @@
-=== graphviz
+== Git
+
+NOTE: insérer ici une description de Gitflow + quelques exemples types création, ajout, suppression, historique, branches, ... et quelques schémas qui-vont-bien.
+
+Il existe plusiseurs outils permettant de gérer les versions du code, dont les plus connus sont `git <https://git-scm.com/>`_ et `mercurial <https://www.mercurial-scm.org/>`_.
+
+Dans notre cas, nous utilisons git et hebergons le code et le livre directement sur le gitlab de `framasoft <https://git.framasoft.org/>`_
+
+== graphviz
 
 En utilisant django_extensions (! bien suivre les étapes d'installation !). 
 
