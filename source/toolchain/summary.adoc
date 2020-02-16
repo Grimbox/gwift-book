@@ -1,6 +1,4 @@
-******
-Résumé
-******
+== En résumé
 
 En résumé, la création d'un **nouveau** projet Django demande plus ou moins toujours les mêmes actions: 
 
@@ -9,8 +7,7 @@ En résumé, la création d'un **nouveau** projet Django demande plus ou moins t
  2. Configurer le fichier ``settings.py``
 
 
-Cookie-cutter
-=============
+. Cookie-cutter
 
 C'est ici que le projet `Cookie-Cutter <http://cookiecutter.readthedocs.io/en/latest/readme.html>`_ va être intéressant: les X premières étapes peuvent être *bypassées* par une simple commande.
 

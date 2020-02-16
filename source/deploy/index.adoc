@@ -1,6 +1,8 @@
 == Un peu de théorie... Les principales étapes
 
-On va déjà parler de déploiement. Si vous avez suivi les étapes jusqu'ici, vous devriez à peine disposer d'un espace de travail proprement configuré, d'un modèle relativement basique et d'une configuration avec une base de données simpliste. En bref, vous avez quelque chose qui fonctionne, mais qui ressemble de très loin à ce que vous souhaitez au final.
+On va déjà parler de déploiement. Le serveur que django met à notre disposition est prévu uniquement pour le développement: inutile de passer par du code Python pour charger des fichiers statiques (feuilles de style, fichiers JavaScript, images, ...). De même, la base de donnée doit supporter plus qu'un seul utilisateur: SQLite fonctionne très bien dès lors qu'on se limite à un seul utilisateur... Sur une application Web, il est plus que probable que vous rencontriez rapidement des erreurs de base de données verrouillée pour écriture par un autre processus. Il est donc plus que bénéfique de passer sur quelque chose de plus solide. 
+
+Si vous avez suivi les étapes jusqu'ici, vous devriez à peine disposer d'un espace de travail proprement configuré, d'un modèle relativement basique et d'une configuration avec une base de données simpliste. En bref, vous avez quelque chose qui fonctionne, mais qui ressemble de très loin à ce que vous souhaitez au final.
 
 Il y a une raison très simple à aborder le déploiement dès maintenant: à trop attendre et à peaufiner son développement en local, on en oublie que sa finalité sera de se retrouver exposé sur un serveur. On risque d'avoir oublié une partie des désidérata, d'avoir zappé une fonctionnalité essentielle ou simplement de passer énormément de temps à adapter les sources pour qu'elles fonctionnent sur un environnement en particulier.
 
@@ -16,6 +18,15 @@ Dans cette partie, on abordera les points suivants:
 === Définition de l'infrastructure
 
 Comme on l'a vu dans la première partie, Django est un framework complet, intégrant tous les mécanismes nécessaires à la bonne évolution d'une application. On peut ainsi commencer petit, et suivre l'évolution des besoins en fonction de la charge estimée ou ressentie, ajouter un mécanisme de mise en cache, des logiciels de suivi, ...
+
+Pour une mise ne production, le standard *de facto* est le suivant:
+
+ * Nginx comme serveur principal
+ * Gunicorn comme serveur d'application
+ * Supervisorctl pour le monitoring
+ * PostgreSQL comme base de données.
+ 
+C'est celle-ci que nous allons décrire ci-dessous.
 
 === Configuration et sécurisation de la machine hôte
 

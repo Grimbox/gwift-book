@@ -166,6 +166,28 @@ systemctl status supervisord.service
 ls /var/run/webapps/
 ----
 
+On peut aussi vérifier que l'application est en train de tourner, à l'aide de la commande `supervisorctl`:
+
+[source,bash]
+----
+$$$ supervisorctl status gwift
+gwift                            RUNNING    pid 31983, uptime 0:01:00
+----
+
+Et pour gérer le démarrage ou l'arrêt, on peut passer par les commandes suivantes:
+
+[source,bash]
+----
+$$$ supervisorctl stop gwift
+gwift: stopped
+root@ks3353535:/etc/supervisor/conf.d# supervisorctl start gwift
+gwift: started
+root@ks3353535:/etc/supervisor/conf.d# supervisorctl restart gwift
+gwift: stopped
+gwift: started
+----
+
+
 === Ouverture des ports
 
 [source,text]
