@@ -8,6 +8,98 @@ Comme on l'a vu dans la partie sur le modèle, nous souhaitons que le créateur 
 Mécanisme d'authentification
 ****************************
 
+On peut schématiser le flux d'authentification de la manière suivante : 
+
+En gros:
+
+. La personne accède à une URL qui est protégée (voir les décorateurs @login_required et le mixin LoginRequiredMixin)
+. Le framework détecte qu'il est nécessaire pour la personne de se connecter (grâce à un paramètre type LOGIN_URL)
+. Le framework présente une page de connexion ou un mécanisme d'accès pour la personne (template à définir)
+. Le framework récupère les informations du formulaire, et les transmets aux différents backends d'authentification, dans l'ordre
+. Chaque backend va appliquer la méthode `authenticate` en cascade, jusqu'à ce qu'un backend réponde True ou qu'aucun ne réponde
+. La réponse de la méthode authenticate doit être une instance d'un utilisateur, tel que définit parmi les paramètres généraux de l'application. 
+
+En résumé (bis): 
+
+. Une personne souhaite se connecter;
+. Les backends d'authentification s'enchaîne jusqu'à trouver une bonne correspondance. Si aucune correspondance n'est trouvée, on envoie la personne sur les roses.
+. Si OK, on retourne une instance de type curren_user, qui pourra être utilisée de manière uniforme dans l'application.
+
+Deux exemples : 
+
+. Une authentification par jeton
+. Une authentification LDAP
+
+
+[source,python]
+----
+from datetime import datetime
+
+from django.contrib.auth import backends, get_user_model
+from django.db.models import Q
+
+from accounts.models import Token  <1>
+
+
+UserModel = get_user_model()
+
+
+class TokenBackend(backends.ModelBackend):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        """Authentifie l'utilisateur sur base d'un jeton qu'il a reçu.
+
+        On regarde la date de validité de chaque jeton avant d'autoriser l'accès.
+        """
+        token = kwargs.get("token", None)
+
+        current_token = Token.objects.filter(token=token, validity_date__gte=datetime.now()).first()
+
+        if current_token:
+            user = current_token.user
+
+            current_token.last_used_date = datetime.now()
+            current_token.save()
+
+            return user
+
+        return None
+----
+  <1> Sous-entend qu'on a bien une classe qui permet d'accéder à ces jetons ;-)
+
+
+
+[source,python]
+----
+from django.contrib.auth import backends, get_user_model
+
+from ldap3 import Server, Connection, ALL
+from ldap3.core.exceptions import LDAPPasswordIsMandatoryError
+
+from config import settings
+
+
+UserModel = get_user_model()
+
+
+class LdapBackend(backends.ModelBackend):
+    """Implémentation du backend LDAP pour la connexion des utilisateurs à l'Active Directory.
+    """
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        """Authentifie l'utilisateur au travers du serveur LDAP.
+        """
+
+        ldap_server = Server(settings.LDAP_SERVER, get_info=ALL)
+        ldap_connection = Connection(ldap_server, user=username, password=password)
+
+        try:
+            if not ldap_connection.bind():
+                raise ValueError("Login ou mot de passe incorrect")
+        except (LDAPPasswordIsMandatoryError, ValueError) as ldap_exception:
+            raise ldap_exception
+
+        user, _ = UserModel.objects.get_or_create(username=username)
+----
+
 On peut résumer le mécanisme d'authentification de la manière suivante:
 
  * Si vous voulez modifier les informations liées à un utilisateur, orientez-vous vers la modification du modèle. Comme nous le verrons ci-dessous, il existe trois manières de prendre ces modifications en compte. Voir également `ici <https://docs.djangoproject.com/en/1.9/topics/auth/customizing/>`_.
@@ -48,7 +140,7 @@ Notez bien qu'**il ne faut pas** spécifier le package ``.models`` dans cette in
 Backend
 =======
 
-[blabla...]
+
 
 
 *********
