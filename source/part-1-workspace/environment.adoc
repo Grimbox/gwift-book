@@ -1,0 +1,8 @@
+== Environnement de travail
+
+Quelques idées: Git, VSCodium[https://vscodium.com/], un terminal (Si vous êtes sous Windows, cmder[https://cmder.net/]).
+
+Un gestionnaire de base de données ? PHPMyAdmin ou PgAdmin.
+
+Un IDE ? PyCharm, VSCodium, VIM, ...
+

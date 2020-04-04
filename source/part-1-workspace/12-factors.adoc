@@ -1,0 +1,42 @@
+== Construire des applications maintables
+
+Pour la méthode de travail et de développement, on va se baser sur les https://12factor.net/fr/[The Twelve-factor App] - ou plus simplement les *12 facteurs*. 
+
+L'idée derrière cette méthode consiste à pousser les concepts suivants (repris grossièrement de la https://12factor.net/fr/[page d'introduction] :
+
+. Faciliter la mise en place de phases d'automatisation; plus simplement, faciliter les mises à jour applicatives, simplifier la gestion de l'hôte, diminuer la divergence entre les différents environnements d'exécution et offrir la possibilité d'intégrer le projet dans un processus d'https://en.wikipedia.org/wiki/Continuous_integration[intégration continue]/link:https://en.wikipedia.org/wiki/Continuous_deployment[déploiement continu]
+. Faciliter la mise à pied de nouveaux développeurs ou de personnes souhaitant rejoindre le projet.
+. Faciliter XXX
+. Augmenter l'agilité générale du projet, en permettant une meilleure évolutivité architecturale et une meilleure mise à l'échelle - _Vous avez 5000 utilisateurs en plus? Ajoutez un serveur et on n'en parle plus ;-)_.
+
+En pratique, les idées planquées derrière les points ci-dessus permettront de monter facilement un nouvel environnement - qu'il soit sur la machine du petit nouveau dans l'équipe, sur un serveur Azure, Heroku, Digital Ocean ou votre nouveau Raspberry Pi Zéro caché à la cave. 
+
+Pour reprendre de manière très brute les différentes idées derrière cette méthode, on a: 
+
+NOTE: pensez à retravailler la partie ci-dessous; la version anglophone semble plus compréhensible... :-/
+
+. Une base de code suivie, avec un système de contrôle de versions, signifie plusieurs déploiements
+. Déclarez explicitement et isolez les dépendances
+. Stockez la configuration dans l’environnement
+
+NOTE: quelle configuration ?
+
+. Traitez les services externes comme des ressources attachées (*?*)
+. Séparez strictement les étapes d’assemblage et d’exécution (*?*)
+. Exécutez l’application comme un ou plusieurs processus sans état (*?*)
+. Exportez les services via des associations de ports (*?*)
+. Grossissez à l’aide du modèle de processus (*?*)
+. Maximisez la robustesse avec des démarrages rapides et des arrêts gracieux (*?*)
+. Gardez le développement, la validation et la production aussi proches l'un de l'autre que possible
+. Traitez les logs comme des flux d’évènements (*?*)
+. Lancez les processus d’administration et de maintenance comme des one-off-processes (*?*)
+
+.Concrètement
+|===
+|Concept|Concept |Outil |Description
+|1|Base de code suivie avec un système de contrôle de version| Git, Mercurial, SVN, ...|Chaque déploiement démarre à partir d'une base de code unique. Il n'y pas de dépôt "Prod", "Staging" ou "Dev". Il n'y en a qu'un et un seul.
+|2|Déclaration explicite et isolation des dépendances| Pyenv, environnements virtuels, RVM, ...|Afin de ne pas perturber les dépendances systèmes, chaque application doit disposer d'un environnement sain par défaut. 
+|3|Configuration dans l'environnement| Fichiers .ENV| Toute clé de configuration (nom du serveur de base de données, adresse d'un service Web externe, clé d'API pour l'interrogation d'une ressource, ...) sera définie directement au niveau de l'hôte - à aucun moment, on ne doit trouver un mot de passe en clair dans le dépôt source ou une valeur susceptible d'évoluer, écrite en dur dans le code.
+|4|Services externes = ressources locales| Fichiers .ENV| Chaque ressource doit pouvoir être interchangeable avec une autre, sans modification du code source. La solution consiste à passer toutes ces informations (nom du serveur et type de base de données, clé d'authentification, ...) directement via des variables d'environnement. 
+|5|Bien séparer les étapes de construction des étapes de mise à disposition| Capistrano, Gitea, un serveur d'artefacts, ...| L'idée est de pouvoir récupérer une version spécifique du code, sans que celle-ci ne puisse avoir été modifiée. Git permet bien de gérer des versions (au travers des tags), mais ces éléments peuvent sans doute être modifiés directement au travers de l'historique.
+|===

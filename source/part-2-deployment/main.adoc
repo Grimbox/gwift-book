@@ -1,6 +1,8 @@
-== Un peu de théorie... Les principales étapes
+= Déploiement
 
 On va déjà parler de déploiement. Le serveur que django met à notre disposition est prévu uniquement pour le développement: inutile de passer par du code Python pour charger des fichiers statiques (feuilles de style, fichiers JavaScript, images, ...). De même, la base de donnée doit supporter plus qu'un seul utilisateur: SQLite fonctionne très bien dès lors qu'on se limite à un seul utilisateur... Sur une application Web, il est plus que probable que vous rencontriez rapidement des erreurs de base de données verrouillée pour écriture par un autre processus. Il est donc plus que bénéfique de passer sur quelque chose de plus solide. 
+
+Déploiement[https://docs.djangoproject.com/fr/3.0/howto/deployment/].
 
 Si vous avez suivi les étapes jusqu'ici, vous devriez à peine disposer d'un espace de travail proprement configuré, d'un modèle relativement basique et d'une configuration avec une base de données simpliste. En bref, vous avez quelque chose qui fonctionne, mais qui ressemble de très loin à ce que vous souhaitez au final.
 
@@ -14,6 +16,12 @@ Dans cette partie, on abordera les points suivants:
 * La configuration de l'hôte, qui hébergera l'application: dans une machine physique, virtuelle ou dans un container. On abordera aussi rapidement les déploiements via Ansible, Chef, Puppet ou Salt.
 * Les différentes méthodes de supervision de l'application: comment analyser les fichiers de logs et comment intercepter correctement une erreur si elle se présente et comment remonter l'information.
 * Une partie sur la sécurité et la sécurisation de l'hôte.
+
+include::infrastructure.adoc[]
+
+include::centos+debian.adoc[]
+
+include::database.adoc[]
 
 === Définition de l'infrastructure
 

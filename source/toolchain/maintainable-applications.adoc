@@ -1,6 +1,6 @@
 == Construire des applications maintenables
 
-Pour cette section, je me base d'un résumé de l'ebook **Building Maintenable Software** disponible chez `O'Reilly <http://shop.oreilly.com/product/0636920049555.do`_ qui vaut clairement le détour pour poser les bases d'un projet.
+Pour cette section, je me base d'un résumé de l'ebook **Building Maintenable Software** disponible chez link:O'Reilly[http://shop.oreilly.com/product/0636920049555.do].
 
 Ce livre répartit un ensemble de conseils parmi quatre niveaux de composants:
 
@@ -34,3 +34,4 @@ Ce livre répartit un ensemble de conseils parmi quatre niveaux de composants:
 
 Par rapport aux points repris ci-dessus, l'environnement Python et le framework Django proposent un ensemble d'outils intégrés qui permettent de répondre à chaque point. Avant d'aller plus loin, donc, un petit point sur les conventions, les tests (unitaires, orientés comportement, basés sur la documentation, ...), la gestion de version du code et sur la documentation. Plus que dans tout langage compilé, ceux-ci sont pratiquement obligatoires. Vous pourrez les voir comme une perte de temps dans un premier temps, mais nous vous promettons qu'ils vous en feront gagner par la suite.
 
+NOTE: parlez des principes SOLID
