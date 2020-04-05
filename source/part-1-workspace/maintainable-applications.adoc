@@ -1,6 +1,6 @@
 == Construire des applications maintenables
 
-Pour cette section, je me base d'un résumé de l'ebook **Building Maintenable Software** disponible chez link:O'Reilly[http://shop.oreilly.com/product/0636920049555.do].
+Pour cette section, je me base d'un résumé de l'ebook **Building Maintenable Software** disponible chez link:++O'Reilly++[http://shop.oreilly.com/product/0636920049555.do].
 
 Ce livre répartit un ensemble de conseils parmi quatre niveaux de composants:
 

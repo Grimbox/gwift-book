@@ -39,7 +39,7 @@ $ gem install asciidoctor-diagram
 ```bash
 asciidoctor -a rouge-style=monokai -a pdf-themesdir=resources/themes -a pdf-theme=gwift main.adoc -t -r asciidoctor-diagram
 
-asciidoctor-pdf -a rouge-style=monokai -a pdf-themesdir=resources/themes -a pdf-theme=gwift main.adoc -t -r asciidoctor-diagram
+asciidoctor-pdf -a pdf-themesdir=resources/themes -a pdf-theme=gwift main.adoc -t -r asciidoctor-diagram
 ```
 
 ## Configuration de l'espace utilisateur 

@@ -1,9 +1,0 @@
-== En résumé
-
-En résumé, la création d'un **nouveau** projet Django demande plus ou moins toujours les mêmes actions: 
-
-. Configurer un environnement virtuel
-. Installer les dépendances et les ajouter dans le fichier ``requirements.txt``
-. Configurer le fichier ``settings.py``
-
-C'est ici que le projet http://cookiecutter.readthedocs.io/en/latest/readme.html[CookieCutter] va être intéressant: les X premières étapes peuvent être *bypassées* par une simple commande.
