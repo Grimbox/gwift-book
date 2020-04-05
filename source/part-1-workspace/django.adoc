@@ -1,23 +1,30 @@
 == Django
 
-Comme on l'a vu ci-dessus, ``django-admin`` permet de créer un nouveau projet. On fait ici une distinction entre un **projet** et une **application**:
+Comme on l'a vu ci-dessus, `django-admin` permet de créer un nouveau projet. On fait ici une distinction entre un **projet** et une **application**:
 
  * **Projet**: ensemble des applications, paramètres, pages HTML, middlwares, dépendances, etc., qui font que votre code fait ce qu'il est sensé faire.
  * **Application**: *contexte* éventuellement indépendant, permettant d'effectuer une partie isolée de ce que l'on veut faire.
 
-Pour ``gwift``, on va notamment avoir une application pour la gestion des listes de souhaits et des éléments, une deuxième application pour la gestion des utilisateurs, voire une troisième application qui gérera les partages entre utilisateurs et listes.
+Pour `gwift`, on va notamment avoir 
 
-On voit bien ici le principe de **contexte**: l'application viendra avec son modèle, ses tests, ses vues et son paramétrage. Elle pourra éventuellement être réutilisée dans un autre projet. C'est en ça que consistent les `paquets Django <https://www.djangopackages.com/>`_ déjà disponibles: ce sont simplement de petites applications empaquetées pour être réutilisées (eg. `Django-Rest-Framework <https://github.com/tomchristie/django-rest-framework>`_, `Django-Debug-Toolbar <https://github.com/django-debug-toolbar/django-debug-toolbar>`_, ...).
+. une première application pour la gestion des listes de souhaits et des éléments, 
+. une deuxième application pour la gestion des utilisateurs,
+. voire une troisième application qui gérera les partages entre utilisateurs et listes.
+
+On voit bien ici le principe de **contexte**: l'application viendra avec son modèle, ses tests, ses vues et son paramétrage. Elle pourra éventuellement être réutilisée dans un autre projet. C'est en ça que consistent les https://www.djangopackages.com/[paquets Django] déjà disponibles: ce sont simplement de petites applications empaquetées pour être réutilisées (eg. https://github.com/tomchristie/django-rest-framework[Django-Rest-Framework], https://github.com/django-debug-toolbar/django-debug-toolbar[Django-Debug-Toolbar], ...).
+
+NOTE: analyser la structure de ces paquets et comparer avec la structure finale de l'environnement.
 
 === Gestion
 
-Comme expliqué un peu plus haut, le fichier ``manage.py`` est un *wrapper* sur les commandes ``django-admin``. A partir de maintenant, nous n'utiliserons plus que celui-là pour tout ce qui touchera à la gestion de notre projet:
+Comme expliqué un peu plus haut, le fichier `manage.py` est un *wrapper* sur les commandes `django-admin`. A partir de maintenant, nous n'utiliserons plus que celui-là pour tout ce qui touchera à la gestion de notre projet:
 
- * ``manage.py check`` pour vérifier (en surface...) que votre projet ne rencontre aucune erreur
- * ``manage.py runserver`` pour lancer un serveur de développement
- * ``manage.py test`` pour découvrir les tests unitaires disponibles et les lancer.
+ * `manage.py check` pour vérifier (en surface...) que votre projet ne rencontre aucune erreur
+ * `manage.py check --deploy`, pour vérifier (en surface aussi) que l'application est prête pour un déploiement.
+ * `manage.py runserver` pour lancer un serveur de développement
+ * `manage.py test` pour découvrir les tests unitaires disponibles et les lancer.
 
-La liste complète peut être affichée avec ``manage.py help``. Vous remarquerez que ces commandes sont groupées selon différentes catégories:
+La liste complète peut être affichée avec `manage.py help`. Vous remarquerez que ces commandes sont groupées selon différentes catégories:
 
  * **auth**: création d'un nouveau super-utilisateur, changer le mot de passe pour un utilisateur existant.
  * **django**: vérifier la *compliance* du projet, lancer un *shell*, *dumper* les données de la base, effectuer une migration du schéma, ...
@@ -28,36 +35,64 @@ Nous verrons plus tard comment ajouter de nouvelles commandes.
 
 === Structure d'une application
 
-Maintenant que l'on a vu à quoi servait ``manage.py``, on peut créer notre nouvelle application grâce à la commande ``manage.py startapp <label>``.
+Maintenant que l'on a vu à quoi servait `manage.py`, on peut créer notre nouvelle application grâce à la commande `manage.py startapp <label>`.
 
-Cette application servira à structurer les listes de souhaits, les éléments qui les composent et les parties que chaque utilisateur pourra offrir. Essayez de trouver un nom éloquent, court et qui résume bien ce que fait l'application. Pour nous, ce sera donc ``wish``. C'est parti pour ``manage.py startapp wish``!
-
-[source,bash]
-----
-$ python manage.py startapp wish
-----
-
-Résultat? Django nous a créé un répertoire ``wish``, dans lequel on trouve les fichiers suivants:
+Cette application servira à structurer les listes de souhaits, les éléments qui les composent et les parties que chaque utilisateur pourra offrir. Essayez de trouver un nom éloquent, court et qui résume bien ce que fait l'application. Pour nous, ce sera donc `wish`. C'est parti pour `manage.py startapp wish`!
 
 [source,bash]
 ----
-$ ls -l wish
-admin.py  __init__.py  migrations  models.py  tests.py  views.py
+$ python manage.py startapp gwift/wish
 ----
 
-En résumé, chaque fichier a la fonction suivante:
+Résultat? Django nous a créé un répertoire `wish`, dans lequel on trouve les fichiers et dossiers suivants:
 
- * ``admin.py`` servira à structurer l'administration de notre application. Chaque information peut en effet être administrée facilement au travers d'une interface générée à la volée par le framework. On y reviendra par la suite.
- * ``__init__.py`` pour que notre répertoire ``wish`` soit converti en package Python.
- * ``migrations/``, dossier dans lequel seront stockées toutes les différentes migrations de notre application.
- * ``models.py`` pour représenter et structurer nos données.
- * ``tests.py`` pour les tests unitaires.
+[source,bash]
+----
+$ tree .
+├── docs
+│   └── README.md
+├── gwift
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-37.pyc
+│   │   └── settings.cpython-37.pyc
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── Makefile
+├── manage.py
+├── requirements
+│   ├── base.txt
+│   ├── dev.txt
+│   └── prod.txt
+├── setup.cfg
+├── tox.ini
+└── wish <1>
+    ├── admin.py
+    ├── apps.py
+    ├── __init__.py
+    ├── migrations
+    │   └── __init__.py
+    ├── models.py
+    ├── tests.py
+    └── views.py
+----
+<1> Notre application a bien été créée!
+
+Chaque nouveau fichier a la fonction suivante:
+
+ * `admin.py` servira à structurer l'administration de notre application. Chaque information peut en effet être administrée facilement au travers d'une interface générée à la volée par le framework. On y reviendra par la suite.
+ * `__init__.py` pour que notre répertoire `wish` soit converti en package Python.
+ * `migrations/`, dossier dans lequel seront stockées toutes les différentes migrations de notre application.
+ * `models.py` pour représenter et structurer nos données.
+ * `tests.py` pour les tests unitaires.
 
 
 === Tests unitaires
 
 Plein de trucs à compléter ici ;-) Est-ce qu'on passe par pytest ou par le framework intégré ? Quels sont les avantages de l'un % à l'autre ?
- * ``views.py`` pour définir ce que nous pouvons faire avec nos données.
+ * `views.py` pour définir ce que nous pouvons faire avec nos données.
 
 
 
