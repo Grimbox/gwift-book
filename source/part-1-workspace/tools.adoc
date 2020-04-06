@@ -301,3 +301,6 @@ PyLint est la version **++**, pour ceux qui veulent un code propre et sans bavur
 
 === mypy
 
+=== Towncrier
+  
+voir https://pypi.org/project/towncrier/[ici]
