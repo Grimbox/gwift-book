@@ -88,6 +88,14 @@ Chaque nouveau fichier a la fonction suivante:
  * `models.py` pour représenter et structurer nos données.
  * `tests.py` pour les tests unitaires.
 
+  
+=== Migrations et schéma de bases de données
+  
+https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html[reset migrations].
+  
+  En gros, soit on supprime toutes les migrations (en conservant le fichier __init__.py), soit on 
+  réinitialise proprement les migrations avec un --fake-initial (sous réserve que toutes les personnes qui 
+  utilisent déjà le projet s'y conforment... Ce qui n'est pas gagné.
 
 === Tests unitaires
 
