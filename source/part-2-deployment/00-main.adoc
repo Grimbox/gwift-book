@@ -77,6 +77,7 @@ Qu'est-ce qu'on fait des logs après ? :-)
 
 include::infrastructure.adoc[]
 
+include::database.adoc[]
+
 include::centos+debian.adoc[]
 
-include::database.adoc[]
