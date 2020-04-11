@@ -63,3 +63,4 @@ Plein de trucs à compléter ici ;-) Est-ce qu'on passe par pytest ou par le fra
 
 
 
+https://pivotfinland.com/pytest-sugar/[pytest-sugar] 

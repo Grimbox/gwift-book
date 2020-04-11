@@ -325,3 +325,6 @@ Black fait le même travail: il arrive à un compromis entre la clarté du code,
 
 === mypy
 
+=== Towncrier
+  
+voir https://pypi.org/project/towncrier/[ici]

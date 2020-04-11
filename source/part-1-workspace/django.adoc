@@ -87,6 +87,25 @@ Par soucis de clarté, déplacez ce nouveau répertoire `wish` dans votre réper
 6 directories, 22 files
 ----
 <1> Notre application a bien été créée, et on l'a déplacée dans le répertoire `gwift` !
+ * `admin.py` servira à structurer l'administration de notre application. Chaque information peut en effet être administrée facilement au travers d'une interface générée à la volée par le framework. On y reviendra par la suite.
+ * `__init__.py` pour que notre répertoire `wish` soit converti en package Python.
+ * `migrations/`, dossier dans lequel seront stockées toutes les différentes migrations de notre application.
+ * `models.py` pour représenter et structurer nos données.
+ * `tests.py` pour les tests unitaires.
+
+  
+=== Migrations et schéma de bases de données
+  
+https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html[reset migrations].
+  
+  En gros, soit on supprime toutes les migrations (en conservant le fichier __init__.py), soit on 
+  réinitialise proprement les migrations avec un --fake-initial (sous réserve que toutes les personnes qui 
+  utilisent déjà le projet s'y conforment... Ce qui n'est pas gagné.
+
+=== Tests unitaires
+
+Plein de trucs à compléter ici ;-) Est-ce qu'on passe par pytest ou par le framework intégré ? Quels sont les avantages de l'un % à l'autre ?
+ * `views.py` pour définir ce que nous pouvons faire avec nos données.
 
 NOTE: vérifier s'il s'agit bien d'une forme de convention :-p 
 

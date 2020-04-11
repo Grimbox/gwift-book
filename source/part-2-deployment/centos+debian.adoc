@@ -265,3 +265,19 @@ Et dans le fichier crontab :
 ----
 0 23 * * * /home/gwift/bin/backup.sh
 ----
+
+  
+=== Rotation des jounaux
+  
+[source,bash]
+----
+/var/log/gwift/* {
+        weekly        
+        rotate 3      
+        size 10M      
+        compress      
+        delaycompress 
+}                     
+----
+  
+  Puis on démarre logrotate avec # logrotate -d /etc/logrotate.d/gwift pour vérifier que cela fonctionne correctement. 
