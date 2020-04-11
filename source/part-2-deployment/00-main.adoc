@@ -2,7 +2,7 @@
 
 On va déjà parler de déploiement. Le serveur que django met à notre disposition est prévu uniquement pour le développement: inutile de passer par du code Python pour charger des fichiers statiques (feuilles de style, fichiers JavaScript, images, ...). De même, la base de donnée doit supporter plus qu'un seul utilisateur: SQLite fonctionne très bien dès lors qu'on se limite à un seul utilisateur... Sur une application Web, il est plus que probable que vous rencontriez rapidement des erreurs de base de données verrouillée pour écriture par un autre processus. Il est donc plus que bénéfique de passer sur quelque chose de plus solide. 
 
-Déploiement[https://docs.djangoproject.com/fr/3.0/howto/deployment/].
+https://docs.djangoproject.com/fr/3.0/howto/deployment/[Déploiement].
 
 Si vous avez suivi les étapes jusqu'ici, vous devriez à peine disposer d'un espace de travail proprement configuré, d'un modèle relativement basique et d'une configuration avec une base de données simpliste. En bref, vous avez quelque chose qui fonctionne, mais qui ressemble de très loin à ce que vous souhaitez au final.
 
@@ -17,22 +17,19 @@ Dans cette partie, on abordera les points suivants:
 * Les différentes méthodes de supervision de l'application: comment analyser les fichiers de logs et comment intercepter correctement une erreur si elle se présente et comment remonter l'information.
 * Une partie sur la sécurité et la sécurisation de l'hôte.
 
-include::infrastructure.adoc[]
-
-include::centos+debian.adoc[]
-
-include::database.adoc[]
-
-=== Définition de l'infrastructure
+== Définition de l'infrastructure
 
 Comme on l'a vu dans la première partie, Django est un framework complet, intégrant tous les mécanismes nécessaires à la bonne évolution d'une application. On peut ainsi commencer petit, et suivre l'évolution des besoins en fonction de la charge estimée ou ressentie, ajouter un mécanisme de mise en cache, des logiciels de suivi, ...
 
 Pour une mise ne production, le standard *de facto* est le suivant:
 
- * Nginx comme serveur principal
- * Gunicorn comme serveur d'application
+ * Nginx comme reverse proxy
+ * Gunicorn ou Uvicorn comme serveur d'application
  * Supervisorctl pour le monitoring
- * PostgreSQL comme base de données.
+ * PostgreSQL ou MariaDB comme base de données.
+ * Redis / Memcache pour la mise à en cache (et pour les sessions ? A vérifier).
+
+En mode _containers_, on passera plutôt par Docker et Traefik.
  
 C'est celle-ci que nous allons décrire ci-dessous.
 
@@ -47,13 +44,39 @@ entity "Gunicorn (sockets/HTTP)" as gunicorn
 database PGSQL
 --
 
-Aussi : Docker, Heroku, Digital Ocean, Scaleway, OVH, ... Bref, sur Debian et CentOS pour avoir un panel assez large. On oublie Windows.
+Aussi : Docker, Heroku, Digital Ocean, Scaleway, OVH, Ansible, Puppet, Chef, ... Bref, sur Debian et CentOS pour avoir un panel assez large. On oublie Windows: rien que Gunicorn et Nginx n'y tournent pas.
 
 
 === Mise à jour
 
 Script de mise à jour.
 
+[source,bash]
+----
+su - <user>
+source ~/.venvs/<app>/bin/activate
+cd ~/webapps/<app>
+git fetch 
+git checkout vX.Y.Z
+pip install -U requirements/prod.txt
+python manage.py migrate
+python manage.py collectstatic
+gunicorn reload -HUP
+----
+
+WARNING: le serveur de déploiement ne doit avoir qu'un accès en lecture au dépôt source.
+
 === Supervision
 
 Qu'est-ce qu'on fait des logs après ? :-)
+
+. Sentry
+. Nagios
+. LibreNMS
+. Zabbix
+
+include::infrastructure.adoc[]
+
+include::centos+debian.adoc[]
+
+include::database.adoc[]

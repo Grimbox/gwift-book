@@ -41,9 +41,9 @@ Et tout ça à un seul et même endroit. Oui. :-)
 
 Bonne lecture.
 
-include::part-1-workspace/main.adoc[]
+include::part-1-workspace/00-main.adoc[]
 
-include::part-2-deployment/main.adoc[]
+include::part-2-deployment/00-main.adoc[]
 
 = Modélisation
 

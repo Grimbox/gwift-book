@@ -5,9 +5,9 @@
 yum update
 groupadd --system webapps
 groupadd --system gunicorn_sockets
-useradd --system --gid webapps --shell /bin/bash --home /home/medplan medplan
-mkdir -p /home/medplan
-chown medplan:webapps /home/medplan
+useradd --system --gid webapps --shell /bin/bash --home /home/gwift gwift
+mkdir -p /home/gwift
+chown gwift:webapps /home/gwift
 ----
 
 === Installation des dépendances systèmes
@@ -26,17 +26,17 @@ sudo yum install sqlite-3.8.11-1.fc21.x86_64.rpm sqlite-devel-3.8.11-1.fc21.x86_
 
 [source,bash]
 ----
-su - medplan
+su - gwift
 cp /etc/skel/.bashrc .
 cp /etc/skel/.bash_profile .
 ssh-keygen
 mkdir bin
 mkdir .venvs
 mkdir webapps
-python3.6 -m venv .venvs/medplan
-source .venvs/medplan/bin/activate
-cd /home/medplan/webapps
-git clone git@vmwmedtools:institutionnel/medplan.git
+python3.6 -m venv .venvs/gwift
+source .venvs/gwift/bin/activate
+cd /home/gwift/webapps
+git clone git@vmwmedtools:institutionnel/gwift.git
 ----
 
 La clé SSH doit ensuite être renseignée au niveau du dépôt, afin de pouvoir y accéder. 
@@ -45,13 +45,13 @@ A ce stade, on devrait déjà avoir quelque chose de fonctionnel en démarrant l
 
 [source,bash]
 ----
-# en tant qu'utilisateur 'medplan'
+# en tant qu'utilisateur 'gwift'
  
-source .venvs/medplan/bin/activate
+source .venvs/gwift/bin/activate
 pip install -U pip
 pip install -r requirements/base.txt
 pip install gunicorn
-cd webapps/medplan
+cd webapps/gwift
 gunicorn config.wsgi:application --bind localhost:3000 --settings=config.settings_production
 ----
 
@@ -61,23 +61,23 @@ gunicorn config.wsgi:application --bind localhost:3000 --settings=config.setting
 ----
 SECRET_KEY=<set your secret key here>
 ALLOWED_HOSTS=*
-STATIC_ROOT=/var/www/medplan/static
+STATIC_ROOT=/var/www/gwift/static
 ----
 
 === Création des répertoires de logs
 
 [source,text]
 ----
-mkdir -p /var/www/medplan/static
+mkdir -p /var/www/gwift/static
 ----
 
 === Création du répertoire pour le socket 
 
-Dans le fichier `/etc/tmpfiles.d/medplan.conf`:
+Dans le fichier `/etc/tmpfiles.d/gwift.conf`:
 
 [source,text]
 ----
-D /var/run/webapps 0775 medplan gunicorn_sockets -
+D /var/run/webapps 0775 gwift gunicorn_sockets -
 ----
 
 Suivi de la création par systemd :
@@ -94,10 +94,10 @@ systemd-tmpfiles --create
 #!/bin/bash
  
 # defines settings for gunicorn
-NAME="Medplan"
-DJANGODIR=/home/medplan/webapps/medplan
-SOCKFILE=/var/run/webapps/gunicorn_medplan.sock
-USER=medplan
+NAME="gwift"
+DJANGODIR=/home/gwift/webapps/gwift
+SOCKFILE=/var/run/webapps/gunicorn_gwift.sock
+USER=gwift
 GROUP=gunicorn_sockets
 NUM_WORKERS=5
 DJANGO_SETTINGS_MODULE=config.settings_production
@@ -105,7 +105,7 @@ DJANGO_WSGI_MODULE=config.wsgi
  
 echo "Starting $NAME as `whoami`"
  
-source /home/medplan/.venvs/medplan/bin/activate
+source /home/gwift/.venvs/gwift/bin/activate
 cd $DJANGODIR
 export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 export PYTHONPATH=$DJANGODIR:$PYTHONPATH
@@ -126,14 +126,14 @@ exec gunicorn ${DJANGO_WSGI_MODULE}:application \
 yum install supervisor -y
 ----
 
-On crée ensuite le fichier `/etc/supervisord.d/medplan.ini`:
+On crée ensuite le fichier `/etc/supervisord.d/gwift.ini`:
 
 [source,bash]
 ----
-[program:medplan]
-command=/home/medplan/bin/start_gunicorn.sh
-user=medplan
-stdout_logfile=/var/log/medplan/medplan.log
+[program:gwift]
+command=/home/gwift/bin/start_gunicorn.sh
+user=gwift
+stdout_logfile=/var/log/gwift/gwift.log
 autostart=true
 autorestart=unexpected
 redirect_stdout=true
@@ -144,8 +144,8 @@ Et on crée les répertoires de logs, on démarre supervisord et on vérifie qu'
 
 [source,bash]
 ----
-mkdir /var/log/medplan
-chown medplan:nagios /var/log/medplan
+mkdir /var/log/gwift
+chown gwift:nagios /var/log/gwift
 
 systemctl enable supervisord
 systemctl start supervisord.service
@@ -157,12 +157,12 @@ systemctl status supervisord.service
  Main PID: 2310 (supervisord)
    CGroup: /system.slice/supervisord.service
            ├─2310 /usr/bin/python /usr/bin/supervisord -c /etc/supervisord.conf
-           ├─2313 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
-           ├─2317 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
-           ├─2318 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
-           ├─2321 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
-           ├─2322 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
-           └─2323 /home/medplan/.venvs/medplan/bin/python3 /home/medplan/.venvs/medplan/bin/gunicorn config.wsgi:...
+           ├─2313 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+           ├─2317 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+           ├─2318 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+           ├─2321 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+           ├─2322 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+           └─2323 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
 ls /var/run/webapps/
 ----
 
@@ -205,19 +205,19 @@ yum install nginx -y
 usermod -a -G gunicorn_sockets nginx
 ----
 
-On configure ensuite le fichier `/etc/nginx/conf.d/medplan.conf`:
+On configure ensuite le fichier `/etc/nginx/conf.d/gwift.conf`:
 
 ----
-upstream medplan_app {
-        server unix:/var/run/webapps/gunicorn_medplan.sock fail_timeout=0;
+upstream gwift_app {
+        server unix:/var/run/webapps/gunicorn_gwift.sock fail_timeout=0;
 }
 
 server {
         listen 80;
         server_name <server_name>;
-        root /var/www/medplan;
-        error_log /var/log/nginx/medplan_error.log;
-        access_log /var/log/nginx/medplan_access.log;
+        root /var/www/gwift;
+        error_log /var/log/nginx/gwift_error.log;
+        access_log /var/log/nginx/gwift_access.log;
  
         client_max_body_size 4G;
         keepalive_timeout 5;
@@ -242,7 +242,7 @@ server {
                 proxy_set_header Host $http_host;
                 proxy_redirect off;
  
-                proxy_pass http://medplan_app;
+                proxy_pass http://gwift_app;
         }
 }
 ----
@@ -251,17 +251,17 @@ server {
 
 Les sauvegardes ont été configurées avec borg: `yum install borgbackup`.
 
-C'est l'utilisateur medplan qui s'en occupe.
+C'est l'utilisateur gwift qui s'en occupe.
 
 ----
-mkdir -p /home/medplan/borg-backups/
-cd /home/medplan/borg-backups/
-borg init medplan.borg -e=none
-borg create medplan.borg::{now} ~/bin ~/webapps
+mkdir -p /home/gwift/borg-backups/
+cd /home/gwift/borg-backups/
+borg init gwift.borg -e=none
+borg create gwift.borg::{now} ~/bin ~/webapps
 ----
 
 Et dans le fichier crontab :
 
 ----
-0 23 * * * /home/medplan/bin/backup.sh
+0 23 * * * /home/gwift/bin/backup.sh
 ----

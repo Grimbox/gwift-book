@@ -41,24 +41,39 @@ Cette application servira à structurer les listes de souhaits, les éléments q
 
 [source,bash]
 ----
-$ python manage.py startapp gwift/wish
+$ python manage.py startapp wish
 ----
 
 Résultat? Django nous a créé un répertoire `wish`, dans lequel on trouve les fichiers et dossiers suivants:
 
+ * `wish/admin.py` servira à structurer l'administration de notre application. Chaque information peut en effet être administrée facilement au travers d'une interface générée à la volée par le framework. On y reviendra par la suite.
+ * `wish/__init__.py` pour que notre répertoire `wish` soit converti en package Python.
+ * `wish/migrations/`, dossier dans lequel seront stockées toutes les différentes migrations de notre application.
+ * `wish/models.py` pour représenter et structurer nos données.
+ * `wish/tests.py` pour les tests unitaires.
+
+Par soucis de clarté, déplacez ce nouveau répertoire `wish` dans votre répertoire `gwift` existant. C'est une forme de convention. La structure de vos répertoires devient celle-ci:
+
 [source,bash]
 ----
-$ tree .
+(gwift-env) fred@aerys:~/Sources/gwift$ tree .
+.
 ├── docs
 │   └── README.md
 ├── gwift
 │   ├── asgi.py
 │   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-37.pyc
-│   │   └── settings.cpython-37.pyc
 │   ├── settings.py
 │   ├── urls.py
+│   ├── wish <1>
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   └── views.py
 │   └── wsgi.py
 ├── Makefile
 ├── manage.py
@@ -67,33 +82,14 @@ $ tree .
 │   ├── dev.txt
 │   └── prod.txt
 ├── setup.cfg
-├── tox.ini
-└── wish <1>
-    ├── admin.py
-    ├── apps.py
-    ├── __init__.py
-    ├── migrations
-    │   └── __init__.py
-    ├── models.py
-    ├── tests.py
-    └── views.py
+└── tox.ini
+
+6 directories, 22 files
 ----
-<1> Notre application a bien été créée!
+<1> Notre application a bien été créée, et on l'a déplacée dans le répertoire `gwift` !
 
-Chaque nouveau fichier a la fonction suivante:
+NOTE: vérifier s'il s'agit bien d'une forme de convention :-p 
 
- * `admin.py` servira à structurer l'administration de notre application. Chaque information peut en effet être administrée facilement au travers d'une interface générée à la volée par le framework. On y reviendra par la suite.
- * `__init__.py` pour que notre répertoire `wish` soit converti en package Python.
- * `migrations/`, dossier dans lequel seront stockées toutes les différentes migrations de notre application.
- * `models.py` pour représenter et structurer nos données.
- * `tests.py` pour les tests unitaires.
-
-
-=== Tests unitaires
-
-Plein de trucs à compléter ici ;-) Est-ce qu'on passe par pytest ou par le framework intégré ? Quels sont les avantages de l'un % à l'autre ?
- * `views.py` pour définir ce que nous pouvons faire avec nos données.
-
-
+NOTE: Vérifier aussi comment les applications sont construites. Type DRF, Django Social Auth, tout ça.
 
 

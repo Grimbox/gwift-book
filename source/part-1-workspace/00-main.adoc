@@ -28,10 +28,10 @@ include::venvs.adoc[]
 
 include::django.adoc[]
 
+include::unit_tests.adoc[]
+
 include::tools.adoc[]
 
 include::external_tools.adoc[]
-
-include::unit_tests.adoc[]
 
 include::summary.adoc[]
