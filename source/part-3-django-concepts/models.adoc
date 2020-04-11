@@ -51,6 +51,12 @@ class Wish(models.Model):
 ----
 <1> On définit un ordre par défaut, directement au niveau du modèle. Cela ne signifie pas qu'il ne sera pas possible de modifier cet ordre (la méthode `order_by` existe et peut être chaînée à n'importe quel queryset). D'où l'intérêt de tester ce type de comportement, dans la mesure où un `top 1` dans votre code pourrait être modifié simplement par cette petite information.
 
+Les propriétés de la classe Meta les plus utiles sont les suivates:
+
+* `ordering` pour spécifier un ordre de récupération spécifique.
+* `verbose_name` pour indiquer le nom à utiliser au singulier pour définir votre classe 
+* `verbose_name_plural`, pour le pluriel.
+
 === Migrations
 
 Les migrations (comprendre les "migrations du schéma de base de données") sont intimement liées à la représentation d'un contexte fonctionnel. L'ajout d'une nouvelle information, d'un nouveau champ ou d'une nouvelle fonction peut s'accompagner de tables de données à mettre à jour ou de champs à étendre.

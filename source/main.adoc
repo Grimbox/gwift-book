@@ -47,19 +47,6 @@ include::part-2-deployment/00-main.adoc[]
 
 include::part-3-django-concepts/00-main.adoc[]
 
-include::django/models.adoc[]
-
-include::django/querysets.adoc[]
-
-include::django/forms.adoc[]
-
-include::django/migrations.adoc[]
-
-include::django/mvc.adoc[]
-
-include::django/logging.adoc[]
-
-include::django/admin.adoc[]
 
 = Go Live !
 
