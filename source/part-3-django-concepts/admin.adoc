@@ -1,16 +1,16 @@
 == Administration
 
-Woké. On va commencer par la *partie à ne _surtout_ (__surtout__ !!) pas faire en premier dans un projet Django*. Mais on va la faire quand même. La raison principale est que cette partie est tellement puissante et performante, qu'elle pourrait laisser penser qu'il est possible de réaliser une application complète rien qu'en configurant l'administration.
+Woké. On va commencer par la *partie à ne _surtout_ (__surtout__ !!) pas faire en premier dans un projet Django*. Mais on va la faire quand même: la raison principale est que cette partie est tellement puissante et performante, qu'elle pourrait laisser penser qu'il est possible de réaliser une application complète rien qu'en configurant l'administration. Mais c'est faux.
 
-C'est faux.
-
-L'administration est une sorte de tour de contrôle évoluée; elle se base sur le modèle de données programmé et construit dynamiquement les formulaires qui lui est associé. Elle joue avec les clés primaires, étrangères, les champs et types de champs par https://fr.wikipedia.org/wiki/Introspection[introspection]. 
+L'administration est une sorte de tour de contrôle évoluée; elle se base sur le modèle de données programmé et construit dynamiquement les formulaires qui lui est associé. Elle joue avec les clés primaires, étrangères, les champs et types de champs par https://fr.wikipedia.org/wiki/Introspection[introspection], et présente tout ce qu'il faut pour avoir du https://fr.wikipedia.org/wiki/CRUD[CRUD], c'est-à-dire tout ce qu'il faut pour ajouter, lister, modifier ou supprimer des informations.
 
 Son problème est qu'elle présente une courbe d'apprentissage asymptotique. Il est *très* facile d'arriver rapidement à un bon résultat, au travers d'un périmètre de configuration  relativement restreint. Mais quoi que vous fassiez, il y a un moment où la courbe de paramétrage sera tellement ardue que vous aurez plus facile à développer ce que vous souhaitez ajouter en utilisant les autres concepts de Django.
 
 Elle doit rester dans les mains d'administrateurs ou de gestionnaires, et dans leurs mains à eux uniquement: il n'est pas question de donner des droits aux utilisateurs finaux (même si c'est extrêment tentant durant les premiers tours de roues). Indépendamment de la manière dont vous allez l'utiliser et la configurer, vous finirez par devoir développer une "vraie" application, destinée aux utilisateurs classiques, et répondant à leurs besoins uniquement.
 
-Une bonne idée consiste à développer l'administration dans un premier temps, en *gardant en tête qu'il sera nécessaire de développer des concepts spécifiques*. Dans cet objectif, l'administration est un outil exceptionel, qui permet de valider un modèle, de créer des objets rapidement et de valider les liens qui existent entre eux. C'est un excellent outil de prototypage et de preuve de concept.
+Une bonne idée consiste à développer l'administration dans un premier temps, en *gardant en tête qu'il sera nécessaire de développer des concepts spécifiques*. Dans cet objectif, l'administration est un outil exceptionel, qui permet de valider un modèle, de créer des objets rapidement et de valider les liens qui existent entre eux. 
+
+C'est un excellent outil de prototypage et de preuve de concept.
 
 === Quelques conseils
 

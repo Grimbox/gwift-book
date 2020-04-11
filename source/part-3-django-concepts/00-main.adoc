@@ -1,0 +1,9 @@
+= Django
+
+Dans ce chapitre, on va parler de plusieurs concepts utiles au développement rapide d'une application. On parlera de modélisation, de migrations, d'administration auto-générée. 
+
+include::models.adoc[]
+
+include::admin.adoc[]
+
+include::forms.adoc[]

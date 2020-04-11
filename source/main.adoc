@@ -45,9 +45,7 @@ include::part-1-workspace/00-main.adoc[]
 
 include::part-2-deployment/00-main.adoc[]
 
-= Modélisation
-
-Dans ce chapitre, on va parler de plusieurs concepts utiles au développement rapide d'une application. On parlera de modélisation, de migrations, d'administration auto-générée. 
+include::part-3-django-concepts/00-main.adoc[]
 
 include::django/models.adoc[]
 
