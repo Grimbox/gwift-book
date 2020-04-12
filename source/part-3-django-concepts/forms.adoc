@@ -2,13 +2,13 @@
 
 Ou comment valider proprement des données entrantes.
 
-NOTE: intégrer le dessin XKCD avec Little Bobby Table sur l'assainissement des données en entrée :-p
+image::images/xkcd-327.png[]
 
 Quand on parle de `forms`, on ne parle pas uniquement de formulaires Web. On pourrait considérer qu'il s'agit de leur objectif principal, mais on peut également voir un peu plus loin: on peut en fait voir les `forms` comme le point d'entrée pour chaque donnée arrivant dans notre application: il s'agit en quelque sorte d'un ensemble de règles complémentaires à celles déjà présentes au niveau du modèle.
 
 L'exemple le plus simple est un fichier `.csv`: la lecture de ce fichier pourrait se faire de manière très simple, en récupérant les valeurs de chaque colonne et en l'introduisant dans une instance du modèle. 
 
-Mauvaise idée. 
+Mauvaise idée. On peut proposer trois versions d'un même code, de la version simple (lecture du fichier csv et jonglage avec les indices de colonnes), puis une version plus sophistiquée (et plus lisible, à base de https://docs.python.org/3/library/csv.html#csv.DictReader[DictReader]), et la version +++ à base de form.
 
 Les données fournies par un utilisateur **doivent** **toujours** être validées avant introduction dans la base de données. Notre base de données étant accessible ici par l'ORM, la solution consiste à introduire une couche supplémentaire de validation.
 
@@ -19,12 +19,21 @@ Le flux à suivre est le suivant:
 . Traitement, si la validation a réussi.
 
 
-Ils jouent également plusieurs rôles:
+Ils jouent également deux rôles importants:
 
-. Validation des données, en plus de celles déjà définies au niveau du modèle
-. Contrôle sur le rendu à appliquer aux champs
+. Valider des données, en plus de celles déjà définies au niveau du modèle
+. Contrôler le rendu à appliquer aux champs.
 
 Ils agissent come une glue entre l'utilisateur et la modélisation de vos structures de données.
+
+=== Flux de validation
+
+| .Validation
+| .is_valid
+| .clean_fields
+↓ .clean_fields_machin
+
+NOTE: A compléter ;-)
 
 === Dépendance avec le modèle
 
@@ -51,9 +60,12 @@ Le formulaire permet également de contrôler le rendu qui sera appliqué lors d
 [source,python]
 ----
 
-from django import forms
 from datetime import date
+
+from django import forms
+
 from .models import Accident
+
 
 class AccidentForm(forms.ModelForm):
     class Meta:
@@ -72,17 +84,18 @@ class AccidentForm(forms.ModelForm):
                                 'class' : 'form-control',
                                 'placeholder' : 'Context (why, where, ...)'
                             })
+        }
 ----
 
 === Squelette par défaut
 
-On a d'un côté le {{ form.as_p }} ou {{ form.as_table }}, mais il y a beaucoup mieux que ça ;-) Voir les templates de Vitor.
+On a d'un côté le {{ form.as_p }} ou {{ form.as_table }}, mais il y a beaucoup mieux que ça ;-) Voir les templates de Vitor et en passant par `widget-tweaks`.
 
 === Crispy-forms
 
 Comme on l'a vu à l'instant, les forms, en Django, c'est le bien. Cela permet de valider des données reçues en entrée et d'afficher (très) facilement des formulaires à compléter par l'utilisateur.
 
-Par contre, c'est lourd. Dès qu'on souhaite peaufiner un peu l'affichage, contrôler parfaitement ce que l'utilisateur doit remplir, modifier les types de contrôleurs, les placer au pixel près, ... Tout ça demande énormément de temps. Et c'est là qu'intervient `Django-Crispy-Forms <http://django-crispy-forms.readthedocs.io/en/latest/>`_. Cette librairie intègre plusieurs frameworks CSS (Bootstrap, Foundation et uni-form) et permet de contrôler entièrement le *layout* et la présentation. 
+Par contre, c'est lourd. Dès qu'on souhaite peaufiner un peu l'affichage, contrôler parfaitement ce que l'utilisateur doit remplir, modifier les types de contrôleurs, les placer au pixel près, ... Tout ça demande énormément de temps. Et c'est là qu'intervient http://django-crispy-forms.readthedocs.io/en/latest/[Django-Crispy-Forms]. Cette librairie intègre plusieurs frameworks CSS (Bootstrap, Foundation et uni-form) et permet de contrôler entièrement le *layout* et la présentation. 
 
 (c/c depuis le lien ci-dessous)
 
@@ -96,11 +109,8 @@ Pour chaque champ, crispy-forms va :
 
 http://dotmobo.github.io/django-crispy-forms.html
 
-== Validation des données
 
-NOTE: parler ici des méthodes `clean`.
-
-== En conclusion
+=== En conclusion
 
 . Toute donnée entrée par l'utilisateur **doit** passer par une instance de `form`.
 . euh ?

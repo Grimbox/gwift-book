@@ -6,7 +6,7 @@ Les morceaux de code seront développés pour Python3.6+ et Django 3.0+. Ils né
 
 Django fonctionne sur un link:++roulement de trois versions mineures pour une version majeure++[https://docs.djangoproject.com/en/dev/internals/release-process/], clôturé par une version LTS (_Long Term Support_).
 
-image::http://ser-libre.com.ar/wp-content/uploads/2016/11/django.png[Support des versions Django]
+image:http://ser-libre.com.ar/wp-content/uploads/2016/11/django.png[Support des versions Django]
 
 Ce sera une bonne indication à prendre en considération pour nos dépendances, puisqu'en visant une version particulière, on ne devra pratiquement pas se soucier (bon, un peu quand même...) des dépendances à installer, pour peu qu'on reste sous un certain seuil.
 

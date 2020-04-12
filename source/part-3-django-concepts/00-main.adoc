@@ -7,3 +7,7 @@ include::models.adoc[]
 include::admin.adoc[]
 
 include::forms.adoc[]
+
+include::mvc.adoc[]
+
+include::urls.adoc[]

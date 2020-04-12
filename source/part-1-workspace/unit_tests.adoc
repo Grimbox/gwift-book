@@ -53,6 +53,10 @@ Vous trouverez ci-dessous une comparaison entre des tests avec les deux framewor
 ----
 
 
+=== Fixtures
+
+https://realpython.com/django-pytest-fixtures/[Lien]: super bien expliqué, et pourquoi les fixtures dans Pytest c'est 'achement plus mieux que les tests unitaires de Django.
+
 === Couverture de code
 
 Dans un premier temps, *le pourcentage de code couvert par nos tests*. Une fois ce pourcentage évalué, le but du jeu va consister à *ce que ce pourcentage reste stable ou augmente*. Si vous modifiez une ligne de code et que la couverture passe de 73% à 72%, vous avez perdu et vous devez faire en sorte de corriger. 
