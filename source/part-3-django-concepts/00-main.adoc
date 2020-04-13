@@ -2,12 +2,32 @@
 
 Dans ce chapitre, on va parler de plusieurs concepts utiles au développement rapide d'une application. On parlera de modélisation, de migrations, d'administration auto-générée. 
 
+Dans un *pattern* MVC classique, la traduction immédiate du **contrôleur** est une **vue**. Et comme on le verra par la suite, la **vue** est en fait le **template**.
+Les vues agrègent donc les informations à partir d'un des composants et les font transiter vers un autre. En d'autres mots, la vue sert de pont entre les données gérées par la base et l'interface utilisateur.
+
+Pour reprendre une partie du schéma précédent, on a une requête qui est émise par un utilisateur. La première étape consiste à trouver une route qui correspond à cette requête, c'est à dire à trouver la correspondance entre l'URL demandée et la fonction qui sera exécutée. Cette fonction correspond au *contrôleur* et s'occupera de construire le *modèle* correspondant. 
+
+En simplifiant, Django suit bien le modèle MVC, et toutes ces étapes sont liées ensemble grâce aux différentes routes, définies dans les fichiers `urls.py`.
+
 include::models.adoc[]
 
 include::admin.adoc[]
 
 include::forms.adoc[]
 
-include::mvc.adoc[]
+include::views.adoc[]
+
+include::templates.adoc[]
+
+include::layout.adoc[]
 
 include::urls.adoc[]
+
+include::auth.adoc[]
+
+include::logging.adoc[]
+
+NOTE: Ne pas oublier de parler des sessions. Mais je ne sais pas si c'est le bon endroit.
+
+include::multilingual.adoc[]
+

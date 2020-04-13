@@ -1,4 +1,4 @@
-=== Templates
+== Templates
 
 Avant de commencer à interagir avec nos données au travers de listes, formulaires et IHM sophistiquées, quelques mots sur les templates: il s'agit en fait de *squelettes* de présentation, recevant en entrée un dictionnaire contenant des clés-valeurs et ayant pour but de les afficher dans le format que vous définirez. En intégrant un ensemble de *tags*, cela vous permettra de greffer les données reçues en entrée dans un patron prédéfini.
 
@@ -43,9 +43,54 @@ En reprenant l'exemple de la page HTML définie ci-dessus, on pourra l'agrément
 </html>
 ----
 
-Vous pouvez déjà copier ce contenu dans un fichier `templates/wsh/list.html`, on en aura besoin par la suite.
+image::images/html/my-first-wishlists.png[]
 
-==== Structure et configuration
+Mais plutôt que de réécrire à chaque fois le même entête, on peut se simplifier la vie en implémentant un héritage au niveau des templates. Pour cela, il suffit de définir des blocs de contenu, et d'*étendre* une page de base, puis de surcharger ces mêmes blocs.
+
+Par exemple, si on repart de notre page de base ci-dessus, on va y définir deux blocs réutilisables:
+
+[source,html]
+----
+<!-- templates/base.html -->
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>{% block title %}Gwift{% endblock %}</title> <1>
+    </head>
+    <body>
+        {% block body %}<p>Hello world!</p>{% endblock %} <2>
+    </body>
+</html>
+----
+<1> Un bloc `title`
+<2> Un bloc `body`
+
+La page HTML pour nos listes de souhaits devient alors:
+
+[source,html]
+----
+<!-- templates/wishlist/wishlist_list.html -->
+
+{% extends "base.html" %} <1>
+
+{% block title %}{{ block.super }} - Listes de souhaits{% endblock %} <2>
+
+{% block body %} <3>
+<p>Mes listes de souhaits</p>
+<ul>
+{% for wishlist in wishlists %}
+    <li>{{ wishlist.name }}: {{ wishlist.description }}</li>
+{% endfor %}
+</ul>    
+----
+<1> On étend/hérite de notre page `base.html`
+<2> On redéfinit le titre (mais on réutilise le titre initial en appelant `block.super`)
+<3> On définit uniquement le contenu, qui sera placé dans le bloc `body`.
+
+=== Structure et configuration
 
 Il est conseillé que les templates respectent la structure de vos différentes applications, mais dans un répertoire à part. Par convention, nous les placerons dans un répertoire `templates`. La hiérarchie des fichiers devient alors celle-ci:
 
@@ -70,36 +115,62 @@ TEMPLATES = [
 ]
 ----
 
-==== Builtins
+=== Builtins
 
 Django vient avec un ensemble de *tags*. On a vu la boucle `for` ci-dessus, mais il existe https://docs.djangoproject.com/fr/1.9/ref/templates/builtins/[beaucoup d'autres tags nativement présents]. Les principaux sont par exemple:
 
 * `{% if ... %} ... {% elif ... %} ... {% else %} ... {% endif %}`: permet de vérifier une condition et de n'afficher le contenu du bloc que si la condition est vérifiée.
 * Opérateurs de comparaisons: `<`, `>`, `==`, `in`, `not in`.
 * Regroupements avec le tag `{% regroup ... by ... as ... %}`.
-* `{% url %}` pour construire facilement une URL
+* `{% url %}` pour construire facilement une URL à partir de son nom
+* `urlize` qui permet de remplacer des URLs trouvées dans un champ de type CharField ou TextField par un lien cliquable.
 * ...
 
-==== Non-builtins
+Chacune de ces fonctions peut être utilisée autant au niveau des templates qu'au niveau du code. Il suffit d'aller les chercher dans le package `django.template.defaultfilters`. Par exemple:
+
+[source,python]
+----
+from django.db import models
+from django.template.defaultfilters import urlize
+
+
+class Suggestion(moels.Model):
+    """Représentation des suggestions.
+    """
+    subject = models.TextField(verbose_name="Sujet")
+
+    def urlized_subject(self):
+        """
+        Voir https://docs.djangoproject.com/fr/3.0/howto/custom-template-tags/
+        """
+        return urlize(self.subject, autoescape=True)
+----
+
+=== Non-builtins
 
 En plus des quelques tags survolés ci-dessus, il est également possible de construire ses propres tags. La structure est un peu bizarre, car elle consiste à ajouter un paquet dans une de vos applications, à y définir un nouveau module et à y définir un ensemble de fonctions. Chacune de ces fonctions correspondra à un tag appelable depuis vos templates.
 
 Il existe trois types de tags *non-builtins*: 
 
-1. Les filtres - on peut les appeler grâce au *pipe* `|` directement après une valeur dans le template. 
-2. Les tags simples - ils peuvent prendre une valeur ou plusieurs en paramètre et retourne une nouvelle valeur. Pour les appeler, c'est *via* les tags `{% nom_de_la_fonction param1 param2 ... %}`.
-3. Les tags d'inclusion: ils retournent un contexte (ie. un dictionnaire), qui est ensuite passé à un nouveau template. 
+1. *Les filtres* - on peut les appeler grâce au *pipe* `|` directement après une valeur dans le template. 
+2. *Les tags simples* - ils peuvent prendre une valeur ou plusieurs en paramètre et retourne une nouvelle valeur. Pour les appeler, c'est *via* les tags `{% nom_de_la_fonction param1 param2 ... %}`.
+3. *Les tags d'inclusion*: ils retournent un contexte (ie. un dictionnaire), qui est ensuite passé à un nouveau template. Type `{% include '...' ... %}`.
 
 Pour l'implémentation:
 
  1. On prend l'application `wish` et on y ajoute un répertoire `templatetags`, ainsi qu'un fichier `__init__.py`. 
  2. Dans ce nouveau paquet, on ajoute un nouveau module que l'on va appeler `tools.py`
  3. Dans ce module, pour avoir un aperçu des possibilités, on va définir trois fonctions (une pour chaque type de tags possible).
- 
+
 [source,bash]
 ----
 [Inclure un tree du dossier template tags]
 ----
+
+Pour plus d'informations, la https://docs.djangoproject.com/en/stable/howto/custom-template-tags/#writing-custom-template-tags[documentation officielle est un bon début].
+
+
+==== Filtres
 
 [source,python]
 ----
@@ -114,14 +185,47 @@ register = template.Library()
 @register.filter(is_safe=True)
 def add_xx(value):
     return '%sxx' % value
+----
+
+
+==== Tags simples
+
+[source,python]
+----
+# wish/tools.py
+    
+from django import template
+
+from wish.models import Wishlist
+
+
+register = template.Library()
+
 
 @register.simple_tag
 def current_time(format_string):
     return datetime.datetime.now().strftime(format_string)
+----
+
+
+==== Tags d'inclusion
+
+[source,python]
+----
+# wish/tools.py
+    
+from django import template
+
+from wish.models import Wishlist
+
+
+register = template.Library()
+
 
 @register.inclusion_tag('wish/templatetags/wishlists_list.html')
 def wishlists_list():
     return { 'list': Wishlist.objects.all() }  
 ----
+
+ 
     
-Pour plus d'informations, la https://docs.djangoproject.com/en/stable/howto/custom-template-tags/#writing-custom-template-tags[documentation officielle est un bon début].

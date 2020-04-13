@@ -14,4 +14,4 @@ html:
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
 pdf:
-	asciidoctor-pdf -a pdf-themesdir=resources/themes -a pdf-theme=gwift source/main.adoc -t -r asciidoctor-diagram
+	asciidoctor-pdf -a pdf-themesdir=resources/themes -a pdf-theme=gwift-theme source/main.adoc -t -r asciidoctor-diagram

@@ -1,10 +1,10 @@
-=== Vues
+== Vues
 
 Une vue correspond à un contrôleur dans le pattern MVC. Tout ce que vous pourrez définir au niveau du fichier `views.py` fera le lien entre le modèle stocké dans la base de données et ce avec quoi l'utilisateur pourra réellement interagir (le `template`).
 
 Chaque vue peut etre représentée de deux manières: soit par des fonctions, soit par des classes. Le comportement leur est propre, mais le résultat reste identique. Le lien entre l'URL à laquelle l'utilisateur accède et son exécution est faite au travers du fichier `gwift/urls.py`, comme on le verra par la suite.
 
-==== Function Based Views
+=== Function Based Views
 
 Les fonctions (ou `FBV` pour *Function Based Views*) permettent une implémentation classique des contrôleurs. Au fur et à mesure de votre implémentation, on se rendra compte qu'il y a beaucoup de répétitions dans ce type d'implémentation: elles ne sont pas obsolètes, mais dans certains cas, il sera préférable de passer par les classes.
 
@@ -13,8 +13,6 @@ Pour définir la liste des `WishLists`  actuellement disponibles, on précédera
 . Définition d'une fonction qui va récupérer les objets de type `WishList` dans notre base de données. La valeur de retour sera la construction d'un dictionnaire (le *contexte*) qui sera passé à un template HTML. On démandera à ce template d'effectuer le rendu au travers de la fonction `render`, qui est importée par défaut dans le fichier `views.py`.
 . Construction d'une URL qui permettra de lier l'adresse à l'exécution de la fonction.
 . Définition du squelette.
-
-===== Définition de la fonction
 
 [source,python]
 ----
@@ -25,27 +23,13 @@ from .models import Wishlist
 
 def wishlists(request):
 	w = Wishlist.objects.all()
-	return render(request, 'wish/list.html',{ 'wishlists': w })
+	return render(request, 'wish/list.html', { 'wishlists': w })
 ----
 
-===== Construction de l'URL
+Rien qu'ici, on doit déjà tester deux choses:
 
-[source,python]
-----
-# gwift/urls.py
-
-from django.conf.urls import include, url
-from django.contrib import admin
-
-from wish import views as wish_views
-
-urlpatterns = [
-	url(r'^admin/', include(admin.site.urls)),
-	url(r'^$', wish_views.wishlists, name='wishlists'),
-]
-----
-
-===== Définition du squelette
+. Qu'on construit bien le modèle attendu - la liste de tous les souhaits déjà émis.
+. Que le template `wish/list.html` existe bien - sans quoi, on va tomber sur une erreur de type `TemplateDoesNotExist` dans notre environnement de test, et sur une erreur 500 en production.
 
 A ce stade, vérifiez que la variable `TEMPLATES` est correctement initialisée dans le fichier `gwift/settings.py` et que le fichier `templates/wish/list.html` ressemble à ceci:
 
@@ -69,8 +53,6 @@ A ce stade, vérifiez que la variable `TEMPLATES` est correctement initialisée 
 </html>
 ----
 
-===== Exécution
-
 A présent, ajoutez quelques listes de souhaits grâce à un *shell*, puis lancez le serveur:
 
 [source,bash]
@@ -90,20 +72,22 @@ Lancez le serveur grâce à la commande `python manage.py runserver`, ouvrez un 
 
 Rien de très sexy, aucune interaction avec l'utilisateur, très peu d'utilisation des variables contextuelles, mais c'est un bon début! =)
 
-==== Class Based Views
+=== Class Based Views
 
 Les classes, de leur côté, implémente le *pattern* objet et permettent d'arriver facilement à un résultat en très peu de temps, parfois même en définissant simplement quelques attributs, et rien d'autre. Pour l'exemple, on va définir deux classes qui donnent exactement le même résultat que la fonction `wishlists` ci-dessus. Une première fois en utilisant une classe générique vierge, et ensuite en utilisant une classe de type `ListView`.
 
-===== Classe générique
+Voir https://ccbv.co.uk/[Classy Class Based Views].
 
-blah
+L'idée derrière les classes est de définir des fonctions *par convention plutôt que par configuration*. 
 
-===== ListView
+NOTE: à compléter ici :-)
+
+==== ListView
 
 Les classes génériques implémentent un aspect bien particulier de la représentation d'un modèle, en utilisant très peu d'attributs. Les principales classes génériques sont de type `ListView`, [...]. L'implémentation consiste, exactement comme pour les fonctions, à:
 
-. Définir la classe
-. Créer l'URL
+. Définir une sous-classe de celle que l'on souhaite utiliser
+. Câbler l'URL qui lui sera associée
 . Définir le squelette.
 
 [source,python]
@@ -120,6 +104,29 @@ class WishListList(ListView):
 	template_name = 'wish/list.html'
 ----
 
+Il est même possible de réduire encore ce morceau de code en définissant juste le snippet suivant : 
+
+[source,python]
+----
+# wish/views.py
+
+from django.views.generic import ListView
+
+from .models import Wishlist
+
+class WishListList(ListView):
+	context_object_name = 'wishlists'	
+----
+
+Par inférence, Django construit beaucoup d'informations: si on n'avait pas spécifié les variables `context_object_name` et `template_name`, celles-ci auraient pris les valeurs suivantes:
+
+ * `context_object_name`: `wishlist_list` (ou plus précisément, le nom du modèle suivi de `_list`)
+ * `template_name`: `wish/wishlist_list.html` (à nouveau, le fichier généré est préfixé du nom du modèle).
+
+En l'état, par rapport à notre précédente vue basée sur une fonction, on y gagne sur les conventions utilisées et le nombre de tests à réaliser. A vous de voir la déclaration que vous préférez, en fonction de vos affinités et du résultat que vous souhaitez atteindre.
+
+NOTE: un petit tableau de différence entre les deux ? :-)
+
 [source,python]
 ----
 # gwift/urls.py
@@ -135,7 +142,5 @@ urlpatterns = [
 ]
 ----
 
-C'est tout. Lancez le serveur, le résultat sera identique. Par inférence, Django construit beaucoup d'informations: si on n'avait pas spécifié les variables `context_object_name` et `template_name`, celles-ci auraient pris les valeurs suivantes:
+C'est tout. Lancez le serveur, le résultat sera identique. 
 
- * `context_object_name`: `wishlist_list` (ou plus précisément, le nom du modèle suivi de `_list`)
- * `template_name`: `wish/wishlist_list.html` (à nouveau, le fichier généré est préfixé du nom du modèle).

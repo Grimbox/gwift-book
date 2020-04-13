@@ -1,28 +1,3 @@
 Templates tags
 --------------
 
-[source,python]
-----
-from django.template.defaultfilters import urlize
-
-
-class Suggestion(BaseModel):
-    """Représentation des suggestions.
-    """
-    created_by = models.ForeignKey(user_model, on_delete=models.DO_NOTHING, verbose_name="Créé par")
-    manager = models.ForeignKey(
-        user_model,
-        on_delete=models.DO_NOTHING,
-        verbose_name="Gestionnaire",
-        null=True,
-        blank=True,
-        related_name="managed_by"
-    )
-    subject = models.TextField(verbose_name="Sujet")
-
-    def urlized_subject(self):
-        """
-        Voir https://docs.djangoproject.com/fr/3.0/howto/custom-template-tags/
-        """
-        return urlize(self.subject, autoescape=True)
-----

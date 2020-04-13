@@ -1,1 +1,92 @@
-=== URLs
+== URLs et espaces de noms
+
+La gestion des URLs permet *grosso modo* d'assigner une adresse paramétrée ou non à une fonction Python. La manière simple consiste à modifier le fichier `gwift/settings.py` pour y ajouter nos correspondances. Par défaut, le fichier ressemble à ceci:
+
+[source,python]
+----
+# gwift/urls.py
+
+from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    url(r'^admin/', include(admin.site.urls)),
+]
+----
+
+La variable `urlpatterns` associe un ensemble d'adresses à des fonctions. Dans le fichier *nu*, seul le *pattern* `admin` est défini, et inclut toutes les adresses qui sont définies dans le fichier `admin.site.urls`.
+
+NOTE: petit mot d'explication sur les expressions rationnelles.
+
+[source,python]
+----
+# admin.site.urls.py
+----
+
+Pour reprendre l'exemple où on en était resté:
+
+[source,python]
+----
+# gwift/urls.py
+
+from django.conf.urls import include, url
+from django.contrib import admin
+
+from wish import views as wish_views
+
+urlpatterns = [
+	url(r'^admin/', include(admin.site.urls)),
+	url(r'^$', wish_views.wishlists, name='wishlists'),
+]
+----
+
+A présent, on doit tester que l'URL racine de notre application mène bien vers la fonction `wish_views.wishlists`. 
+
+Prenons par exemple l'exemple de Twitter : quand on accède à une URL, elle est de la forme `https://twitter.com/<user>``. Sauf que les pages `about` et `help` existent également. Pour implémenter ce type de précédence, il faudrait implémenter les URLs de la manière suivante: 
+
+[source,text]
+----
+| about
+| help
+| <user>
+----
+
+Mais cela signifie aussi que les utilisateurs `about` et `help` (s'ils existent...) ne pourront jamais accéder à leur profil. Une dernière solution serait de maintenir une liste d'authorité des noms d'utilisateur qu'il n'est pas possible d'utiliser.
+
+D'où l'importance de bien définir la séquence de déinition de ces routes, ainsi que des espaces de noms.  
+
+L'idée des espaces de noms ou _namespaces_ est de définir un _sous-répertoire_ dans lequel on trouvera nos nouvelles routes. Cette manière de procéder permet notamment de répondre au problème ci-dessous, en définissant un sous-dossier type `https://twitter.com/users/<user>``. 
+
+De là, découle une autre bonne pratique: l'utilisation de _breadcrumbs_ (https://stackoverflow.com/questions/826889/how-to-implement-breadcrumbs-in-a-django-template) ou de guidelines de navigation.
+
+=== Reverse
+
+En associant un nom ou un libellé à chaque URL, il est possible de récupérer sa *traduction*. Cela implique par contre de ne plus toucher à ce libellé par la suite...
+
+Dans le fichier `urls.py`, on associe le libellé `wishlists` à l'URL `r'^$` (c'est-à-dire la racine du site):  
+
+[source,python]
+----
+from wish.views import WishListList
+
+urlpatterns = [
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', WishListList.as_view(), name='wishlists'),
+]
+----
+
+De cette manière, dans nos templates, on peut à présent construire un lien vers la racine avec le tags suivant: 
+
+[source,html]
+----
+<a href="{% url 'wishlists' %}">{{ yearvar }} Archive</a>
+----
+
+De la même manière, on peut également récupérer l'URL de destination pour n'importe quel libellé, de la manière suivante:
+
+[source,python]
+----
+from django.core.urlresolvers import reverse_lazy
+
+wishlists_url = reverse_lazy('wishlists')
+----
