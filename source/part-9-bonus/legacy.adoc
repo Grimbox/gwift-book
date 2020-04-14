@@ -1,3 +1,5 @@
+== Applications _Legacy_
+
 Quand on intègre une nouvelle application Django dans un environement existant, la première étape est de se câbler sur la base de données existantes; 
 
  1. Soit l'application sur laquelle on se greffe restera telle quelle; 

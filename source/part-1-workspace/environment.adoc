@@ -1,8 +1,18 @@
-== Environnement de travail
+== Boite à outils
 
-Quelques idées: Git, VSCodium[https://vscodium.com/], un terminal (Si vous êtes sous Windows, cmder[https://cmder.net/]).
+Un IDE : 
+
+* https://vscodium.com/[VSCodium], avec les plugins https://marketplace.visualstudio.com/items?itemName=ms-python.python[Python], 
+* https://www.jetbrains.com/pycharm/[PyCharm]
+* https://www.vim.org/[Vim] avec les plugins https://github.com/davidhalter/jedi-vim[Jedi-Vim], https://github.com/preservim/nerdtree[nerdtree]
+
+Un terminal :
+
+* Si vous êtes sous Windows, https://cmder.net/[cmder].
 
 Un gestionnaire de base de données ? PHPMyAdmin ou PgAdmin.
 
-Un IDE ? PyCharm, VSCodium, VIM, ...
+Un gestionnaire de mots de passe :
+
+* https://keepassxc.org/[KeepassXC] (on en aura besoin ;-))
 

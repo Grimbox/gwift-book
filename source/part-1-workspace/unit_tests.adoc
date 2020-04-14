@@ -2,9 +2,25 @@
 
 Si on schématise l'infrastructure et le chemin parcouru par une éventuelle requête, on devrait arriver à quelque chose de synthéthique:
 
-User -> Firefox -> http GET 1.1 -> Debian GNU/Linux -> Nginx -> gunicorn -> django -> url -> route -> fonction/classe/méthode -> construction -> accès à la base de données -> retour des données -> rendu -> réponse à l'utilisateur. 
+* Au niveau de l'infrastructure, 
+    . l'utilisateur fait une requête via son navigateur (Firefox ou Chrome) 
+    . le navigateur envoie une requête http, sa version, un verbe (GET, POST, ...), un port et éventuellement du contenu
+    . le firewall du serveur (Debian GNU/Linux, CentOS, ...) vérifie si la requête peut être prise en compte 
+    . la requête est transmise à l'application qui écoute sur le port (probablement 80 ou 443; et _a priori_ Nginx)
+    . elle est ensuite transmise par socket et est prise en compte par Gunicorn
+    . qui la transmet ensuite à l'un de ses _workers_ (= un processus Python)
+    . après exécution, une réponse est renvoyée à l'utilisateur. 
 
-image::images/scenarii-de-plantages.png
+image::images/diagrams/architecture.png[]
+
+* Au niveau logiciel (la partie mise en subrillance ci-dessus), la requête arrive dans les mains du processus Python, qui doit encore 
+    . effectuer le routage des données, 
+    . trouver la bonne fonction à exécuter, 
+    . récupérer les données depuis la base de données, 
+    . effectuer le rendu ou la conversion des données, 
+    . et renvoyer une réponse à l'utilisateur.
+
+image::images/diagrams/django-process.png[]
 
 En gros, ça peut planter aux points suivants :
 
@@ -14,7 +30,7 @@ En gros, ça peut planter aux points suivants :
 . Le verbe HTTP n'est pas pris en charge par la fonction
 . Le système n'a plus de place sur son disque
 . Nginx est mal configuré
-. La communication par socket est mal configuré
+. La communication par socket est mal configurée
 . L'URL est inconnue
 . La route n'existe pas
 . La base de dnnées est inaccessible

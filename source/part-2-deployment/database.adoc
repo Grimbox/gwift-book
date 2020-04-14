@@ -1,13 +1,14 @@
 == Bases de données
 
-On l'a déjà vu, Django se base sur un pattern type https://www.martinfowler.com/eaaCatalog/activeRecord.html[ActiveRecords] pour l'ORM et supporte les principaux moteurs de bases de données connus: 
+On l'a déjà vu, Django se base sur un pattern type https://www.martinfowler.com/eaaCatalog/activeRecord.html[ActiveRecords] pour la gestion de la persistance des données et supporte les principaux moteurs de bases de données connus: 
 
+* SQLite (en natif, mais Django 3.0 exige une version du moteur supérieure ou égale à la 3.8)
 * MariaDB (en natif depuis Django 3.0), 
 * PostgreSQL au travers de psycopg2 (en natif aussi), 
 * Microsoft SQLServer grâce aux drivers [...à compléter] 
-* ou Oracle via https://oracle.github.io/python-cx_Oracle/[cx_Oracle]. 
+* Oracle via https://oracle.github.io/python-cx_Oracle/[cx_Oracle]. 
 
-WARNING: Chaque pilote doit être utilisé précautionneusement ! Chaque version de Django n'est pas toujours compatible avec chacune des versions des pilotes, et chaque moteur de base de données nécessite parfois une version spécifique du pilote. Par ce fait, vous serez parfois bloqué sur une version de Django, simplement parce que votre serveur de base de données se trouvera dans une version spécifique (eg. Django 2.3 à cause d'un Oracle 12.1).
+CAUTION: Chaque pilote doit être utilisé précautionneusement ! Chaque version de Django n'est pas toujours compatible avec chacune des versions des pilotes, et chaque moteur de base de données nécessite parfois une version spécifique du pilote. Par ce fait, vous serez parfois bloqué sur une version de Django, simplement parce que votre serveur de base de données se trouvera dans une version spécifique (eg. Django 2.3 à cause d'un Oracle 12.1).
 
 Ci-dessous, quelques procédures d'installation pour mettre un serveur à disposition. Les deux plus simples seront MariaDB et PostgreSQL, qu'on couvrira ci-dessous. Oracle et Microsoft SQLServer se trouveront en annexes.
 

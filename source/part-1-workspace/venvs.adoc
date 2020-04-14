@@ -9,7 +9,7 @@ Cette pratique est cependant fortement déconseillée pour plusieurs raisons:
 . Il est tout à fait envisagable que deux applications différentes soient déployées sur un même hôte, et nécessitent chacune deux versions différentes d'une même dépendance.
 . Pour la reproductibilité d'un environnement spécifique. Cela évite notamment les réponses type "Ca juste marche chez moi", puisque la construction d'un nouvel environnement fait partie intégrante du processus de construction et de la documentation du projet; grace à elle, on a la possibilité de construire un environnement sain et d'appliquer des dépendances identiques, quelle que soit la machine hôte.
 
-image:https://res.cloudinary.com/teepublic/image/private/s--hOdhXtVV--/t_Preview/b_rgb:ffffff,c_limit,f_jpg,h_630,q_90,w_630/v1464028809/production/designs/521845_1.jpg 
+image::images/it-works-on-my-machine.jpg
 
 Depuis la version 3.5 de Python, le module `venv` est https://docs.python.org/3/library/venv.html[recommandé] afin de créer un environnement virtuel.
 

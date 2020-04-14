@@ -38,7 +38,7 @@ if "%1" == "html" (
 )
 
 if "%1" == "pdf" (
-	asciidoctor-pdf -a pdf-themesdir=resources/themes -a pdf-theme=gwift-theme source/main.adoc -t
+	asciidoctor-pdf -a pdf-themesdir=resources/themes -a pdf-theme=basic source/main.adoc -t
 	goto end
 )
 

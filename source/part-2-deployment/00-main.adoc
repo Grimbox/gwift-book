@@ -1,8 +1,6 @@
 = Déploiement
 
-On va déjà parler de déploiement. Le serveur que django met à notre disposition est prévu uniquement pour le développement: inutile de passer par du code Python pour charger des fichiers statiques (feuilles de style, fichiers JavaScript, images, ...). De même, la base de donnée doit supporter plus qu'un seul utilisateur: SQLite fonctionne très bien dès lors qu'on se limite à un seul utilisateur... Sur une application Web, il est plus que probable que vous rencontriez rapidement des erreurs de base de données verrouillée pour écriture par un autre processus. Il est donc plus que bénéfique de passer sur quelque chose de plus solide. 
-
-https://docs.djangoproject.com/fr/3.0/howto/deployment/[Déploiement].
+On va déjà parler de déploiement. Le serveur que django met à notre disposition est prévu uniquement pour le développement: inutile de passer par du code Python pour charger des fichiers statiques (feuilles de style, fichiers JavaScript, images, ...). De même, la base de donnée doit supporter plus qu'un seul utilisateur: SQLite fonctionne très bien dès lors qu'on se limite à un seul utilisateur... Sur une application Web, il est plus que probable que vous rencontriez rapidement des erreurs de base de données verrouillée pour écriture par un autre processus. Il est donc plus que bénéfique de passer sur quelque chose de plus solide. https://docs.djangoproject.com/fr/3.0/howto/deployment/[Déploiement].
 
 Si vous avez suivi les étapes jusqu'ici, vous devriez à peine disposer d'un espace de travail proprement configuré, d'un modèle relativement basique et d'une configuration avec une base de données simpliste. En bref, vous avez quelque chose qui fonctionne, mais qui ressemble de très loin à ce que vous souhaitez au final.
 
@@ -16,6 +14,28 @@ Dans cette partie, on abordera les points suivants:
 * La configuration de l'hôte, qui hébergera l'application: dans une machine physique, virtuelle ou dans un container. On abordera aussi rapidement les déploiements via Ansible, Chef, Puppet ou Salt.
 * Les différentes méthodes de supervision de l'application: comment analyser les fichiers de logs et comment intercepter correctement une erreur si elle se présente et comment remonter l'information.
 * Une partie sur la sécurité et la sécurisation de l'hôte.
+
+Si on schématise l'infrastructure et le chemin parcouru par une éventuelle requête, on devrait arriver à quelque chose de synthéthique:
+
+* Au niveau de l'infrastructure, 
+    . l'utilisateur fait une requête via son navigateur (Firefox ou Chrome) 
+    . le navigateur envoie une requête http, sa version, un verbe (GET, POST, ...), un port et éventuellement du contenu
+    . le firewall du serveur (Debian GNU/Linux, CentOS, ...) vérifie si la requête peut être prise en compte 
+    . la requête est transmise à l'application qui écoute sur le port (probablement 80 ou 443; et _a priori_ Nginx)
+    . elle est ensuite transmise par socket et est prise en compte par Gunicorn
+    . qui la transmet ensuite à l'un de ses _workers_ (= un processus Python)
+    . après exécution, une réponse est renvoyée à l'utilisateur. 
+
+image::images/diagrams/architecture.png[]
+
+* Au niveau logiciel (la partie mise en subrillance ci-dessus), la requête arrive dans les mains du processus Python, qui doit encore 
+    . effectuer le routage des données, 
+    . trouver la bonne fonction à exécuter, 
+    . récupérer les données depuis la base de données, 
+    . effectuer le rendu ou la conversion des données, 
+    . et renvoyer une réponse à l'utilisateur.
+
+image::images/diagrams/django-process.png[]
 
 == Définition de l'infrastructure
 
