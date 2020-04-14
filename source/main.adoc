@@ -6,6 +6,7 @@ Cédric Declerfayt <jaguarondi27@gmail.com>; Fred Pauchet <fred@grimbox.be>
 :chapter-label: Chapitre
 :preface-title: Préface
 :source-highlighter: rouge
+:icons: font
 
 On ne va pas se mentir: il existe enormément de tutoriaux très bien réalisés sur "Comment réaliser une application Django" et autres "Déployer votre code en 2 minutes". On se disait juste que ces tutoriaux restaient relativement haut-niveau et se limitaient à un contexte donné. 
 
@@ -80,6 +81,4 @@ include::gwift/metamodel.adoc[]
 == feedbacks utilisateurs
 
 
-= En bonus
-
-include::bonus/code-snippets.adoc[]
+include::part-9-bonus/00-main.adoc[]
