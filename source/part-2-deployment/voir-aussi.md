@@ -1,0 +1,1 @@
+https://mattsegal.dev/simple-django-deployment.html
