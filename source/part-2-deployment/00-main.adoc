@@ -101,3 +101,6 @@ include::database.adoc[]
 
 include::centos+debian.adoc[]
 
+== Ressources
+  
+https://zestedesavoir.com/tutoriels/2213/deployer-une-application-django-en-production/
