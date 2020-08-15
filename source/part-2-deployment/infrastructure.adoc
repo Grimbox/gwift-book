@@ -1,0 +1,1 @@
+See https://mattsegal.dev/nginx-django-reverse-proxy-config.html 
