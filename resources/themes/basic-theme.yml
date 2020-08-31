@@ -1,0 +1,14 @@
+extends: default
+footer:
+  recto:
+    right:
+      content: '{section-or-chapter-title} | {page-number}'
+  verso:
+    left:
+      content: '{page-number} | {chapter-title}'
+admonition:
+  icon:
+    caution:
+      name: fa-fire
+      stroke_color: ff0000
+      size: 24

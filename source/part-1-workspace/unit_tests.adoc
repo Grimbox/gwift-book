@@ -1,0 +1,91 @@
+== Tests unitaires
+
+Si on schématise l'infrastructure et le chemin parcouru par une éventuelle requête, on devrait arriver à quelque chose de synthéthique:
+
+* Au niveau de l'infrastructure, 
+    . l'utilisateur fait une requête via son navigateur (Firefox ou Chrome) 
+    . le navigateur envoie une requête http, sa version, un verbe (GET, POST, ...), un port et éventuellement du contenu
+    . le firewall du serveur (Debian GNU/Linux, CentOS, ...) vérifie si la requête peut être prise en compte 
+    . la requête est transmise à l'application qui écoute sur le port (probablement 80 ou 443; et _a priori_ Nginx)
+    . elle est ensuite transmise par socket et est prise en compte par Gunicorn
+    . qui la transmet ensuite à l'un de ses _workers_ (= un processus Python)
+    . après exécution, une réponse est renvoyée à l'utilisateur. 
+
+image::images/diagrams/architecture.png[]
+
+* Au niveau logiciel (la partie mise en subrillance ci-dessus), la requête arrive dans les mains du processus Python, qui doit encore 
+    . effectuer le routage des données, 
+    . trouver la bonne fonction à exécuter, 
+    . récupérer les données depuis la base de données, 
+    . effectuer le rendu ou la conversion des données, 
+    . et renvoyer une réponse à l'utilisateur.
+
+image::images/diagrams/django-process.png[]
+
+En gros, ça peut planter aux points suivants :
+
+. L'utilisateur n'est pas connecté à l'Internet
+. La version du navigateur utilisé est obsolète et les technologies de sécurité ne sont plus supportées
+. La version d'HTTP n'est pas prise en charge par notre serveur
+. Le verbe HTTP n'est pas pris en charge par la fonction
+. Le système n'a plus de place sur son disque
+. Nginx est mal configuré
+. La communication par socket est mal configurée
+. L'URL est inconnue
+. La route n'existe pas
+. La base de dnnées est inaccessible
+. La fonction n'est pas correctement appelée
+. Il manque des valeurs au rendu
+. Il y a tellement de données qu'Nginx ou Gunicorn ou déjà envoyé une fin de requête à l'utilisateur (_timeout_)
+...
+
+En bref, on a potentiellement un ou plusieurs problèmes potentiels à chaque intervenant. Une chose à la fois: dans un premier temps, on va se concentrer sur notre code. 
+
+Vous aurez remarqué ci-dessus qu'une nouvelle application créée par Django vient d'office avec un fichier `tests.py`. C'est simplement parce que les tests unitaires et tests d'intégration font partie intégrante du cadre de travail. Ceci dit, chaque batterie de tests demande une certaine préparation et un certain "temps de cuisson"... Comprendre qu'un test ne sera effectif que s'il est correctement structurée (_configuration over convention_ ?), s'il se trouve dans une classe et que chaque test se trouve bien dans une méthode de cette classe... Cela commence à faire beaucoup de boulot pour vérifier qu'une fonction retourne bien une certaine valeur, et en décourager la plupart d'entrée de jeux, surtout quand on sait que chaque fonction, condition ou point d'entrée sera sensée disposer de son test.
+
+Au niveau des améliorations, on va :
+
+. Changer de framework de test et utiliser https://docs.pytest.org/en/latest/[pytest] et son greffon https://pytest-django.readthedocs.io/en/latest/[pytest-django]
+. Ajouter une couverture de code.
+
+=== Pytest
+
+Pourquoi pytest, plutôt que Django ? Par pure fainéantise :-) Si, si ! Pytest est relativement plus facile à utiliser, permet un contrôle plus fin de certaines variables d'environnement et est surtout compatible hors-Django (en plus de quelques améliorations sur les performances, comme les tests sur plusieurs processus).
+
+Cela signifie surtout que si vous apprenez Pytest maintenant, et que votre prochain projet est une application en CLI ou avec un autre framework, vous ne serez pas dépaysé. Les tests unitaires de Django sont compatibles uniquement avec Django... D'où une certaine perte de vélocité lorsqu'on devra s'en détacher.
+
+Vous trouverez ci-dessous une comparaison entre des tests avec les deux frameworks:
+
+[source,python]
+----
+# avec django 
+
+----
+
+[source,python]
+----
+# avec pytest
+
+----
+
+Plugins pytest : 
+
+* https://github.com/CFMTech/pytest-monitor
+* https://pivotfinland.com/pytest-sugar/[pytest-sugar] 
+
+
+=== Fixtures
+
+https://realpython.com/django-pytest-fixtures/[Lien]: super bien expliqué, et pourquoi les fixtures dans Pytest c'est 'achement plus mieux que les tests unitaires de Django.
+
+=== Couverture de code
+
+Dans un premier temps, *le pourcentage de code couvert par nos tests*. Une fois ce pourcentage évalué, le but du jeu va consister à *ce que ce pourcentage reste stable ou augmente*. Si vous modifiez une ligne de code et que la couverture passe de 73% à 72%, vous avez perdu et vous devez faire en sorte de corriger. 
+
+Plein de trucs à compléter ici ;-) Est-ce qu'on passe par pytest ou par le framework intégré ? Quels sont les avantages de l'un % à l'autre ?
+ * `views.py` pour définir ce que nous pouvons faire avec nos données.
+
+
+
+
+

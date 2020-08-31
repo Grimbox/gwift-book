@@ -1,0 +1,6 @@
+== En résumé
+
+* Créez systématiquement un environnement virtuel pour chaque projet sur lequel vous travaillez
+* La description des dépendances utilisées pour un projet doivent faire partie intégrante des sources
+
+C'est ici que le projet http://cookiecutter.readthedocs.io/en/latest/readme.html[CookieCutter] va être intéressant: les X premières étapes peuvent être *bypassées* par une simple commande.

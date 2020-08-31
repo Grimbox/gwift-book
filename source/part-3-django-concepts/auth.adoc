@@ -1,0 +1,158 @@
+== Authentification
+
+Comme on l'a vu dans la partie sur le modèle, nous souhaitons que le créateur d'une liste puisse retrouver facilement les éléments qu'il aura créé. Ce dont nous n'avons pas parlé cependant, c'est la manière dont l'utilisateur va pouvoir créer son compte et s'authentifier. La https://docs.djangoproject.com/en/stable/topics/auth/[documentation] est très complète, nous allons essayer de la simplifier au maximum. Accrochez-vous, le sujet peut être complexe.
+
+=== Mécanisme d'authentification
+
+On peut schématiser le flux d'authentification de la manière suivante : 
+
+En gros:
+
+. La personne accède à une URL qui est protégée (voir les décorateurs @login_required et le mixin LoginRequiredMixin)
+. Le framework détecte qu'il est nécessaire pour la personne de se connecter (grâce à un paramètre type LOGIN_URL)
+. Le framework présente une page de connexion ou un mécanisme d'accès pour la personne (template à définir)
+. Le framework récupère les informations du formulaire, et les transmets aux différents backends d'authentification, dans l'ordre
+. Chaque backend va appliquer la méthode `authenticate` en cascade, jusqu'à ce qu'un backend réponde True ou qu'aucun ne réponde
+. La réponse de la méthode authenticate doit être une instance d'un utilisateur, tel que définit parmi les paramètres généraux de l'application. 
+
+En résumé (bis): 
+
+. Une personne souhaite se connecter;
+. Les backends d'authentification s'enchaîne jusqu'à trouver une bonne correspondance. Si aucune correspondance n'est trouvée, on envoie la personne sur les roses.
+. Si OK, on retourne une instance de type current_user, qui pourra être utilisée de manière uniforme dans l'application.
+
+Ci-dessous, on définit deux backends différents pour mieux comprendre les différentes possibilités:
+
+. Une authentification par jeton
+. Une authentification LDAP
+
+
+[source,python]
+----
+from datetime import datetime
+
+from django.contrib.auth import backends, get_user_model
+from django.db.models import Q
+
+from accounts.models import Token  <1>
+
+
+UserModel = get_user_model()
+
+
+class TokenBackend(backends.ModelBackend):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        """Authentifie l'utilisateur sur base d'un jeton qu'il a reçu.
+
+        On regarde la date de validité de chaque jeton avant d'autoriser l'accès.
+        """
+        token = kwargs.get("token", None)
+
+        current_token = Token.objects.filter(token=token, validity_date__gte=datetime.now()).first()
+
+        if current_token:
+            user = current_token.user
+
+            current_token.last_used_date = datetime.now()
+            current_token.save()
+
+            return user
+
+        return None
+----
+<1> Sous-entend qu'on a bien une classe qui permet d'accéder à ces jetons ;-)
+
+[source,python]
+----
+from django.contrib.auth import backends, get_user_model
+
+from ldap3 import Server, Connection, ALL
+from ldap3.core.exceptions import LDAPPasswordIsMandatoryError
+
+from config import settings
+
+
+UserModel = get_user_model()
+
+
+class LdapBackend(backends.ModelBackend):
+    """Implémentation du backend LDAP pour la connexion des utilisateurs à l'Active Directory.
+    """
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        """Authentifie l'utilisateur au travers du serveur LDAP.
+        """
+
+        ldap_server = Server(settings.LDAP_SERVER, get_info=ALL)
+        ldap_connection = Connection(ldap_server, user=username, password=password)
+
+        try:
+            if not ldap_connection.bind():
+                raise ValueError("Login ou mot de passe incorrect")
+        except (LDAPPasswordIsMandatoryError, ValueError) as ldap_exception:
+            raise ldap_exception
+
+        user, _ = UserModel.objects.get_or_create(username=username)
+----
+
+On peut résumer le mécanisme d'authentification de la manière suivante:
+
+ * Si vous voulez modifier les informations liées à un utilisateur, orientez-vous vers la modification du modèle. Comme nous le verrons ci-dessous, il existe trois manières de prendre ces modifications en compte. Voir également https://docs.djangoproject.com/en/stable/topics/auth/customizing/[ici].
+ * Si vous souhaitez modifier la manière dont l'utilisateur se connecte, alors vous devrez modifier le *backend*.
+ 
+=== Modification du modèle
+
+Dans un premier temps, Django a besoin de manipuler https://docs.djangoproject.com/en/1.9/ref/contrib/auth/#user-model[des instances de type `django.contrib.auth.User`]. Cette classe implémente les champs suivants:
+
+ * `username`
+ * `first_name`
+ * `last_name`
+ * `email`
+ * `password`
+ * `date_joined`.
+ 
+D'autres champs, comme les groupes auxquels l'utilisateur est associé, ses permissions, savoir s'il est un super-utilisateur, ... sont moins pertinents pour le moment. Avec les quelques champs déjà définis ci-dessus, nous avons de quoi identifier correctement nos utilisateurs. Inutile d'implémenter nos propres classes, puisqu'elles existent déjà :-) 
+
+Si vous souhaitez ajouter un champ, il existe trois manières de faire. 
+
+=== Extension du modèle existant
+
+Le plus simple consiste à créer une nouvelle classe, et à faire un lien de type `OneToOne` vers la classe `django.contrib.auth.User`. De cette manière, on ne modifie rien à la manière dont Django authentife ses utlisateurs: tout ce qu'on fait, c'est un lien vers une table nouvellement créée, comme on l'a déjà vu au point [...voir l'héritage de modèle]. L'avantage de cette méthode, c'est qu'elle est extrêmement flexible, et qu'on garde les mécanismes Django standard. Le désavantage, c'est que pour avoir toutes les informations de notre utilisateur, on sera obligé d'effectuer une jointure sur le base de données, ce qui pourrait avoir des conséquences sur les performances.
+
+=== Substitution
+
+Avant de commencer, sachez que cette étape doit être effectuée **avant la première migration**. Le plus simple sera de définir une nouvelle classe héritant de `django.contrib.auth.User` et de spécifier la classe à utiliser dans votre fichier de paramètres. Si ce paramètre est modifié après que la première migration ait été effectuée, il ne sera pas pris en compte. Tenez-en compte au moment de modéliser votre application.
+
+[source,python]
+----
+AUTH_USER_MODEL = 'myapp.MyUser'
+----
+
+Notez bien qu'il ne faut pas spécifier le package `.models` dans cette injection de dépendances: le schéma à indiquer est bien `<nom de l'application>.<nom de la classe>`.  
+
+==== Backend
+
+
+==== Templates
+
+Ce qui n'existe pas par contre, ce sont les vues. Django propose donc tout le mécanisme de gestion des utilisateurs, excepté le visuel (hors administration). En premier lieu, ces paramètres sont fixés dans le fichier `settings <https://docs.djangoproject.com/en/1.8/ref/settings/#auth>`_. On y trouve par exemple les paramètres suivants:
+
+ * `LOGIN_REDIRECT_URL`: si vous ne spécifiez pas le paramètre `next`, l'utilisateur sera automatiquement redirigé vers cette page.
+ * `LOGIN_URL`: l'URL de connexion à utiliser. Par défaut, l'utilisateur doit se rendre sur la page `/accounts/login`. 
+
+
+==== Social-Authentification
+
+Voir ici : https://github.com/omab/python-social-auth[python social auth]
+
+==== Un petit mot sur OAuth
+
+OAuth est un standard libre définissant un ensemble de méthodes à implémenter pour l'accès (l'autorisation) à une API. Son fonctionnement se base sur un système de jetons (Tokens), attribués par le possesseur de la ressource à laquelle un utilisateur souhaite accéder.
+
+Le client initie la connexion en demandant un jeton au serveur. Ce jeton est ensuite utilisée tout au long de la connexion, pour accéder aux différentes ressources offertes par ce serveur. `wikipedia <http://en.wikipedia.org/wiki/OAuth>`_.
+
+Une introduction à OAuth est http://hueniverse.com/oauth/guide/intro/[disponible ici]. Elle introduit le protocole comme étant une `valet key`, une clé que l'on donne à la personne qui va garer votre voiture pendant que vous profitez des mondanités. Cette clé donne un accès à votre voiture, tout en bloquant un ensemble de fonctionnalités. Le principe du protocole est semblable en ce sens: vous vous réservez un accès total à une API, tandis que le système de jetons permet d'identifier une personne, tout en lui donnant un accès restreint à votre application. 
+
+L'utilisation de jetons permet notamment de définir une durée d'utilisation et une portée d'utilisation. L'utilisateur d'un service A peut par exemple autoriser un service B à accéder à des ressources qu'il possède, sans pour autant révéler son nom d'utilisateur ou son mot de passe.
+
+L'exemple repris au niveau du http://hueniverse.com/oauth/guide/workflow/[workflow] est le suivant : un utilisateur(trice), Jane, a uploadé des photos sur le site faji.com (A). Elle souhaite les imprimer au travers du site beppa.com (B).
+Au moment de la commande, le site beppa.com envoie une demande au site faji.com pour accéder aux ressources partagées par Jane. Pour cela, une nouvelle page s'ouvre pour l'utilisateur, et lui demande d'introduire sa "pièce d'identité". Le site A, ayant reçu une demande de B, mais certifiée par l'utilisateur, ouvre alors les ressources et lui permet d'y accéder.

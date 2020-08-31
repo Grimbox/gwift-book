@@ -1,0 +1,7 @@
+= En Bonus
+
+https://gto76.github.io/python-cheatsheet/[Python Cheat Sheet]
+
+include::code-snippets.adoc[]
+
+include::legacy.adoc[]

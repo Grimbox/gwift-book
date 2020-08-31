@@ -1,0 +1,319 @@
+== Déploiement sur CentOS
+
+[source,bash]
+----
+yum update
+groupadd --system webapps <1>
+groupadd --system gunicorn_sockets <2>
+useradd --system --gid webapps --shell /bin/bash --home /home/gwift gwift <3>
+mkdir -p /home/gwift <4>
+chown gwift:webapps /home/gwift <5>
+----
+<1> On ajoute un groupe intitulé `webapps`
+<2> On crée un groupe pour les communications via sockets
+<3> On crée notre utilisateur applicatif; ses applications seront placées dans le répertoire `/home/gwift`
+<4> On crée le répertoire home/gwift
+<5> On pourrait sans doute fusioner les étapes 3, 4 et 5.
+
+
+=== Installation des dépendances systèmes
+
+La version 3.6 de Python se trouve dans les dépôts officiels de CentOS.
+Si vous souhaitez utiliser une version ultérieure, il suffit de l'installer en parallèle de la version officiellement supportée par votre distribution.
+
+Pour CentOS, vous avez donc deux possibilités : 
+
+[source,bash]
+----
+yum install python36 -y
+ 
+# CentOS 7 ne dispose que de la version 3.7 d'SQLite. On a besoin d'une version 3.8 au minimum:
+wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-devel-3.8.11-1.fc21.x86_64.rpm
+wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-3.8.11-1.fc21.x86_64.rpm
+sudo yum install sqlite-3.8.11-1.fc21.x86_64.rpm sqlite-devel-3.8.11-1.fc21.x86_64.rpm -y
+----
+
+Ou passer par une installation alternative:
+
+[source,bash]
+----
+sudo yum -y groupinstall "Development Tools"
+sudo yum -y install openssl-devel bzip2-devel libffi-devel
+
+wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tgz
+cd Python-3.8*/
+./configure --enable-optimizations
+sudo make altinstall <1>
+----
+<1> *Attention !* Le paramètre `altinstall` est primordial. Sans lui, vous écraserez l'interpréteur initialement supporté par la distribution, et cela pourrait avoir des effets de bord non souhaités.
+
+=== Préparation de l'environnement utilisateur
+
+[source,bash]
+----
+su - gwift
+cp /etc/skel/.bashrc .
+cp /etc/skel/.bash_profile .
+ssh-keygen
+mkdir bin
+mkdir .venvs
+mkdir webapps
+python3.6 -m venv .venvs/gwift
+source .venvs/gwift/bin/activate
+cd /home/gwift/webapps
+git clone ...
+----
+
+La clé SSH doit ensuite être renseignée au niveau du dépôt, afin de pouvoir y accéder. 
+
+A ce stade, on devrait déjà avoir quelque chose de fonctionnel en démarrant les commandes suivantes:
+
+[source,bash]
+----
+# en tant qu'utilisateur 'gwift'
+ 
+source .venvs/gwift/bin/activate
+pip install -U pip
+pip install -r requirements/base.txt
+pip install gunicorn
+cd webapps/gwift
+gunicorn config.wsgi:application --bind localhost:3000 --settings=config.settings_production
+----
+
+=== Configuration de l'application
+
+[source,bash]
+----
+SECRET_KEY=<set your secret key here> <1>
+ALLOWED_HOSTS=*
+STATIC_ROOT=/var/www/gwift/static
+DATABASE= <2>
+----
+<1> La variable `SECRET_KEY` est notamment utilisée pour le chiffrement des sessions.
+<2> On fait confiance à django_environ pour traduire la chaîne de connexion à la base de données.
+
+=== Création des répertoires de logs
+
+[source,text]
+----
+mkdir -p /var/www/gwift/static
+----
+
+=== Création du répertoire pour le socket 
+
+Dans le fichier `/etc/tmpfiles.d/gwift.conf`:
+
+[source,text]
+----
+D /var/run/webapps 0775 gwift gunicorn_sockets -
+----
+
+Suivi de la création par systemd :
+
+[source,text]
+----
+systemd-tmpfiles --create
+----
+
+=== Gunicorn
+
+[source,bash]
+----
+#!/bin/bash
+ 
+# defines settings for gunicorn
+NAME="gwift"
+DJANGODIR=/home/gwift/webapps/gwift
+SOCKFILE=/var/run/webapps/gunicorn_gwift.sock
+USER=gwift
+GROUP=gunicorn_sockets
+NUM_WORKERS=5
+DJANGO_SETTINGS_MODULE=config.settings_production
+DJANGO_WSGI_MODULE=config.wsgi
+ 
+echo "Starting $NAME as `whoami`"
+ 
+source /home/gwift/.venvs/gwift/bin/activate
+cd $DJANGODIR
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+ 
+exec gunicorn ${DJANGO_WSGI_MODULE}:application \
+--name $NAME \
+--workers $NUM_WORKERS \
+--user $USER \
+--bind=unix:$SOCKFILE \
+--log-level=debug \
+--log-file=-
+----
+
+=== Supervision, keep-alive et autoreload
+
+Pour la supervision, on passe par Supervisor. Il existe d'autres superviseurs, 
+
+[source,bash]
+----
+yum install supervisor -y
+----
+
+On crée ensuite le fichier `/etc/supervisord.d/gwift.ini`:
+
+[source,bash]
+----
+[program:gwift]
+command=/home/gwift/bin/start_gunicorn.sh
+user=gwift
+stdout_logfile=/var/log/gwift/gwift.log
+autostart=true
+autorestart=unexpected
+redirect_stdout=true
+redirect_stderr=true
+----
+
+Et on crée les répertoires de logs, on démarre supervisord et on vérifie qu'il tourne correctement:
+
+[source,bash]
+----
+mkdir /var/log/gwift
+chown gwift:nagios /var/log/gwift
+
+systemctl enable supervisord
+systemctl start supervisord.service
+systemctl status supervisord.service
+● supervisord.service - Process Monitoring and Control Daemon
+   Loaded: loaded (/usr/lib/systemd/system/supervisord.service; enabled; vendor preset: disabled)
+   Active: active (running) since Tue 2019-12-24 10:08:09 CET; 10s ago
+  Process: 2304 ExecStart=/usr/bin/supervisord -c /etc/supervisord.conf (code=exited, status=0/SUCCESS)
+ Main PID: 2310 (supervisord)
+   CGroup: /system.slice/supervisord.service
+           ├─2310 /usr/bin/python /usr/bin/supervisord -c /etc/supervisord.conf
+           ├─2313 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+           ├─2317 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+           ├─2318 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+           ├─2321 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+           ├─2322 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+           └─2323 /home/gwift/.venvs/gwift/bin/python3 /home/gwift/.venvs/gwift/bin/gunicorn config.wsgi:...
+ls /var/run/webapps/
+----
+
+On peut aussi vérifier que l'application est en train de tourner, à l'aide de la commande `supervisorctl`:
+
+[source,bash]
+----
+$$$ supervisorctl status gwift
+gwift                            RUNNING    pid 31983, uptime 0:01:00
+----
+
+Et pour gérer le démarrage ou l'arrêt, on peut passer par les commandes suivantes:
+
+[source,bash]
+----
+$$$ supervisorctl stop gwift
+gwift: stopped
+root@ks3353535:/etc/supervisor/conf.d# supervisorctl start gwift
+gwift: started
+root@ks3353535:/etc/supervisor/conf.d# supervisorctl restart gwift
+gwift: stopped
+gwift: started
+----
+
+
+=== Ouverture des ports
+
+ et 443 (HTTPS).
+
+[source,text]
+----
+firewall-cmd --permanent --zone=public --add-service=http <1>
+firewall-cmd --permanent --zone=public --add-service=https <2>
+firewall-cmd --reload
+----
+<1> On ouvre le port 80, uniquement pour autoriser une connexion HTTP, mais qui sera immédiatement redirigée vers HTTPS
+<2> Et le port 443 (forcément).
+
+=== Installation d'Nginx
+
+[source]
+----
+yum install nginx -y
+usermod -a -G gunicorn_sockets nginx
+----
+
+On configure ensuite le fichier `/etc/nginx/conf.d/gwift.conf`:
+
+----
+upstream gwift_app {
+        server unix:/var/run/webapps/gunicorn_gwift.sock fail_timeout=0;
+}
+
+server {
+        listen 80;
+        server_name <server_name>;
+        root /var/www/gwift;
+        error_log /var/log/nginx/gwift_error.log;
+        access_log /var/log/nginx/gwift_access.log;
+ 
+        client_max_body_size 4G;
+        keepalive_timeout 5;
+ 
+        gzip on;
+        gzip_comp_level 7;
+        gzip_proxied any;
+        gzip_types gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
+ 
+ 
+        location /static/ { <2>
+                access_log off;
+                expires 30d;
+                add_header Pragma public;
+                add_header Cache-Control "public";
+                add_header Vary "Accept-Encoding";
+                try_files $uri $uri/ =404;
+        }
+ 
+        location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; <3>
+                proxy_set_header Host $http_host;
+                proxy_redirect off;
+ 
+                proxy_pass http://gwift_app;
+        }
+}
+----
+<2> Ce répertoire sera complété par la commande `collectstatic` que l'on verra plus tard. L'objectif est que les fichiers ne demandant aucune intelligence soit directement servis par Nginx. Cela évite d'avoir un processus Python (relativement lent) qui doive être instancié pour servir un simple fichier statique.
+<3> Afin d'éviter que Django ne reçoive uniquement des requêtes provenant de 127.0.0.1
+
+=== Configuration des sauvegardes
+
+Les sauvegardes ont été configurées avec borg: `yum install borgbackup`.
+
+C'est l'utilisateur gwift qui s'en occupe.
+
+----
+mkdir -p /home/gwift/borg-backups/
+cd /home/gwift/borg-backups/
+borg init gwift.borg -e=none
+borg create gwift.borg::{now} ~/bin ~/webapps
+----
+
+Et dans le fichier crontab :
+
+----
+0 23 * * * /home/gwift/bin/backup.sh
+----
+
+
+=== Rotation des jounaux
+  
+[source,bash]
+----
+/var/log/gwift/* {
+        weekly        
+        rotate 3      
+        size 10M      
+        compress      
+        delaycompress 
+}                     
+----
+  
+  Puis on démarre logrotate avec # logrotate -d /etc/logrotate.d/gwift pour vérifier que cela fonctionne correctement. 
