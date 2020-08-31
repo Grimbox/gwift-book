@@ -7,3 +7,8 @@ Django utilise un modèle https://fr.wikipedia.org/wiki/Mapping_objet-relationne
 L'avantage de tout ceci est que tout reste au niveau du code. Si l'on revient sur la méthodologie des douze facteurs, ce point concerne principalement la minimisation de la divergence entre les environnements d'exécution. Déployer une nouvelle instance de l'application pourra être réalisé directement à partir d'une seule et même commande, dans la mesure où *tout est embarqué au niveau du code*.
 
 Assez de blabla, on démarre !
+
+=== Le modèle et les validateurs
+
+
+=== 
