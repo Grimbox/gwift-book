@@ -167,7 +167,7 @@ def double_quantity(self, request, queryset):
 		obj.field += 1
 		obj.save()
 double_quantity.short_description = "Doubler la quantité des souhaits."
----
+----
 
 Et pour informer l'utilisateur de ce qui a été réalisé, on peut aussi lui passer un petit message:
 

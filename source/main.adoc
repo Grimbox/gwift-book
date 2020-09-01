@@ -73,12 +73,6 @@ include::gwift/user-management.adoc[]
 
 include::gwift/console.adoc[]
 
-include::gwift/metamodel.adoc[]
-
-== Supervision des logs
 
 
-== feedbacks utilisateurs
 
-
-include::part-9-bonus/00-main.adoc[]

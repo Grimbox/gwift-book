@@ -1,18 +1,28 @@
 == Boite à outils
 
-Un IDE : 
+=== Environnement de développement
 
-* https://vscodium.com/[VSCodium], avec les plugins https://marketplace.visualstudio.com/items?itemName=ms-python.python[Python], 
+Concrètement, on pourrait tout à fait se limiter à Notepad ou Notepad++. C'est juste qu'à moins d'aimer se fouetter avec un câble USB, on appréciera la complétion du code, la coloration syntaxique, l'intégration des tests unitaires et d'un debugger et de deux-trois sucreries qui feront plaisir à n'importe quel développeur.
+
+* https://vscodium.com/[VSCodium], avec les plugins https://marketplace.visualstudio.com/items?itemName=ms-python.python[Python],  https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens[GitLens], https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv[Rainbow-CSV] (celui-là, c'est juste pour le fun; on n'en aura pas besoin pour la suite)
 * https://www.jetbrains.com/pycharm/[PyCharm]
 * https://www.vim.org/[Vim] avec les plugins https://github.com/davidhalter/jedi-vim[Jedi-Vim], https://github.com/preservim/nerdtree[nerdtree]
 
-Un terminal :
+=== Un terminal 
 
-* Si vous êtes sous Windows, https://cmder.net/[cmder].
+Si vous êtes sous Windows, https://cmder.net/[cmder].
+Pour tout autre système, vous devriez disposer en natif de ce qu'il faut.
 
-Un gestionnaire de base de données ? PHPMyAdmin ou PgAdmin.
+=== Un gestionnaire de base de données
 
-Un gestionnaire de mots de passe :
+PHPMyAdmin ou PgAdmin. _A priori_, les deux sont disponibles pour tous les systèmes d'exploitation, et sont nativement supportés par Django. Pour SQLite, il existe https://sqlitebrowser.org/[SQLiteBrowser] qui fait très bien le boulot.
 
-* https://keepassxc.org/[KeepassXC] (on en aura besoin ;-))
+Dans tous les cas, le shell Django pourra largement suffire.
 
+=== Un gestionnaire de mots de passe
+
+https://keepassxc.org/[KeepassXC]. On en aura besoin pour gé(né)rer des phrases secrètes pour nos applications.
+
+=== Un système de gestion de versions 
+
+https://git-scm.com/[Git]

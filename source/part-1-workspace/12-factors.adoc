@@ -1,4 +1,4 @@
-== Construire des applications maintables
+== Construire des applications maintenables
 
 Pour la méthode de travail et de développement, on va se baser sur les https://12factor.net/fr/[The Twelve-factor App] - ou plus simplement les *12 facteurs*. 
 
