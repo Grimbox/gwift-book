@@ -4,18 +4,19 @@ Pour la méthode de travail et de développement, on va se baser sur les https:/
 
 L'idée derrière cette méthode consiste à pousser les concepts suivants (repris grossièrement de la https://12factor.net/fr/[page d'introduction] :
 
-. Faciliter la mise en place de phases d'automatisation; plus simplement, faciliter les mises à jour applicatives, simplifier la gestion de l'hôte, diminuer la divergence entre les différents environnements d'exécution et offrir la possibilité d'intégrer le projet dans un processus d'https://en.wikipedia.org/wiki/Continuous_integration[intégration continue]/link:https://en.wikipedia.org/wiki/Continuous_deployment[déploiement continu]
-. Faciliter la mise à pied de nouveaux développeurs ou de personnes souhaitant rejoindre le projet.
-. Faciliter XXX
-. Augmenter l'agilité générale du projet, en permettant une meilleure évolutivité architecturale et une meilleure mise à l'échelle - _Vous avez 5000 utilisateurs en plus? Ajoutez un serveur et on n'en parle plus ;-)_.
+. *Faciliter la mise en place de phases d'automatisation*; plus concrètement, de faciliter les mises à jour applicatives, simplifier la gestion de l'hôte, diminuer la divergence entre les différents environnements d'exécution et offrir la possibilité d'intégrer le projet dans un processus d'https://en.wikipedia.org/wiki/Continuous_integration[intégration continue]/link:https://en.wikipedia.org/wiki/Continuous_deployment[déploiement continu]
+. *Faciliter la mise à pied de nouveaux développeurs ou de personnes souhaitant rejoindre le projet*
+. *Minimiser les divergences entre les différents environnemens composant un projet*
+. *Augmenter l'agilité générale du projet*, en permettant une meilleure évolutivité architecturale et une meilleure mise à l'échelle - _Vous avez 5000 utilisateurs en plus? Ajoutez un serveur et on n'en parle plus ;-)_.
 
-En pratique, les idées planquées derrière les points ci-dessus permettront de monter facilement un nouvel environnement - qu'il soit sur la machine du petit nouveau dans l'équipe, sur un serveur Azure, Heroku, Digital Ocean ou votre nouveau Raspberry Pi Zéro caché à la cave. 
+En pratique, les idées qui se trouvent derrière les points ci-dessus permettront de monter facilement un nouvel environnement - qu'il soit sur la machine du petit nouveau dans l'équipe, sur un serveur Azure/Heroku/Digital Ocean ou votre nouveau Raspberry Pi Zéro caché à la cave. 
 
 Pour reprendre de manière très brute les différentes idées derrière cette méthode, on a: 
 
+. Une base de code suivie par un système de contrôle de versions. Chaque déploiement de l'application devra se baser sur cette source unique, ceci afin de minimiser les différences que l'on pourrait trouver entre un environnement de développement et la mise en production.
+
 NOTE: pensez à retravailler la partie ci-dessous; la version anglophone semble plus compréhensible... :-/
 
-. Une base de code suivie, avec un système de contrôle de versions, signifie plusieurs déploiements
 . Déclarez explicitement et isolez les dépendances
 . Stockez la configuration dans l’environnement
 

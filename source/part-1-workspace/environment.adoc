@@ -15,9 +15,9 @@ Pour tout autre système, vous devriez disposer en natif de ce qu'il faut.
 
 === Un gestionnaire de base de données
 
-PHPMyAdmin ou PgAdmin. _A priori_, les deux sont disponibles pour tous les systèmes d'exploitation, et sont nativement supportés par Django. Pour SQLite, il existe https://sqlitebrowser.org/[SQLiteBrowser] qui fait très bien le boulot.
+PHPMyAdmin ou PgAdmin. _A priori_, les deux sont disponibles pour tous les systèmes d'exploitation, et sont nativement supportés par Django. Pour SQLite, il existe https://sqlitebrowser.org/[SQLiteBrowser] qui fait très bien le boulot. On abordera les <<Bases de données,systèmes de gestion de base de données>>.
 
-Dans tous les cas, le shell Django pourra largement suffire.
+Pour tous les autres cas, le shell Django pourra largement suffire.
 
 === Un gestionnaire de mots de passe
 
@@ -25,4 +25,4 @@ https://keepassxc.org/[KeepassXC]. On en aura besoin pour gé(né)rer des phrase
 
 === Un système de gestion de versions 
 
-https://git-scm.com/[Git]
+https://git-scm.com/[Git], pour développer rapidement des preuves de concept, switcher vers une nouvelle fonctionnalité à développer, un bogue à réparer ou une nouvelle release à proposer au téléchargement. Même en développant seul dans son coin, un système de gestion de versions reste indispensable.

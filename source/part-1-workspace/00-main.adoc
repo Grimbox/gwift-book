@@ -10,13 +10,15 @@ image::images/django-support-lts.png[]
 
 Ce sera une bonne indication à prendre en considération pour nos dépendances, puisqu'en visant une version particulière, on ne devra pratiquement pas se soucier (bon, un peu quand même...) des dépendances à installer, pour peu qu'on reste sous un certain seuil.
 
-Dans cette partie, on va parler de *méthode de travail*, avec un objectif visé. On peut éviter que l'application ne tourne que sur notre machine et que chaque déploiement ne soit une plaie à gérer. Chaque mise à jour doit se limiter à: 
+NOTE: en relisant, le passage ci-dessus n'est peut-être pas hyper clair... A refaire.
+
+Dans cette partie, on va parler de *méthode de travail*, avec comme objectif visé, d'éviter que l'application ne tourne que sur notre machine et que chaque déploiement ne soit une plaie à gérer. Chaque mise à jour doit se limiter à: 
 
 . démarrer un script, 
 . prévoir un rollback si cela plante
 . se préparer une tisane en regardant nos flux RSS (si cette technologie existe encore...).
 
-**Remarque** : les commandes qui seront exécutés dans ce livre le seront depuis un shell sous GNU/Linux. Certaines devront donc être adaptées si vous êtes dans un autre environnemnet.
+**Remarque** : les commandes qui seront exécutés dans ce livre le seront depuis un shell sous GNU/Linux. Certaines devront donc être adaptées si vous êtes dans un autre environnement.
 
 include::12-factors.adoc[]
 

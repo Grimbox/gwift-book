@@ -14,29 +14,26 @@ L'idée du texte ci-dessous est de jeter les bases d'un bon développement, en s
 
 Ces idées ne s'appliquent pas uniquement à Django et à son cadre de travail, ni même au langage Python. Juste que ces deux bidules sont de bons candidats et que le cadre de travail est bien défini et suffisamment flexible.
 
-Django se présente comme un "Framework Web pour perfectionnistes ayant des deadlines" [https://www.djangoproject.com/].
-
-Django suit link:quelques principes[https://docs.djangoproject.com/en/dev/misc/design-philosophies/].
+Django se présente comme un "link:https://www.djangoproject.com/[Framework Web pour perfectionnistes ayant des deadlines]" et suit https://docs.djangoproject.com/en/dev/misc/design-philosophies/[ces quelques principes]:
 
  * Faible couplage et forte cohésion, pour que chaque composant ait son indépendance.
  * Moins de code, plus de fonctionnalités.
- * link:Don't repeat yourself[https://fr.wikipedia.org/wiki/Sec]: ne pas se répéter!
+ * https://fr.wikipedia.org/wiki/Ne_vous_r%C3%A9p%C3%A9tez_pas[Don't repeat yourself]: on ne se répète pas !
  * Rapidité du développement (après une petite courbe d'apprentissage un peu ardue au début ;-))
 
-Mis côte à côte, l'application de ces principes permet une meilleure stabilité du projet. 
+Mis côte à côte, l'application de ces principes permet une meilleure stabilité du projet à moyen et long terme. Tout pour plaire à n'importe quel directeur IT.
 
-Dans la première partie, on verra comment configurer l'environnement, comment installer Django de manière isolée et comment démarrer un nouveau projet. On verra comment gérer correctement les dépendances, les versions et comment applique un score sur note code.
-On verra aussique la configuration proposée par défaut par le framework n'est pas idéale pour la majorité des cas.
+*Dans la première partie*, on verra comment configurer l'environnement, comment installer Django de manière isolée et comment démarrer un nouveau projet. On verra comment gérer correctement les dépendances, les versions et comment appliquer et suivre un score sur note code. On verra aussi que la configuration proposée par défaut par le framework n'est pas idéale dans la majorité des cas.
 
 Pour cela, on présentera différents outils (mypy, flake8, black, ...), la rédaction de tests unitaires et d'intégration pour limiter les régressions, les règles de nomenclature et de contrôle du contenu, ainsi que les bonnes étapes à suivre pour arriver à un déploiement rapide et fonctionnel avec peu d'efforts.
 
-Dans la seconde partie, on détaillera précisément les étapes de déploiement, avec la description et la configuration de l'infrastructure, ainsi que des exemples concrets de déploiement sur deux distributions principales (Debian et CentOS), ainsi que l'utilisation de Docker et Docker-Compose. 
+*Dans la deuxième partie*, on détaillera précisément les étapes de déploiement, avec la description et la configuration de l'infrastructure, des exemples concrets de déploiement sur deux distributions principales (Debian et CentOS), ainsi que l'utilisation de Docker et Docker-Compose. 
 
 On abordera également la supervision et la mise à jour d'une application existante, en respectant les bonnes pratiques d'administration système. 
 
-Dans la troisième partie, on abordera les grands principes de modélisation, en suivant les lignes de conduites du cadre de travail. On abordera les concepts clés qui permettent à une application de rester maintenable, les formulaires et leurs validations, les migrations de données et l'administration.
+*Dans la troisième partie*, on abordera les grands principes de modélisation, en suivant les lignes de conduites du cadre de travail. On abordera les concepts clés qui permettent à une application de rester maintenable, les formulaires et leurs validations, les migrations de données et l'administration.
 
-Dans la quatrième partie, on mettra ces concepts en pratique en présentant le développement d'une "vraie" application: définition des tables, gestion des utilisateurs, ... et mise à disposition!
+*Dans la quatrième partie*, on mettra ces concepts en pratique en présentant le développement d'une "vraie" application: définition des tables, gestion des utilisateurs, ... et mise à disposition!
 
 Et tout ça à un seul et même endroit. Oui. :-)
 
