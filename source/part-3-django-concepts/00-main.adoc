@@ -17,6 +17,8 @@ En simplifiant, Django suit bien le modèle MVC, et toutes ces étapes sont lié
 
 include::models.adoc[]
 
+include::shell.adoc[]
+
 include::admin.adoc[]
 
 include::forms.adoc[]

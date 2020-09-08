@@ -13,9 +13,67 @@ Assez de blabla, on démarre !
 
 === Clés étrangères et relations
 
+. ForeignKey
+. ManyToManyField
+. OneToOneField
 
+Dans les examples ci-dessus, nous avons vu les relations multiples (1-N), représentées par des *ForeignKey* d'une classe A vers une classe B. Il existe également les champs de type *ManyToManyField*, afin de représenter une relation N-N. Les champs de type *OneToOneField*, pour représenter une relation 1-1.
+
+Dans notre modèle ci-dessus, nous n'avons jusqu'à présent eu besoin que des relations 1-N: la première entre les listes de souhaits et les souhaits; la seconde entre les souhaits et les parts.
+
+[source,python]
+----
+# wish/models.py
+
+class Wishlist(models.Model):
+    pass
+
+
+class Item(models.Model):
+    wishlist = models.ForeignKey(Wishlist)
+----
+
+Depuis le code, à partir de l'instance de la classe `Item`, on peut donc accéder à la liste en appelant la propriété `wishlist` de notre instance. *A contrario*, depuis une instance de type `Wishlist`, on peut accéder à tous les éléments liés grâce à `<nom de la propriété>_set`; ici `item_set`.
+
+Lorsque vous déclarez une relation 1-1, 1-N ou N-N entre deux classes, vous pouvez ajouter l'attribut `related_name` afin de nommer la relation inverse.
+
+[source,python]
+----
+# wish/models.py
+
+class Wishlist(models.Model):
+    pass
+
+
+class Item(models.Model):
+    wishlist = models.ForeignKey(Wishlist, related_name='items')
+----
+
+A partir de maintenant, on peut accéder à nos propriétés de la manière suivante:
+
+[source,python]
+----
+# python manage.py shell
+
+>>> from wish.models import Wishlist, Item
+>>> w = Wishlist('Liste de test', 'description')
+>>> w = Wishlist.create('Liste de test', 'description')
+>>> i = Item.create('Element de test', 'description', w)
+>>>
+>>> i.wishlist
+<Wishlist: Wishlist object>
+>>>
+>>> w.items.all()
+[<Item: Item object>]
+----
+
+Remarque: si, dans une classe A, plusieurs relations sont liées à une classe B, Django ne saura pas à quoi correspondra la relation inverse. Pour palier à ce problème et pour gagner en cohérence, on fixe alors une valeur à l'attribut `related_name`.
 
 === Querysets et managers
+
+* http://stackoverflow.com/questions/12681653/when-to-use-or-not-use-iterator-in-the-django-orm
+* https://docs.djangoproject.com/en/1.9/ref/models/querysets/#django.db.models.query.QuerySet.iterator
+* http://blog.etianen.com/blog/2013/06/08/django-querysets/
 
 L'ORM de Django (et donc, chacune des classes qui composent votre modèle) propose par défaut deux objets hyper importants: 
 
@@ -37,7 +95,13 @@ Wish.objects.filter(name__icontains="test").filter(name__icontains="too") <2>
 
 
 
-=== Propriétés Meta
+=== Metamodèle
+
+Quand on prend une classe (par exemple, `Wishlist` que l'on a défini ci-dessus), on voit qu'elle hérite par défaut de `models.Model`. On peut regarder les propriétés définies dans cette classe en analysant le fichier `lib\site-packages\django\models\base.py`. On y voit notamment que `models.Model` hérite de `ModelBase` au travers de https://pypi.python.org/pypi/six[six] pour la rétrocompatibilité vers Python 2.7.
+
+Cet héritage apporte notamment les fonctions `save()`, `clean()`, `delete()`, ... Bref, toutes les méthodes qui font qu'une instance est sait **comment** interagir avec la base de données. La base d'un https://en.wikipedia.org/wiki/Object-relational_mapping[ORM], en fait.
+
+D'autre part, chaque classe héritant de `models.Model` possède une propriété `objects`. Comme on l'a vu dans la section **Jouons un peu avec la console**, cette propriété permet d'accéder aux objects persistants dans la base de données, au travers d'un `ModelManager`.
 
 En plus de cela, il faut bien tenir compte des propriétés `Meta` de la classe: si elle contient déjà un ordre par défaut, celui-ci sera pris en compte pour l'ensemble des requêtes effectuées sur cette classe.
 
@@ -59,12 +123,52 @@ Les propriétés de la classe Meta les plus utiles sont les suivates:
 
 === Migrations
 
-Les migrations (comprendre les "migrations du schéma de base de données") sont intimement liées à la représentation d'un contexte fonctionnel. L'ajout d'une nouvelle information, d'un nouveau champ ou d'une nouvelle fonction peut s'accompagner de tables de données à mettre à jour ou de champs à étendre.
+Les migrations (comprendre les "_migrations du schéma de base de données_") sont intimement liées à la représentation d'un contexte fonctionnel. L'ajout d'une nouvelle information, d'un nouveau champ ou d'une nouvelle fonction peut s'accompagner de tables de données à mettre à jour ou de champs à étendre.
 
-Toujours dans une optique de centralisation, les migrations sont directement embarquées au niveau du code. Le développeur s'occupe de créer les migrations en fonction des actions à entreprendre; ces migrations peuvent être retravaillées, _squashées_, ... et feront partie intégrante du processus de mise à jour de l'application.
+Toujours dans une optique de centralisation, les migrations sont directement embarquées au niveau du code. Le développeur s'occupe de créer les migrations en fonction des actions à entreprendre; ces migrations peuvent être retravaillées, _squashées_, ... et feront partie intégrante du processus de mise à jour de l'application. 
+
+A noter que les migrations n'appliqueront de modifications que si le schéma est impacté. Ajouter une propriété `related_name` sur une ForeignKey n'engendrera aucune nouvelle action de migration, puisque ce type d'action ne s'applique que sur l'ORM, et pas directement sur la base de données: au niveau des tables, rien ne change. Seul le code et le modèle sont impactés.
 
 === Shell
 
 
 === Les validateurs
 
+
+=== A retenir
+
+==== Constructeurs
+
+Si vous décidez de définir un constructeur sur votre modèle, ne surchargez pas la méthode `__init__`: créez plutôt une méthode static de type `create()`, en y associant les paramètres obligatoires ou souhaités:
+
+[source,python]
+----
+class Wishlist(models.Model):
+
+    @staticmethod
+    def create(name, description):
+        w = Wishlist()
+        w.name = name
+        w.description = description
+        w.save()
+        return w
+
+class Item(models.Model):
+
+    @staticmethod
+    def create(name, description, wishlist):
+        i = Item()
+        i.name = name
+        i.description = description
+        i.wishlist = wishlist
+        i.save()
+        return i
+----
+
+Mieux encore: on pourrait passer par un `ModelManager` pour limiter le couplage; l'accès à une information stockée en base de données ne se ferait dès lors qu'au travers de cette instance et pas directement au travers du modèle. De cette manière, on limite le couplage des classes et on centralise l'accès.
+
+[source,python]
+----
+class ItemManager(...):
+    (de mémoire, je ne sais plus exactement :-))
+----

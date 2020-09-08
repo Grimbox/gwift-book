@@ -1,8 +1,12 @@
 == Templates
 
-Avant de commencer à interagir avec nos données au travers de listes, formulaires et IHM sophistiquées, quelques mots sur les templates: il s'agit en fait de *squelettes* de présentation, recevant en entrée un dictionnaire contenant des clés-valeurs et ayant pour but de les afficher dans le format que vous définirez. En intégrant un ensemble de *tags*, cela vous permettra de greffer les données reçues en entrée dans un patron prédéfini.
+Avant de commencer à interagir avec nos données au travers de listes, formulaires et d'interfaces sophistiquées, quelques mots sur les templates: il s'agit en fait de *squelettes* de présentation, recevant en entrée un dictionnaire contenant des clés-valeurs et ayant pour but de les afficher selon le format que vous définirez. 
 
-Une page HTML basique ressemble à ceci:
+En intégrant un ensemble de *tags*, cela vous permettra de greffer les données reçues en entrée dans un patron prédéfini.
+
+NOTE: (je ne sais plus ce que je voulais dire ici)
+
+Un squelette de page HTML basique ressemble à ceci:
 
 [source,html]
 ----
@@ -117,7 +121,7 @@ TEMPLATES = [
 
 === Builtins
 
-Django vient avec un ensemble de *tags*. On a vu la boucle `for` ci-dessus, mais il existe https://docs.djangoproject.com/fr/1.9/ref/templates/builtins/[beaucoup d'autres tags nativement présents]. Les principaux sont par exemple:
+Django vient avec un ensemble de *tags* ou *template tags*. On a vu la boucle `for` ci-dessus, mais il existe https://docs.djangoproject.com/fr/1.9/ref/templates/builtins/[beaucoup d'autres tags nativement présents]. Les principaux sont par exemple:
 
 * `{% if ... %} ... {% elif ... %} ... {% else %} ... {% endif %}`: permet de vérifier une condition et de n'afficher le contenu du bloc que si la condition est vérifiée.
 * Opérateurs de comparaisons: `<`, `>`, `==`, `in`, `not in`.
@@ -134,7 +138,7 @@ from django.db import models
 from django.template.defaultfilters import urlize
 
 
-class Suggestion(moels.Model):
+class Suggestion(models.Model):
     """Représentation des suggestions.
     """
     subject = models.TextField(verbose_name="Sujet")
