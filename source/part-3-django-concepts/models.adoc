@@ -93,7 +93,9 @@ Wish.objects.filter(name__icontains="test").filter(name__icontains="too") <2>
 <1> Ca, c'est notre manager. 
 <2> Et là, on chaîne les requêtes pour composer une recherche sur tous les souhaits dont le nom contient (avec une casse insensible) la chaîne "test" et dont le nom contient la chaîne "too". 
 
-
+=== Aggregate vs. Annotate
+  
+https://docs.djangoproject.com/en/3.1/topics/db/aggregation/
 
 === Metamodèle
 
