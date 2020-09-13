@@ -164,6 +164,8 @@ class Wish(models.Model):
 ----
 <1> On définit un ordre par défaut, directement au niveau du modèle. Cela ne signifie pas qu'il ne sera pas possible de modifier cet ordre (la méthode `order_by` existe et peut être chaînée à n'importe quel queryset). D'où l'intérêt de tester ce type de comportement, dans la mesure où un `top 1` dans votre code pourrait être modifié simplement par cette petite information.
 
+Pour sélectionner un objet au pif : `return Category.objects.order_by("?").first()`
+
 Les propriétés de la classe Meta les plus utiles sont les suivates:
 
 * `ordering` pour spécifier un ordre de récupération spécifique.
