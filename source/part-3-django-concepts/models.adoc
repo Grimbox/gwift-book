@@ -134,6 +134,12 @@ L'opérateur inverse (_NOT_)
   
 Idem que ci-dessus : soit on utilise la méthode `exclude` sur le queryset, soit l'opérateur `~` sur un Q object;
   
+  
+Ajouter les sujets suivants : 
+  
+  . Prefetch
+  . select_related
+  
 === Aggregate vs. Annotate
   
 https://docs.djangoproject.com/en/3.1/topics/db/aggregation/
