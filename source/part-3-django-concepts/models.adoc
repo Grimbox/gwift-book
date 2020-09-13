@@ -70,6 +70,8 @@ A partir de maintenant, on peut accéder à nos propriétés de la manière suiv
 Remarque: si, dans une classe A, plusieurs relations sont liées à une classe B, Django ne saura pas à quoi correspondra la relation inverse. Pour palier à ce problème et pour gagner en cohérence, on fixe alors une valeur à l'attribut `related_name`.
 
 === Querysets et managers
+  
+  NOTE : faudra sortir les queryset du chapitre...
 
 * http://stackoverflow.com/questions/12681653/when-to-use-or-not-use-iterator-in-the-django-orm
 * https://docs.djangoproject.com/en/1.9/ref/models/querysets/#django.db.models.query.QuerySet.iterator
@@ -81,8 +83,28 @@ L'ORM de Django (et donc, chacune des classes qui composent votre modèle) propo
 * Les querysets, qui permettent de filtrer des ensembles ou sous-ensemble d'objets. Les querysets peuvent s'imbriquer, pour ajouter
 d'autres filtres à des filtres existants.
 
-Ces deux propriétés vont de paire; par défaut, chaque classe de votre modèle propose un attribut `objects`, qui correspond à un manager (ou un gestionnaire, si vous préférez). Ce gestionnaire constitue l'interface par laquelle vous accéderez à la base de données. Mais pour cela, vous aurez aussi besoin d'appliquer certains requêtes ou filtres. Et pour cela, vous aurez besoin des `querysets`, qui consistent en des ... ensembles de requêtes :-).
+Ces deux propriétés vont de paire; par défaut, chaque classe de votre modèle propose un attribut `objects`, qui correspond 
+  à un manager (ou un gestionnaire, si vous préférez). Ce gestionnaire constitue l'interface par laquelle vous accéderez à la base de données. Mais pour cela, vous aurez aussi besoin d'appliquer certains requêtes ou filtres. Et pour cela, vous aurez besoin des `querysets`, qui consistent en des ... ensembles de requêtes :-).
 
+Si on veut connaître la requête SQL sous-jacente à l'exécution du queryset, il suffit d'appeler la fonction str() sur la propriété `query`:
+  
+[source,python]
+----
+queryset = Wishlist.objects.all()
+  
+print(queryset.query)
+----
+  
+Conditions AND et OR sur un queryset
+  
+  Pour un `AND`, il suffit de chaîner les conditions. ** trouver un exemple ici ** :-)
+  
+  Mais en gros : bidule.objects.filter(condition1, condition2)
+  
+  Il existe deux autres options : combiner deux querysets avec l'opérateur `&` ou combiner des Q objects avec ce même opérateur.
+  
+Soit encore combiner des filtres:
+  
 [source,python]
 ----
 from core.models import Wish
@@ -92,7 +114,26 @@ Wish.objects.filter(name__icontains="test").filter(name__icontains="too") <2>
 ----
 <1> Ca, c'est notre manager. 
 <2> Et là, on chaîne les requêtes pour composer une recherche sur tous les souhaits dont le nom contient (avec une casse insensible) la chaîne "test" et dont le nom contient la chaîne "too". 
+  
+Pour un 'OR', on a deux options : 
+  
+  . Soit passer par deux querysets, typiuqment `queryset1 | queryset2`
+  . Soit passer par des `Q objects`, que l'on trouve dans le namespace `django.db.models`.
+  
+[source,python]
+----
+from django.db.models import Q
+  
+condition1 = Q(...)
+condition2 = Q(...)
+  
+bidule.objects.filter(condition1 | condition2)
+----
 
+L'opérateur inverse (_NOT_)
+  
+Idem que ci-dessus : soit on utilise la méthode `exclude` sur le queryset, soit l'opérateur `~` sur un Q object;
+  
 === Aggregate vs. Annotate
   
 https://docs.djangoproject.com/en/3.1/topics/db/aggregation/
