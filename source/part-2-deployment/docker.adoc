@@ -1,0 +1,18 @@
+(c/c Ced' - 2020-01-24)
+
+Ça y est, j'ai fait un test sur mon portable avec docker et cookiecutter pour django.
+
+D'abords, après avoir installer docker-compose et les dépendances sous debian, tu dois t'ajouter dans le groupe docker, sinon il faut être root pour utiliser docker.
+Ensuite, j'ai relancé mon pc car juste relancé un shell n'a pas suffit pour que je puisse utiliser docker avec mon compte.
+
+Bon après c'est facile, un petit virtualenv pour cookiecutter, suivit d'une installation du template django.
+Et puis j'ai suivi sans t https://cookiecutter-django.readthedocs.io/en/latest/developing-locally-docker.html
+
+Alors, il télécharge les images, fait un petit update, installe les dépendances de dev, install les requirement pip ...
+
+Du coup, ça prend vite de la place:
+image.png
+
+L'image de base python passe de 179 à 740 MB. Et là j'en ai pour presque 1,5 GB d'un coup.
+
+Mais par contre, j'ai un python 3.7 direct et postgres 10 sans rien faire ou presque.

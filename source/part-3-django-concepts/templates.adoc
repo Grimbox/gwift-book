@@ -232,4 +232,34 @@ def wishlists_list():
 ----
 
  
-    
+=== Contexts Processors
+  
+Un `context processor` permet d'ajouter des informations par défaut à un contexte (le dictionnaire qu'on passe de la vue au template).
+L'idée est d'ajouter une fonction à un module Python à notre projet, puis de le référencer parmi 
+  les CONTEXT_PROCESSORS de nos paramètres généraux. Cette fonction doit peupler un dictionnaire, et les clés de ce dictionnaire seront 
+  directement ajoutées à tout autre dictionnaire/contexte passé à une vue. Par exemple:
+
+(cf. https://stackoverflow.com/questions/60515797/default-context-for-all-pages-django[StackOverflow] - à retravailler)
+  
+[source,python]
+----
+from product.models import SubCategory, Category
+
+
+def add_variable_to_context(request):
+    return {
+        'subCategories': SubCategory.objects.order_by('id').all(),
+        'categories': Category.objects.order_by("id").all(),
+    }
+----
+  
+[source,python]
+----
+'OPTIONS': {
+    'context_processors': [
+        ....
+        'core.context_processors.add_variable_to_context',
+        ....
+    ],
+},
+----
