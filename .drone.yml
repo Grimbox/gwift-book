@@ -1,0 +1,14 @@
+pipeline:
+  build-pdf:
+    image: asciidoctor/docker-asciidoctor
+    commands:
+      - make pdf
+  release:
+    image: plugins/gitea-release
+    settings:
+      api_key:
+        from_secret: gitea_token
+      base_url: https://sources.grimbox.be
+      files: source/main.pdf
+    when:
+      event: tag

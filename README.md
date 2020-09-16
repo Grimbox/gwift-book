@@ -1,34 +1,14 @@
 # Installation
 
-Ce livre peut être compilé avec [Sphinx](...).
+[![Build Status](https://drone.grimbox.be/api/badges/fred/gwift-book/status.svg)](https://drone.grimbox.be/fred/gwift-book)
 
-Les lexers Pygments disponibles se trouvent sur cette page: http://pygments.org/docs/lexers/. Les principaux utilisés seront: 
-
- * `shell`
- * `python`
+Ce livre peut être compilé avec [AsciiDoctor](...).
 
 
 ## Dépendances
 
 ```bash
-apt install texlive-latex-base latexmk texlive-latex-extra texlive-xetex
-apt install plantuml ruby-asciidoctor-plantuml
-```
-
-## Sortie en PDF
-
-```bash
-pandoc -s --toc gwift.rst -o output.pdf --pdf-engine=xelatex
-```
-
-## Environnement
-
-```bash
-cd ~/
-python3 -m venv .venvs/gwift-book
-source .venvs/gwift-book/bin/activate
-pip install -r requirements/base.txt
-
+$ apt install plantuml ruby-asciidoctor-plantuml
 $ gem install asciidoctor-pdf --pre
 $ gem install rouge
 $ gem install asciidoctor-diagram
