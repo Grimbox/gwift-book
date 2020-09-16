@@ -13,5 +13,6 @@ steps:
         from_secret: gitea_token
       base_url: https://sources.grimbox.be
       files: source/main.pdf
+      title: gwift-book
     when:
       event: tag
