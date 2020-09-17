@@ -15,4 +15,4 @@ steps:
       files: source/main.pdf
       title: gwift-book
     when:
-      event: tag
+      event: [tag]
