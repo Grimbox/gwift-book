@@ -113,4 +113,6 @@ See https://mattsegal.dev/nginx-django-reverse-proxy-config.html
 * https://zestedesavoir.com/tutoriels/2213/deployer-une-application-django-en-production/
 * https://docs.djangoproject.com/fr/3.0/howto/deployment/[Déploiement].
 
+* Let's Encrypt !
+
 include::database.adoc[]
