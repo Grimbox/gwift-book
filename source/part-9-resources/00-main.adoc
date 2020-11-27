@@ -1,0 +1,11 @@
+= Ressources et bibliographie
+
+* https://simpleisbetterthancomplex.com/series/beginners-guide/1.11/[Simple Is Better Than Complex]
+* https://www.feldroy.com/collections/two-scoops-press/products/two-scoops-of-django-1-11[Two Scoops of Django 1.11]
+* https://www.feldroy.com/products/django-crash-course[Django Crash Course]
+* https://www.amazon.com/dp/B07BDGC57[Django Design Patterns and Best Practices] (Packt Publishing)
+* https://books.agiliq.com/en/latest/README.html[Books by Agiliq]
+
+include::code-snippets.adoc[]
+
+include::legacy.adoc[]

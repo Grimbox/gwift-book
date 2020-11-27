@@ -1,18 +1,31 @@
+<<<<<<< Updated upstream
 == 12 facteurs
+=======
+== Douze facteurs
+>>>>>>> Stashed changes
 
 Pour la méthode de travail et de développement, on va se baser sur les https://12factor.net/fr/[The Twelve-factor App] - ou plus simplement les *12 facteurs*. 
 
-L'idée derrière cette méthode consiste à pousser les concepts suivants (repris grossièrement de la https://12factor.net/fr/[page d'introduction] :
+L'idée derrière cette méthode, et indépendamment des langages de développement utilisés, consiste à suivre un ensemble de douze concepts , afin de:
 
+<<<<<<< Updated upstream
 . *Faciliter la mise en place de phases d'automatisation*; plus concrètement, de faciliter les mises à jour applicatives, simplifier la gestion de l'hôte, diminuer la divergence entre les différents environnements d'exécution et offrir la possibilité d'intégrer le projet dans un processus d'https://en.wikipedia.org/wiki/Continuous_integration[intégration continue]/link:https://en.wikipedia.org/wiki/Continuous_deployment[déploiement continu]
 . *Faciliter la mise à pied de nouveaux développeurs ou de personnes souhaitant rejoindre le projet*
 . *Minimiser les divergences entre les différents environnemens composant un projet*
 . *Augmenter l'agilité générale du projet*, en permettant une meilleure évolutivité architecturale et une meilleure mise à l'échelle - _Vous avez 5000 utilisateurs en plus? Ajoutez un serveur et on n'en parle plus ;-)_.
+=======
+. Faciliter la mise en place de phases d'automatisation; plus simplement, faciliter les mises à jour applicatives, simplifier la gestion de l'hôte, diminuer la divergence entre les différents environnements d'exécution, faciliter la maintenance et offrir la possibilité d'intégrer le projet dans un processus d'https://en.wikipedia.org/wiki/Continuous_integration[intégration continue]/link:https://en.wikipedia.org/wiki/Continuous_deployment[déploiement continu]
+. Faciliter la mise à pied de nouveaux développeurs ou de personnes rejoignant le projet. A l'inverse, faciliter également le départ d'autres personnes et la communication générale.
+. Définir des bonnes pratiques à chaque étape de la chaîne.
+. Réduire les frictions entre les équipes de développement et les équipes d'opération.
+. Augmenter l'agilité générale du projet, en permettant une meilleure évolutivité architecturale et une meilleure mise à l'échelle - _Vous avez 5000 utilisateurs en plus? Ajoutez un serveur et on n'en parle plus ;-)_.
+>>>>>>> Stashed changes
 
 En pratique, les idées qui se trouvent derrière les points ci-dessus permettront de monter facilement un nouvel environnement - qu'il soit sur la machine du petit nouveau dans l'équipe, sur un serveur Azure/Heroku/Digital Ocean ou votre nouveau Raspberry Pi Zéro caché à la cave. 
 
 Pour reprendre de manière très brute les différentes idées derrière cette méthode, on a: 
 
+<<<<<<< Updated upstream
 . *Une base de code unique, suivie par un système de contrôle de versions*. Chaque déploiement de l'application se basera sur cette source, afin de minimiser les différences que l'on pourrait trouver entre deux environnements d'un même projet. On utilisera un dépôt Git - Github, Gitlab, Gitea, ... Au choix.
 
 . *Déclarez explicitement les dépendances nécessaires au projet, et les isoler du reste du système lors de leur installation*. L'idée est que chaque installation ou configuration se fasse toujours de la même manière, et puisse être répétée quel que soit l'environnement cible. Cela permet également d'éviter que l'application n'utilise une dépendance qui soit déjà installée sur un des sytèmes de développement, et qu'elle soit difficile à répercuter sur un autre environnement. Dans notre cas, cela pourra être fait au travers de https://pypi.org/project/pip/[pip - Package Installer for Python]. Dans tous les cas, chaque application doit disposer d'un environnement sain, qui lui est assigné, et vu le peu de ressources que cela coûte, il ne faut pas s'en priver.
@@ -36,3 +49,30 @@ Pour reprendre de manière très brute les différentes idées derrière cette m
 . *Gérer les journeaux d'évènements comme des flux*. Une application ne doit jamais se soucier de l'endroit où ces évènements seront écrits, mais simplement de les envoyer sur la sortie `stdout`. De cette manière, qu'on soit en développement sur le poste d'un développeur avec une sortie console ou sur une machine de production avec un envoi vers une instance https://www.graylog.org/[Greylog], le routage des journaux sera réalisé en fonction de sa nécessité et de sa criticité.
 
 . *Isoler les tâches administratives du reste de l'application*. Evitez qu'une migration puisse être démarrée depuis une URL de l'application, ou qu'un envoi massif de notifications ne soit accessible pour n'importe quel utilisateur: les tâches administratives ne doivent être accessibles qu'à un administrateur. Les applications 12facteurs favorisent les langages qui mettent un environnement REPL (pour _Read_, _Eval_, _Print_ et _Loop_) à disposition (au hasad: https://pythonprogramminglanguage.com/repl/[Python]).
+=======
+NOTE: pensez à retravailler la partie ci-dessous; la version anglophone semble plus compréhensible... :-/
+
+. Une base de code suivie, avec un système de contrôle de versions, d'où démarreront chaque déploiement.
+. Déclarez explicitement et isolez les dépendances
+. Stockez la configuration dans des variables d'environnement
+
+. Traitez les services externes comme des ressources attachées (*?*)
+. Séparez strictement les étapes d’assemblage et d’exécution
+. Exécutez l’application comme un ou plusieurs processus sans état
+. Exportez les services via des associations de ports (*?*)
+. Grossissez à l’aide du modèle de processus (*?*)
+. Maximisez la robustesse et la disponibilité avec des démarrages rapides et des arrêts gracieux (la commande `kill -9` est donc à proscrire)
+. Gardez le développement, la validation et la production aussi proches l'un de l'autre que possible
+. Traitez les logs comme des flux d’évènements (*?*)
+. Lancez les processus d’administration et de maintenance comme des one-off-processes (*?*)
+
+.Concrètement
+|===
+|Concept|Concept |Outil |Description
+|1|Base de code suivie avec un système de contrôle de version| Git, Mercurial, SVN, ...|Chaque déploiement démarre à partir d'une base de code unique. Il n'y pas de dépôt "Prod", "Staging" ou "Dev". Il n'y en a qu'un et un seul.
+|2|Déclaration explicite et isolation des dépendances| Pyenv, environnements virtuels, RVM, ...|Afin de ne pas perturber les dépendances systèmes, chaque application doit disposer d'un environnement sain par défaut. 
+|3|Configuration dans l'environnement| Fichiers .ENV| Toute clé de configuration (nom du serveur de base de données, adresse d'un service Web externe, clé d'API pour l'interrogation d'une ressource, ...) sera définie directement au niveau de l'hôte - à aucun moment, on ne doit trouver un mot de passe en clair dans le dépôt source ou une valeur susceptible d'évoluer, écrite en dur dans le code.
+|4|Services externes = ressources locales| Fichiers .ENV| Chaque ressource doit pouvoir être interchangeable avec une autre, sans modification du code source. La solution consiste à passer toutes ces informations (nom du serveur et type de base de données, clé d'authentification, ...) directement via des variables d'environnement. 
+|5|Bien séparer les étapes de construction des étapes de mise à disposition| Capistrano, Gitea, un serveur d'artefacts, ...| L'idée est de pouvoir récupérer une version spécifique du code, sans que celle-ci ne puisse avoir été modifiée. Git permet bien de gérer des versions (au travers des tags), mais ces éléments peuvent sans doute être modifiés directement au travers de l'historique.
+|===
+>>>>>>> Stashed changes
