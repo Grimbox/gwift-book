@@ -1,48 +1,51 @@
 = Déploiement
 
-On va déjà parler de déploiement.
-Le serveur que django met à notre disposition _via_ la commande `runserver` est prévu uniquement pour le développement: en production, il est inutile de passer par du code Python pour charger des fichiers statiques (feuilles de style, fichiers JavaScript, images, ...).
-De même, la base de donnée doit être capable de supporter plusieurs utilisateurs et connexions simultanément: SQLite fonctionne très bien dès lors qu'on se limite à un seul utilisateur... Mais sur une application Web, il est plus que probable que vous rencontriez rapidement des erreurs de verrou parce qu'un autre processus a déjà pris la main pour écrire ses données.
-Il est donc plus que bénéfique de passer sur quelque chose de plus solide.
-
-Si vous avez suivi les étapes jusqu'ici, vous devriez disposer d'un espace de travail proprement configuré, d'un modèle relativement basique et d'une configuration avec une base de données type SQLite.
-En bref, vous avez quelque chose qui fonctionne, mais qui ressemble de très loin à ce dont vous aurez besoin au final.
-
 Il y a une raison très simple à aborder le déploiement dès maintenant: à trop attendre et à peaufiner son développement en local, on en oublie que sa finalité sera de se retrouver exposé sur un serveur.
 Il est du coup probable d'oublier une partie des désidérata, de zapper une fonctionnalité essentielle ou simplement de passer énormément de temps à adapter les sources pour qu'elles fonctionnent sur un environnement en particulier.
 
 Aborder le déploiement dès le début permet également de rédiger dès le début les procédures d'installation, de mises à jour et de sauvegardes.
 Déploier une nouvelle version sera aussi simple que de récupérer la dernière archive depuis le dépôt, la placer dans le bon répertoire, appliquer des actions spécifiques (et souvent identiques entre deux versions), puis redémarrer les services adéquats, et la procédure complète se résumera à quelques lignes d'un script bash.
 
+
+Le serveur que django met à notre disposition _via_ la commande `runserver` est extrêmement pratique, mais il est uniquement prévu pour la phase  développement: en production, il est inutile de passer par du code Python pour charger des fichiers statiques (feuilles de style, fichiers JavaScript, images, ...).
+De même, Django propose par défaut une base de données SQLite, qui fonctionne parfaitement dès lors que l'on connait ses limites et que l'on se limite à un utilisateur à la fois. En production, il est légitime que la base de donnée soit capable de supporter plusieurs utilisateurs et connexions simultanément... En restant avec les paramètres par défaut, il est plus que probable que vous rencontriez rapidement des erreurs de verrou parce qu'un autre processus a déjà pris la main pour écrire ses données.
+En bref, vous avez quelque chose qui fonctionne, mais qui ressemble de très loin à ce dont vous aurez besoin au final.
+
 Dans cette partie, nous aborderons les points suivants:
 
-* La définition de l'infrastructure nécessaire à notre application,
-* La configuration de l'hôte, qui hébergera l'application: dans une machine physique, virtuelle ou dans un container. Nous aborderons aussi les déploiements via Ansible et Salt.
-* Les différentes méthodes de supervision de l'application: comment analyser les fichiers de logs, comment intercepter correctement une erreur si elle se présente et comment remonter l'information.
-* Une partie sur la sécurité et la sécurisation de l'hôte.
+* Définir l'infrastructure nécessaire à notre application et configurer l'hôte qui hébergera l'application: dans une machine physique, virtuelle ou dans un container. Nous aborderons aussi les déploiements via Ansible et Salt.
+* Déployer notre code source
+* Configurer les outils nécessaires à la bonne exécution de ce code et de ses fonctionnalités: les différentes méthodes de supervision de l'application, comment analyser les fichiers de logs, comment intercepter correctement une erreur si elle se présente et comment remonter l'information.
+* Rendre notre application accessible depuis l'extérieur.
+
+== Infrastructure
 
 Si on schématise l'infrastructure et le chemin parcouru par une éventuelle requête, nous devrions arriver à quelque chose de synthéthique:
 
-* Au niveau de l'infrastructure,
-    . l'utilisateur fait une requête via son navigateur (Firefox ou Chrome)
-    . le navigateur envoie une requête http, sa version, un verbe (GET, POST, ...), un port et éventuellement du contenu
-    . le firewall du serveur (Debian GNU/Linux, CentOS, ...) vérifie si la requête peut être prise en compte
-    . la requête est transmise à l'application qui écoute sur le port (probablement 80 ou 443; et _a priori_ Nginx)
-    . elle est ensuite transmise par socket et est prise en compte par Gunicorn
-    . qui la transmet ensuite à l'un de ses _workers_ (= un processus Python)
-    . après exécution, une réponse est renvoyée à l'utilisateur.
+. l'utilisateur fait une requête via son navigateur (Firefox ou Chrome)
+. le navigateur envoie une requête http, sa version, un verbe (GET, POST, ...), un port et éventuellement du contenu
+. le firewall du serveur (Debian GNU/Linux, CentOS, ...) vérifie si la requête peut être prise en compte
+. la requête est transmise à l'application qui écoute sur le port (probablement 80 ou 443; et _a priori_ Nginx)
+. elle est ensuite transmise par socket et est prise en compte par Gunicorn
+. qui la transmet ensuite à l'un de ses _workers_ (= un processus Python)
+. après exécution, une réponse est renvoyée à l'utilisateur.
 
 image::images/diagrams/architecture.png[]
 
-* Au niveau logiciel (la partie mise en subrillance ci-dessus), la requête arrive dans les mains du processus Python, qui doit encore
-    . effectuer le routage des données,
-    . trouver la bonne fonction à exécuter,
-    . récupérer les données depuis la base de données,
-    . effectuer le rendu ou la conversion des données,
-    . et renvoyer une réponse à l'utilisateur.
+== Code source
+
+Au niveau logiciel (la partie mise en subrillance ci-dessus), la requête arrive dans les mains du processus Python, qui doit encore
+
+. effectuer le routage des données,
+. trouver la bonne fonction à exécuter,
+. récupérer les données depuis la base de données,
+. effectuer le rendu ou la conversion des données,
+. et renvoyer une réponse à l'utilisateur.
 
 Comme nous l'avons vu dans la première partie, Django est un framework complet, intégrant tous les mécanismes nécessaires à la bonne évolution d'une application.
 Il est possible de démarrer petit, et de suivre l'évolution des besoins en fonction de la charge estimée ou ressentie, d'ajouter un mécanisme de mise en cache, des logiciels de suivi, ...
+
+== Outils de supervision et de mise à disposition
 
 Pour une mise ne production, le standard _de facto_ est le suivant:
 
@@ -53,13 +56,15 @@ Pour une mise ne production, le standard _de facto_ est le suivant:
  * Celery et RabbitMQ pour l'exécution de tâches asynchrones
  * Redis / Memcache pour la mise à en cache (et pour les sessions ? A vérifier).
 
+== Méthode de déploiement
+
 Nous allons détailler ci-dessous trois méthodes de déploiement:
 
 * Sur une machine hôte, en embarquant tous les composants sur un même serveur. Ce ne sera pas idéal, puisqu'il ne sera pas possible de configurer un _load balancer_, de routeur plusieurs basées de données, mais ce sera le premier cas de figure.
 * Dans des containers, avec Docker-Compose.
 * Sur une *Plateforme en tant que Service* (ou plus simplement, *PaaS*), pour faire abstraction de toute la couche de configuration du serveur.
 
-== Sur une machine hôte
+=== Sur une machine hôte
 
 La première étape pour la configuration de notre hôte consiste à définir les utilisateurs et groupes de droits. Il est faut absolument éviter de faire tourner une application en tant qu'utilisateur *root*, car la moindre faille pourrait avoir des conséquences catastrophiques.
 
@@ -72,39 +77,21 @@ Une fois que ces utilisateurs seront configurés, nous pourrons passer à l'éta
 
 La machine hôte peut être louée chez Digital Ocean, Scaleway, OVH, Vultr, ... Il existe des dizaines d'hébergements typés VPS (**Virtual Private Server**). A vous de choisir celui qui vous convient footnote:[Personnellement, j'ai un petit faible pour Hetzner Cloud].
 
-include::centos+debian.adoc[]
+include::debian.adoc[]
 
-== Via Ansible & Salt
+include::ansible.adoc[]
 
+include::heroku.adoc[]
 
-== Sur Heroku
-
-
-== Docker-Compose
+include::docker.adoc[]
 
 
-=== Mise à jour
-
-Script de mise à jour.
-
-[source,bash]
-----
-su - <user>
-source ~/.venvs/<app>/bin/activate
-cd ~/webapps/<app>
-git fetch
-git checkout vX.Y.Z
-pip install -U requirements/prod.txt
-python manage.py migrate
-python manage.py collectstatic
-gunicorn reload -HUP
-----
 
 WARNING: le serveur de déploiement ne doit avoir qu'un accès en lecture au dépôt source.
 
 On peut aussi passer par fabric, ansible, chef ou puppet.
 
-=== Supervision
+== Supervision
 
 Qu'est-ce qu'on fait des logs après ? :-)
 
@@ -115,15 +102,15 @@ Qu'est-ce qu'on fait des logs après ? :-)
 
 Il existe également https://munin-monitoring.org[Munin], https://www.elastic.co[Logstash, ElasticSearch et Kibana (ELK-Stack)] ou https://www.fluentd.org[Fluentd].
 
-=== Autres outils
+== Autres outils
 
 Voir aussi devpi, circus, uswgi, statsd.
 
-include::infrastructure.adoc[]
-
-include::database.adoc[]
+See https://mattsegal.dev/nginx-django-reverse-proxy-config.html
 
 == Ressources
 
 * https://zestedesavoir.com/tutoriels/2213/deployer-une-application-django-en-production/
 * https://docs.djangoproject.com/fr/3.0/howto/deployment/[Déploiement].
+
+include::database.adoc[]

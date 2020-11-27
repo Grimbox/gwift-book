@@ -1,8 +1,8 @@
-=== Déploiement sur CentOS
+=== Déploiement sur Debian
 
 [source,bash]
 ----
-yum update
+apt update
 groupadd --system webapps <1>
 groupadd --system gunicorn_sockets <2>
 useradd --system --gid webapps --shell /bin/bash --home /home/gwift gwift <3>
@@ -13,7 +13,7 @@ chown gwift:webapps /home/gwift <5>
 <2> On crée un groupe pour les communications via sockets
 <3> On crée notre utilisateur applicatif; ses applications seront placées dans le répertoire `/home/gwift`
 <4> On crée le répertoire home/gwift
-<5> On pourrait sans doute fusioner les étapes 3, 4 et 5.
+<5> On donne les droits sur le répertoire /home/gwift
 
 
 ==== Installation des dépendances systèmes
@@ -26,11 +26,6 @@ Pour CentOS, vous avez donc deux possibilités :
 [source,bash]
 ----
 yum install python36 -y
-
-# CentOS 7 ne dispose que de la version 3.7 d'SQLite. On a besoin d'une version 3.8 au minimum:
-wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-devel-3.8.11-1.fc21.x86_64.rpm
-wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-3.8.11-1.fc21.x86_64.rpm
-sudo yum install sqlite-3.8.11-1.fc21.x86_64.rpm sqlite-devel-3.8.11-1.fc21.x86_64.rpm -y
 ----
 
 Ou passer par une installation alternative:
@@ -283,30 +278,24 @@ server {
 <2> Ce répertoire sera complété par la commande `collectstatic` que l'on verra plus tard. L'objectif est que les fichiers ne demandant aucune intelligence soit directement servis par Nginx. Cela évite d'avoir un processus Python (relativement lent) qui doive être instancié pour servir un simple fichier statique.
 <3> Afin d'éviter que Django ne reçoive uniquement des requêtes provenant de 127.0.0.1
 
+=== Mise à jour
 
+Script de mise à jour.
 
-=== Déploiement sur Debian
+[source,bash]
+----
+su - <user>
+source ~/.venvs/<app>/bin/activate
+cd ~/webapps/<app>
+git fetch
+git checkout vX.Y.Z
+pip install -U requirements/prod.txt
+python manage.py migrate
+python manage.py collectstatic
+gunicorn reload -HUP
+----
 
-==== Installation des dépendances systèmes
-
-==== Préparation de l'environnement utilisateur
-
-==== Configuration de l'application
-
-==== Création des répertoires de logs
-
-==== Création du répertoire pour le socket
-
-==== Gunicorn
-
-==== Supervision, keep-alive et autoreload
-
-==== Ouverture des ports
-
-==== Installation d'Nginx
-
-
-== Configuration des sauvegardes
+=== Configuration des sauvegardes
 
 Les sauvegardes ont été configurées avec borg: `yum install borgbackup`.
 
@@ -326,7 +315,7 @@ Et dans le fichier crontab :
 ----
 
 
-== Rotation des jounaux
+=== Rotation des jounaux
 
 [source,bash]
 ----
