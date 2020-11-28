@@ -8,21 +8,37 @@ Concrètement, on pourrait tout à fait se limiter à Notepad ou Notepad++. C'es
 * https://www.jetbrains.com/pycharm/[PyCharm]
 * https://www.vim.org/[Vim] avec les plugins https://github.com/davidhalter/jedi-vim[Jedi-Vim], https://github.com/preservim/nerdtree[nerdtree]
 
-=== Un terminal 
+image::images/environment/codium.png[]
+
+=== Un terminal
 
 Si vous êtes sous Windows, https://cmder.net/[cmder].
 Pour tout autre système, vous devriez disposer en natif de ce qu'il faut.
 
+image::images/environment/terminal.png[align="center"]
+
 === Un gestionnaire de base de données
 
-PHPMyAdmin ou PgAdmin. _A priori_, les deux sont disponibles pour tous les systèmes d'exploitation, et sont nativement supportés par Django. Pour SQLite, il existe https://sqlitebrowser.org/[SQLiteBrowser] qui fait très bien le boulot. On abordera les <<Bases de données,systèmes de gestion de base de données>>.
+Django gère plusieurs types de base de données.
+Essayez de conformer votre environnement de développement à l'environnement sur lequel l'application sera sensée tourner en production:
 
+* Pour *PostgreSQL*, il existe https://www.pgadmin.org/[pgAdmin]
+* Pour *MariaDB* ou *MySQL*, partez sur https://www.phpmyadmin.net/[PHPMyAdmin]
+* Pour *SQLite*, il existe https://sqlitebrowser.org/[SQLiteBrowser]
+PHPMyAdmin ou PgAdmin.
+
+_A priori_, ces trois types de bases de données sont disponibles pour tous les systèmes d'exploitation, et sont nativement supportés par Django.
 Pour tous les autres cas, le shell Django pourra largement suffire.
 
 === Un gestionnaire de mots de passe
 
-https://keepassxc.org/[KeepassXC]. On en aura besoin pour gé(né)rer des phrases secrètes pour nos applications.
+Nous en auront besoin pour gé(né)rer des phrases secrètes pour nos applications.
+Si vous n'en utilisez pas déjà un, partez sur https://keepassxc.org/[KeepassXC].
 
-=== Un système de gestion de versions 
+image::images/environment/keepass.png[align="center"]
+
+
+
+=== Un système de gestion de versions
 
 https://git-scm.com/[Git], pour développer rapidement des preuves de concept, switcher vers une nouvelle fonctionnalité à développer, un bogue à réparer ou une nouvelle release à proposer au téléchargement. Même en développant seul dans son coin, un système de gestion de versions reste indispensable.

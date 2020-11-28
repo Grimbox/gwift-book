@@ -12,21 +12,23 @@ Ce sera une bonne indication à prendre en considération pour nos dépendances,
 
 NOTE: en relisant, le passage ci-dessus n'est peut-être pas hyper clair... A refaire.
 
-Dans cette partie, on va parler de *méthode de travail*, avec comme objectif visé, d'éviter que l'application ne tourne que sur notre machine et que chaque déploiement ne soit une plaie à gérer. Chaque mise à jour doit se limiter à: 
+Dans cette partie, on va parler de *méthode de travail*, avec comme objectif visé, d'éviter que l'application ne tourne que sur notre machine et que chaque déploiement ne soit une plaie à gérer. Chaque mise à jour doit se limiter à:
 
-. démarrer un script, 
+. démarrer un script,
 . prévoir un rollback si cela plante
 . se préparer une tisane en regardant nos flux RSS (si cette technologie existe encore...).
 
 **Remarque** : les commandes qui seront exécutés dans ce livre le seront depuis un shell sous GNU/Linux. Certaines devront donc être adaptées si vous êtes dans un autre environnement.
 
-include::12-factors.adoc[]
+== Construire des applications maintenables
 
-include::maintainable-applications.adoc[]
+include::maintainable-applications/12-factors.adoc[]
 
-include::solid.adoc[]
+include::maintainable-applications/maintainable-applications.adoc[]
 
-include::environment.adoc[]
+include::maintainable-applications/solid.adoc[]
+
+include::environment/index.adoc[]
 
 include::venvs.adoc[]
 

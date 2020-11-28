@@ -1,4 +1,4 @@
-== SOLID 
+=== SOLID
 
 . S : SRP (Single Responsibility
 . O : Open closed
@@ -6,25 +6,25 @@
 . I : Interface Segregation
 . D : Dependency Inversion
 
-=== Single Responsibility Principle
+==== Single Responsibility Principle
 
 Le principe de responsabilité unique définit que chaque concept ou domaine d'activité ne s'occupe que d'une et d'une seule chose. En prenant l'exemple d'une méthode qui communique avec une base de données, ce ne sera pas à cette méthode à gérer l'inscription d'une exception à un emplacement quelconque. Cette action doit être prise en compte par une autre classe (ou un autre concept), qui s'occupera elle de définir l'emplacement où l'évènement sera enregistré (base de données, Graylog, fichier, ...).
 
 Cette manière d'organiser le code ajoute une couche d'abstraction (ie. "I don't care") sur les concepts, et centralise tout ce qui touche à type d'évènement à un et un seul endroit. Ceci permet également de centraliser la configuration pour ce type d'évènements, et augmenter la testabilité du code.
 
-=== Open Closed
+==== Open Closed
 
 Un des principes essentiels en programmation orientée objets est l'héritage de classes et la surcharge de méthodes: plutôt que de partir sur une série de comparaisons pour définir le comportement d'une instance, il est parfois préférable de définir une nouvelle sous-classe, qui surcharge une méthode bien précise. Pour l'exemple, on pourrait ainsi définir trois classes:
 
 *  Une classe `Customer`, pour laquelle la méthode `GetDiscount` ne renvoit rien;
-* Une classe `SilverCustomer`, pour laquelle la méthode revoit une réduction de 10%;  
+* Une classe `SilverCustomer`, pour laquelle la méthode revoit une réduction de 10%;
 * Une classe `GoldCustomer`, pour laquelle la même méthode renvoit une réduction de 20%.
 
 Si on rencontre un nouveau type de client, il suffit alors de créer une nouvelle sous-classe. Cela évite d'avoir à gérer un ensemble conséquent de conditions dans la méthode initiale, en fonction d'une autre variable (ici, le type de client).
 
 En anglais, dans le texte : "Putting in simple words the “Customer” class is now closed for any new modification but it’s open for extensions when new customer types are added to the project.". En résumé: on ferme la classe `Customer` à toute modification, mais on ouvre la possibilité de créer de nouvelles extensions en ajoutant de nouveaux types [héritant de `Customer`].
 
-=== Liskov Substitution
+==== Liskov Substitution
 
 Le principe de substitution fait qu'une classe B qui hérite d'une classe A doit se comporter de la même manière que cette dernière. Il n'est pas question que la classe B n'implémente pas certaines méthodes, alors que celles-ci sont disponibles pour A.
 
@@ -34,7 +34,7 @@ Le principe de substitution fait qu'une classe B qui hérite d'une classe A doit
 
 Ce principe s'applique à tout type de polymorphisme, et même aux langages de type *duck typing*: "when I see a bird that quacks like a duck, walks like a duck, has feathers and webbed feet and associates with ducks—I’m certainly going to assume that he is a duck" (Source: http://en.wikipedia.org/wiki/Duck_test[Wikipedia (as usual)]). Pour le cas émis ci-dessus, ce n'est donc pas parce qu'une classe a besoin **d'une méthode** définie dans une autre classe qu'elle doit forcément en hériter. Cela bousillerait le principe de substitution (et par la même occasion le *duck test*).
 
-=== Interface Segregation
+==== Interface Segregation
 
 Ce principe stipule qu'un client ne peut en aucun cas dépendre d'une méthode dont il n'a pas besoin. Plus simplement, plutôt que de dépendre d'une seule et même (grosse) interface présentant un ensemble conséquent de méthodes, il est proposé d'exploser cette interface en plusieurs (plus petites) interfaces. Ceci permet aux différents clients de n'utiliser qu'un sous-ensemble précis d'interfaces, répondant chacune à un besoin particulier.
 
@@ -45,7 +45,7 @@ Pour contrer ceci, on aurait alors une première interface permettant la lecture
 * A : lecture
 * B (héritant de A) : lecture (par A) et écriture.
 
-=== Dependency inversion
+==== Dependency inversion
 
 Dans une architecture conventionnelle, les composants de haut-niveau dépendant directement des composants de bas-niveau. Une manière très simple d'implémenter ceci est d'instancier un nouveau composant.  L'inversion de dépendances stipule que c'est le composant de haut-niveau qui possède la définition de l'interface dont il a besoin, et le composant de bas-niveau qui l'implémente.
 
@@ -58,7 +58,7 @@ Le composant de haut-niveau peut donc définir qu'il s'attend à avoir un `Publi
 
 L'injection de dépendances est un patron de programmation qui suit le principe d'inversion de dépendances.
 
-=== Sources
+==== Sources
 
 * http://www.codeproject.com/Articles/703634/SOLID-architecture-principles-using-simple-Csharp[Understanding SOLID principles on CodeProject]
 * http://en.wikipedia.org/wiki/Software_craftsmanship[Software Craftmanship]
