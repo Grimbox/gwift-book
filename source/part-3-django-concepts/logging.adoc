@@ -7,24 +7,35 @@ Si on veut propager les logs entre applications, il faut bien spécifier l'attri
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(SRC_DIR, 'log', 'log.txt'),
-        },
+            'formatter': "simple"
+        }
     },
     'loggers': {
-        'mv': {
-            'handlers': ['file'],
+        'connexys': {
+            'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
         },
-    },
+        'stp': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
 }
 ----
 
