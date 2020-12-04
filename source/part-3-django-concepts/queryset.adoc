@@ -1,0 +1,27 @@
+### Querysets & managers
+
+#### Jointures
+
+Pour appliquer une jointure sur un modèle, nous pouvons passer par les méthodes `select_related` et `prefetch_related`.
+Il faut cependant faire **très** attention au prefetch related, qui fonctionne en fait comme une grosse requête dans laquelle 
+nous trouvons un `IN (...)`. 
+Càd que Django va récupérer tous les objets demandés initialement par le queryset, pour ensuite prendre toutes les clés primaires, 
+pour finalement faire une deuxième requête et récupérer les relations externes. 
+
+Au final, si votre premier queryset est relativement grand (nous parlons de 1000 à 2000 éléments, en fonction du moteur de base de données),
+la seconde requête va planter et vous obtiendrez une exception de type `django.db.utils.OperationalError: too many SQL variables`.
+
+La solution consiste à passer par un itérateur: 
+
+1. Le queryset peut-être construit comme d'habitude
+2. Nous implémentons un itérateur sur les résultats du queryset, pour nous conformer aux limites du moteur de base de données
+
+[source,python]
+----
+informations = (
+  <MyObject>.objects.filter(<my_criteria>)
+  .select_related(<related_field>)
+  .prefetch_related(<related_field>)
+  .iterator(chunk_size=1000)
+)
+----
