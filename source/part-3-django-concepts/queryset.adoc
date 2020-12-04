@@ -11,10 +11,14 @@ pour finalement faire une deuxième requête et récupérer les relations extern
 Au final, si votre premier queryset est relativement grand (nous parlons de 1000 à 2000 éléments, en fonction du moteur de base de données),
 la seconde requête va planter et vous obtiendrez une exception de type `django.db.utils.OperationalError: too many SQL variables`.
 
-La solution consiste à passer par un itérateur: 
+Nous pourrions penser qu'utiliser un itérateur permettrait de combiner les deux, mais ce n'est pas le cas... 
 
-1. Le queryset peut-être construit comme d'habitude
-2. Nous implémentons un itérateur sur les résultats du queryset, pour nous conformer aux limites du moteur de base de données
+Comme l'indique la documentation:
+
+	Note that if you use iterator() to run the query, prefetch_related() calls will be ignored since these two optimizations do not make sense together.
+
+Ajouter un itérateur va en fait forcer le code à parcourir chaque élément de la liste, pour l'évaluer. 
+Il y aura donc (à nouveau) autant de requêtes qu'il y a d'éléments, ce que nous cherchons à éviter.
 
 [source,python]
 ----
