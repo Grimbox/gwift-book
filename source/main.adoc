@@ -2,38 +2,39 @@
 Cédric Declerfayt <jaguarondi27@gmail.com>; Fred Pauchet <fred@grimbox.be>
 :doctype: book
 :toc:
+:toclevels: 2
 :sectnums:
 :chapter-label: Chapitre
 :preface-title: Préface
 :source-highlighter: rouge
 :icons: font
 
-On ne va pas se mentir: il existe enormément de tutoriaux très bien réalisés sur "Comment réaliser une application Django" et autres "Déployer votre code en 2 minutes". On se disait juste que ces tutoriaux restaient relativement haut-niveau et se limitaient à un contexte donné. 
+Nous n'allons pas vous mentir: il existe enormément de tutoriaux très bien réalisés sur "_Comment réaliser une application Django_" et autres "_Déployer votre code en 2 minutes_". Nous nous disions juste que ces tutoriaux restaient relativement haut-niveaux et se limitaient à un contexte donné.
 
 L'idée du texte ci-dessous est de jeter les bases d'un bon développement, en survolant l'ensemble des outils permettant de suivre des lignes directrices reconnues, de maintenir une bonne qualité de code au travers des différentes étapes (du développement au déploiement) et de s'assurer du maintient correct de la base de code, en permettant à n'importe qui de reprendre le développement.
 
-Ces idées ne s'appliquent pas uniquement à Django et à son cadre de travail, ni même au langage Python. Juste que ces deux bidules sont de bons candidats et que le cadre de travail est bien défini et suffisamment flexible.
+Ces idées ne s'appliquent pas uniquement à Django et à son cadre de travail, ni même au langage Python. Juste que ces deux sujets sont de bons candidats et que le cadre de travail est bien défini et suffisamment flexible.
 
 Django se présente comme un "link:https://www.djangoproject.com/[Framework Web pour perfectionnistes ayant des deadlines]" et suit https://docs.djangoproject.com/en/dev/misc/design-philosophies/[ces quelques principes]:
 
- * Faible couplage et forte cohésion, pour que chaque composant ait son indépendance.
+ * Faible couplage et forte cohésion, pour que chaque composant dispose de son indépendance.
  * Moins de code, plus de fonctionnalités.
  * https://fr.wikipedia.org/wiki/Ne_vous_r%C3%A9p%C3%A9tez_pas[Don't repeat yourself]: on ne se répète pas !
  * Rapidité du développement (après une petite courbe d'apprentissage un peu ardue au début ;-))
 
 Mis côte à côte, l'application de ces principes permet une meilleure stabilité du projet à moyen et long terme. Tout pour plaire à n'importe quel directeur IT.
 
-*Dans la première partie*, on verra comment configurer l'environnement, comment installer Django de manière isolée et comment démarrer un nouveau projet. On verra comment gérer correctement les dépendances, les versions et comment appliquer et suivre un score sur note code. On verra aussi que la configuration proposée par défaut par le framework n'est pas idéale dans la majorité des cas.
+*Dans la première partie*, nous verrons comment configurer l'environnement, comment installer Django de manière isolée et comment démarrer un nouveau projet. Nous verrons comment gérer correctement les dépendances, les versions et comment appliquer et suivre un score de qualité de notre code. Nous verrons aussi que la configuration proposée par défaut par le framework n'est pas idéale dans la majorité des cas.
 
-Pour cela, on présentera différents outils (mypy, flake8, black, ...), la rédaction de tests unitaires et d'intégration pour limiter les régressions, les règles de nomenclature et de contrôle du contenu, ainsi que les bonnes étapes à suivre pour arriver à un déploiement rapide et fonctionnel avec peu d'efforts.
+Pour cela, nous présenterons différents outils, la rédaction de tests unitaires et d'intégration pour limiter les régressions, les règles de nomenclature et de contrôle du contenu, comment partir d'un squelette plus complet, ainsi que les bonnes étapes à suivre pour arriver à un déploiement rapide et fonctionnel avec peu d'efforts.
 
-*Dans la deuxième partie*, on détaillera précisément les étapes de déploiement, avec la description et la configuration de l'infrastructure, des exemples concrets de déploiement sur deux distributions principales (Debian et CentOS), ainsi que l'utilisation de Docker et Docker-Compose. 
+*Dans la deuxième partie*, nous détaillerons précisément les étapes de déploiement, avec la description et la configuration de l'infrastructure, des exemples concrets de mise à disposition sur deux distributions principales (Debian et CentOS), sur une _*Plateform as a Service*_, ainsi que l'utilisation de Docker et Docker-Compose.
 
-On abordera également la supervision et la mise à jour d'une application existante, en respectant les bonnes pratiques d'administration système. 
+Nous aborderons également la supervision et la mise à jour d'une application existante, en respectant les bonnes pratiques d'administration système.
 
-*Dans la troisième partie*, on abordera les grands principes de modélisation, en suivant les lignes de conduites du cadre de travail. On abordera les concepts clés qui permettent à une application de rester maintenable, les formulaires et leurs validations, les migrations de données et l'administration.
+*Dans la troisième partie*, nous aborderons les grands principes de modélisation, en suivant les lignes de conduites du cadre de travail. Nous aborderons les concepts clés qui permettent à une application de rester maintenable, les formulaires, leurs validations, comment gérer les données en entrée, les migrations de données et l'administration.
 
-*Dans la quatrième partie*, on mettra ces concepts en pratique en présentant le développement d'une "vraie" application: définition des tables, gestion des utilisateurs, ... et mise à disposition!
+*Dans la quatrième partie*, nous mettrons ces concepts en pratique en présentant le développement de deux "vraies" applications: définition des tables, gestion des utilisateurs, ... et mise à disposition!
 
 Et tout ça à un seul et même endroit. Oui. :-)
 
