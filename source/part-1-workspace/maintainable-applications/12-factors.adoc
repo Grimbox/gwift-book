@@ -1,45 +1,70 @@
 === 12 facteurs
 
-Pour la méthode de travail et de développement, on va se baser sur les https://12factor.net/fr/[The Twelve-factor App] - ou plus simplement les *12 facteurs*.
+Pour la méthode de travail et de développement, nous allons nous baser sur les https://12factor.net/fr/[The Twelve-factor App] - ou plus simplement les *12 facteurs*.
 
-L'idée derrière cette méthode, et indépendamment des langages de développement utilisés, consiste à suivre un ensemble de douze concepts , afin de:
+L'idée derrière cette méthode, et indépendamment des langages de développement utilisés, consiste à suivre un ensemble de douze concepts, afin de:
 
-. *Faciliter la mise en place de phases d'automatisation*; plus concrètement, de faciliter les mises à jour applicatives, simplifier la gestion de l'hôte, diminuer la divergence entre les différents environnements d'exécution et offrir la possibilité d'intégrer le projet dans un processus d'https://en.wikipedia.org/wiki/Continuous_integration[intégration continue]/link:https://en.wikipedia.org/wiki/Continuous_deployment[déploiement continu]
-. *Faciliter la mise à pied de nouveaux développeurs ou de personnes souhaitant rejoindre le projet*
-. *Minimiser les divergences entre les différents environnemens composant un projet*
+. *Faciliter la mise en place de phases d'automatisation*; plus concrètement, de faciliter les mises à jour applicatives, simplifier la gestion de l'hôte, diminuer la divergence entre les différents environnements d'exécution et offrir la possibilité d'intégrer le projet dans un processus d'https://en.wikipedia.org/wiki/Continuous_integration[intégration continue] ou link:https://en.wikipedia.org/wiki/Continuous_deployment[déploiement continu]
+. *Faciliter la mise à pied de nouveaux développeurs ou de personnes souhaitant rejoindre le projet*, dans la mesure où la mise à disposition d'un environnement sera grandement facilitée.
+. *Minimiser les divergences entre les différents environnemens sur lesquels un projet pourrait être déployé*
 . *Augmenter l'agilité générale du projet*, en permettant une meilleure évolutivité architecturale et une meilleure mise à l'échelle - _Vous avez 5000 utilisateurs en plus? Ajoutez un serveur et on n'en parle plus ;-)_.
 
-En pratique, les idées qui se trouvent derrière les points ci-dessus permettront de monter facilement un nouvel environnement - qu'il soit sur la machine du petit nouveau dans l'équipe, sur un serveur Azure/Heroku/Digital Ocean ou votre nouveau Raspberry Pi Zéro caché à la cave.
+En pratique, les points ci-dessus permettront de monter facilement un nouvel environnement - qu'il soit sur la machine du petit nouveau dans l'équipe, sur un serveur Azure/Heroku/Digital Ocean ou votre nouveau Raspberry Pi Zéro caché à la cave - et vous feront gagner un temps précieux.
 
-Pour reprendre de manière très brute les différentes idées derrière cette méthode, on a:
+Pour reprendre de manière très brute les différentes idées derrière cette méthode, nous avons:
 
-. *Une base de code unique, suivie par un système de contrôle de versions*. Chaque déploiement de l'application se basera sur cette source, afin de minimiser les différences que l'on pourrait trouver entre deux environnements d'un même projet. On utilisera un dépôt Git - Github, Gitlab, Gitea, ... Au choix.
+*#1 - Une base de code unique, suivie par un système de contrôle de versions*. Chaque déploiement de l'application se basera sur cette source, afin de minimiser les différences que l'on pourrait trouver entre deux environnements d'un même projet. On utilisera un dépôt Git - Github, Gitlab, Gitea, ... Au choix.
 
-. *Déclarez explicitement les dépendances nécessaires au projet, et les isoler du reste du système lors de leur installation*. L'idée est que chaque installation ou configuration se fasse toujours de la même manière, et puisse être répétée quel que soit l'environnement cible. Cela permet également d'éviter que l'application n'utilise une dépendance qui soit déjà installée sur un des sytèmes de développement, et qu'elle soit difficile à répercuter sur un autre environnement.
-Dans notre cas, cela pourra être fait au travers de https://pypi.org/project/pip/[pip - Package Installer for Python].
-Dans tous les cas, chaque application doit disposer d'un environnement sain, qui lui est assigné, et vu le peu de ressources que cela coûte, il ne faut pas s'en priver.
+image::images/diagrams/12-factors-1.png[align=center]
 
-. *Sauver la configuration directement au niveau de l'environnement*.
-On veut par exemple éviter d'avoir à recompiler/redéployer l'application parce que l'adresse du serveur de messagerie a été modifiée, ou parce qu'un protocole a changé en cours de route.
-Concrètement, toute information susceptible de modifier le comportement intrinsèque de l'application doit se trouver dans un fichier ou dans une variable d'environnement.
-En allant un pas plus loin, cela permettra de paramétrer facilement un container, simplement en modifiant une variable de configuration, qui spécifiera la base de données sur laquelle l'application devra se connecter.
-Toute clé de configuration (nom du serveur de base de données, adresse d'un service Web externe, clé d'API pour l'interrogation d'une ressource, ...) sera définie directement au niveau de l'hôte - à aucun moment, on ne doit trouver un mot de passe en clair dans le dépôt source ou une valeur susceptible d'évoluer, écrite en dur dans le code.
+*#2 - Déclarez explicitement les dépendances nécessaires au projet, et les isoler du reste du système lors de leur installation*. Chaque installation ou configuration doit toujours être faite de la même manière, et doit pouvoir être répétée quel que soit l'environnement cible.
 
-. *Traiter les ressources externes comme des ressources attachées*.
+Cela permet d'éviter que l'application n'utilise une dépendance qui soit déjà installée sur un des sytèmes de développement, et qu'elle soit difficile, voire impossible, à répercuter sur un autre environnement.
+Dans notre cas, cela pourra être fait au travers de https://pypi.org/project/pip/[PIP - Package Installer for Python] ou https://python-poetry.org/[Poetry].
+
+Mais dans tous les cas, chaque application doit disposer d'un environnement sain, qui lui est assigné, et vu le peu de ressources que cela coûte, il ne faut pas s'en priver.
+
+*#3 - Sauver la configuration directement au niveau de l'environnement*.
+Nous voulons éviter d'avoir à recompiler/redéployer l'application parce que:
+
+. l'adresse du serveur de messagerie a été modifiée,
+. un protocole a changé en cours de route
+. la base de données a été déplacée
+. ...
+
+En pratique, toute information susceptible de modifier un lien applicatif doit se trouver dans un fichier ou dans une variable d'environnement, et doit être facilement modifiable.
+En allant un pas plus loin, cela permettra de paramétrer facilement un container, en modifiant une variable de configuration qui spécifierait la base de données sur laquelle l'application devra se connecter.
+
+Toute clé de configuration (nom du serveur de base de données, adresse d'un service Web externe, clé d'API pour l'interrogation d'une ressource, ...) sera définie directement au niveau de l'hôte - à aucun moment, nous ne devons trouver un mot de passe en clair dans le dépôt source ou une valeur susceptible d'évoluer, écrite en dur dans le code.
+
+*#4 - Traiter les ressources externes comme des ressources attachées*.
 On parle de bases de données, de services de mise en cache, d'API externes, ...
-L'application doit également être capable d'effectuer des changements au niveau de ces ressources sans que le code intrinsèque ne soit modifié. On parle alors de *ressources attachées*, dont la présence est nécessaire au bon fonctionnement de l'application, mais pour lesquelles le *type* n'est pas obligatoirement défini.
-On veut par exemple "une base de données" et "une mémoire cache", et pas "une base MariaDB et une instance Memcached". De cette manière, les ressources peuvent être attachées et détachées d'un déploiement à la volée.
+L'application doit être capable d'effectuer des changements au niveau de ces ressources sans que son code ne soit modifié. On parle alors de *ressources attachées*, dont la présence est nécessaire au bon fonctionnement de l'application, mais pour lesquelles le *type* n'est pas obligatoirement défini.
+
+Nous voulons par exemple "une base de données" et "une mémoire cache", et pas "une base MariaDB et une instance Memcached". De cette manière, les ressources peuvent être attachées et détachées d'un déploiement à la volée.
+
 Si une base de données ne fonctionne pas correctement (problème matériel?), l'administrateur pourrait simplement restaurer un nouveau serveur à partir d'une précédente sauvegarde, et l'attacher à l'application sans que le code source ne soit modifié. une solution consiste à passer toutes ces informations (nom du serveur et type de base de données, clé d'authentification, ...) directement via des variables d'environnement.
 
-. *Séparer proprement les phases de construction, de mise à disposition et d'exécution*.
-La *construction* (_build_) convertit un code source en un ensemble de fichiers exécutables, associé à une version et à une transaction dans le système de gestion de sources.
-La *mise à disposition* (_release_) associe cet ensemble à une configuration prête à être exécutée, tandis que la phase d'*exécution* (_run_) démarre les processus nécessaires au bon fonctionnement de l'application. On doit pouvoir se baser sur les _releases_ de Gitea, sur un serveur d'artefacts ou sur https://fr.wikipedia.org/wiki/Capistrano_(logiciel)[Capistrano].
+*#5 - Séparer proprement les phases de construction, de mise à disposition et d'exécution*.
 
-. *Les processus d'exécution ne doivent rien connaître ou conserver de l'état de l'application*.
-On suppose donc que toute information stockée en mémoire ou sur disque n'altérera pas le comportement futur de l'application, par exemple après un redémarrage non souhaité.
-Si une réinitialisation devait être nécessaire, l'application ne devra pas compter sur la présence d'une information au niveau du système.
+. La *construction* (_build_) convertit un code source en un ensemble de fichiers exécutables, associé à une version et à une transaction dans le système de gestion de sources.
+. La *mise à disposition* (_release_) associe cet ensemble à une configuration prête à être exécutée,
+. tandis que la phase d'*exécution* (_run_) démarre les processus nécessaires au bon fonctionnement de l'application.
 
-. *Autoriser la liaison d'un port de l'application à un port du système hôte*. Les applications 12-factors sont auto-contenues et peuvent fonctionner en autonomie totale. L'idée ici est qu'elles puissent être joignables grâce à un mécanisme de pont, où l'hôte effectue la redirection vers l'un des ports ouverts par l'application, typiquement, en HTTP ou via un autre protocole.
+Parmi les solutions possibles, nous pourrions nous pourrions nous baser sur les _releases_ de Gitea, sur un serveur d'artefacts ou sur https://fr.wikipedia.org/wiki/Capistrano_(logiciel)[Capistrano].
+
+*#6 - Les processus d'exécution ne doivent rien connaître ou conserver de l'état de l'application*.
+
+Toute information stockée en mémoire ou sur disque ne doit pas altérer le comportement futur de l'application, par exemple après un redémarrage non souhaité.
+
+Pratiquement, si l'application devait rencontrer un problème, nous pourrions la redémarrer sur un autre serveur. Toute information qui aurait été stockée durant l'exécution de l'application sur le premier hôte serait donc perdue.
+Si une réinitialisation devait être nécessaire, l'application ne devra pas compter sur la présence d'une information au niveau du nouveau système.
+
+Il serait également difficile d'appliquer une mise à l'échelle de l'application si une donnée indispensable à son fonctionnement devait se trouver sur une seule machine où elle est exécutée.
+
+*#7 - Autoriser la liaison d'un port de l'application à un port du système hôte*. Les applications 12-factors sont auto-contenues et peuvent fonctionner en autonomie totale. L'idée est qu'elles puissent être joignables grâce à un mécanisme de ponts, où l'hôte effectue la redirection vers l'un des ports ouverts par l'application, typiquement, en HTTP ou via un autre protocole.
+
+image::images/diagrams/12-factors-7.png[align=center]
 
 . *Faites confiance aux processus systèmes pour l'exécution de l'application*. Comme décrit plus haut, l'application doit utiliser des processus _stateless_ (sans état). On peut donc facilement créer et utiliser des processus supplémentaires pour tenir plus facilement une lourde charge, ou dédier des processus particuliers pour certaines tâches: requêtes HTTP _via_ des processus Web; _long-running_ jobs pour des processys asynchrones, ...
 
