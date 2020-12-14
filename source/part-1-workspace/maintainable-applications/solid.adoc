@@ -8,37 +8,119 @@
 
 ==== Single Responsibility Principle
 
-Le principe de responsabilité unique définit que chaque concept ou domaine d'activité ne s'occupe que d'une et d'une seule chose. En prenant l'exemple d'une méthode qui communique avec une base de données, ce ne sera pas à cette méthode à gérer l'inscription d'une exception à un emplacement quelconque. Cette action doit être prise en compte par une autre classe (ou un autre concept), qui s'occupera elle de définir l'emplacement où l'évènement sera enregistré (base de données, Graylog, fichier, ...).
+Le principe de responsabilité unique définit que chaque concept ou domaine d'activité ne s'occupe que d'une et d'une seule chose. 
+En prenant l'exemple d'une méthode qui communique avec une base de données, ce ne sera pas à cette méthode à gérer l'inscription d'une exception à un emplacement quelconque. 
+Cette action doit être prise en compte par une autre classe (ou un autre concept), qui s'occupera elle de définir l'emplacement où l'évènement sera enregistré (dans une base de données, une instance Graylog, un fichier, ...).
 
-Cette manière d'organiser le code ajoute une couche d'abstraction (ie. "I don't care") sur les concepts, et centralise tout ce qui touche à type d'évènement à un et un seul endroit. Ceci permet également de centraliser la configuration pour ce type d'évènements, et augmenter la testabilité du code.
+Cette manière d'organiser le code ajoute une couche de flemmardise (ie. Une fonction ou une méthode doit pouvoir se dire "_I don't care_" et s'occuper uniquement de ses propres oignons) sur certains concepts. Ceci permet de centraliser la configuration d'un type d'évènement à un seul endroit, ce augmente la testabilité du code.
 
 ==== Open Closed
 
-Un des principes essentiels en programmation orientée objets est l'héritage de classes et la surcharge de méthodes: plutôt que de partir sur une série de comparaisons pour définir le comportement d'une instance, il est parfois préférable de définir une nouvelle sous-classe, qui surcharge une méthode bien précise. Pour l'exemple, on pourrait ainsi définir trois classes:
+Un des principes essentiels en programmation orientée objets concerne l'héritage de classes et la surcharge de méthodes: plutôt que de partir sur une série de comparaisons pour définir le comportement d'une instance, il est parfois préférable de définir une nouvelle sous-classe, qui surcharge une méthode bien précise. 
+Pour l'exemple, on pourrait ainsi définir trois classes:
 
-*  Une classe `Customer`, pour laquelle la méthode `GetDiscount` ne renvoit rien;
+* Une classe `Customer`, pour laquelle la méthode `GetDiscount` ne renvoit rien;
 * Une classe `SilverCustomer`, pour laquelle la méthode revoit une réduction de 10%;
 * Une classe `GoldCustomer`, pour laquelle la même méthode renvoit une réduction de 20%.
 
-Si on rencontre un nouveau type de client, il suffit alors de créer une nouvelle sous-classe. Cela évite d'avoir à gérer un ensemble conséquent de conditions dans la méthode initiale, en fonction d'une autre variable (ici, le type de client).
+Si nous rencontrons un nouveau type de client, il suffit de créer une nouvelle sous-classe. 
+Cela évite d'avoir à gérer un ensemble conséquent de conditions dans la méthode initiale, en fonction d'une autre variable (ici, le type de client).
 
-En anglais, dans le texte : "Putting in simple words the “Customer” class is now closed for any new modification but it’s open for extensions when new customer types are added to the project.". En résumé: on ferme la classe `Customer` à toute modification, mais on ouvre la possibilité de créer de nouvelles extensions en ajoutant de nouveaux types [héritant de `Customer`].
+Nous passerions ainsi de:
+
+[source,python]
+----
+class Customer():
+    def __init__(self, customer_type: str):
+        self.customer_type = customer_type
+
+
+def get_discount(customer: Customer) -> int:
+    if customer.customer_type == "Silver":
+        return 10
+    elif customer.customer_type == "Gold":
+        return 20
+    return 0
+
+
+>>> jack = Customer("Silver")
+>>> jack.get_discount()
+10
+----
+
+A ceci:
+
+[source,python]
+----
+class Customer():
+    def get_discount(self) -> int:
+        return 0
+
+    
+class SilverCustomer(Customer):
+    def get_discount(self) -> int:
+        return 10
+
+
+class GoldCustomer(Customer):
+    def get_discount(self) -> int:
+        return 20
+
+
+>>> jack = SilverCustomer()
+>>> jack.get_discount()
+10
+----
+
+En anglais, dans le texte : "Putting in simple words, the “Customer” class is now closed for any new modification but it’s open for extensions when new customer types are added to the project.". En résumé: nous fermons la classe `Customer` à toute modification, mais nous ouvrons la possibilité de créer de nouvelles extensions en ajoutant de nouveaux types [héritant de `Customer`].
+
+De cette manière, nous simplifions également la maintenance de la méthode `get_discount`, dans la mesure où elle dépend directement du type dans lequel elle est implémentée.
+
+Ce point sera très utile lorsque nous aborderons les https://docs.djangoproject.com/en/3.1/topics/db/models/#proxy-models[modèles proxy].
 
 ==== Liskov Substitution
 
-Le principe de substitution fait qu'une classe B qui hérite d'une classe A doit se comporter de la même manière que cette dernière. Il n'est pas question que la classe B n'implémente pas certaines méthodes, alors que celles-ci sont disponibles pour A.
+Le principe de substitution fait qu'une classe héritant d'une autre classe doit se comporter de la même manière que cette dernière. 
+Il n'est pas question que la sous-classe n'implémente pas certaines méthodes, alors que celles-ci sont disponibles sa classe parente.
 
 > [...] if S is a subtype of T, then objects of type T in a computer program may be replaced with objects of type S (i.e., objects of type S may be substituted for objects of type T), without altering any of the desirable properties of that program (correctness, task performed, etc.). (Source: http://en.wikipedia.org/wiki/Liskov_substitution_principle[Wikipédia]).
 
 > Let q(x) be a property provable about objects x of type T. Then q(y) should be provable for objects y of type S, where S is a subtype of T. (Source: http://en.wikipedia.org/wiki/Liskov_substitution_principle[Wikipédia aussi])
 
-Ce principe s'applique à tout type de polymorphisme, et même aux langages de type *duck typing*: "when I see a bird that quacks like a duck, walks like a duck, has feathers and webbed feet and associates with ducks—I’m certainly going to assume that he is a duck" (Source: http://en.wikipedia.org/wiki/Duck_test[Wikipedia (as usual)]). Pour le cas émis ci-dessus, ce n'est donc pas parce qu'une classe a besoin **d'une méthode** définie dans une autre classe qu'elle doit forcément en hériter. Cela bousillerait le principe de substitution (et par la même occasion le *duck test*).
+Ce n'est donc pas parce qu'une classe **a besoin d'une méthode définie dans une autre classe** qu'elle doit forcément en hériter. 
+Cela bousillerait le principe de substitution, dans la mesure où une instance de cette classe pourra toujours être considérée comme étant du type de son parent.
+
+Petit exemple pratique: si nous définissons une méthode `walk` et une méthode `eat` sur une classe `Duck`, et qu'une réflexion avancée (et sans doute un peu alcoolisée) nous dit que "Puisqu'un `Lion` marche aussi, faisons le hériter de notre classe `Canard`":
+
+[source,python]
+----
+class Duck():
+    def walk(self):
+        print("Kwak")
+
+    def eat(self, thing):
+        if thing in ("plant", "insect", "seed", "seaweed", "fish"):
+            return "Yummy!"
+        
+        raise IndigestionError("Arrrh")
+
+class Lion(Duck):
+    def walk(self):
+        print("Roaaar!")
+
+----
+
+UnNous vous laissons tester la structure ci-dessus en glissant une antilope dans la boite à goûter du lion, ce qui nous donnera quelques trucs bizarres (et un lion atteint de botulisme).
+
 
 ==== Interface Segregation
 
-Ce principe stipule qu'un client ne peut en aucun cas dépendre d'une méthode dont il n'a pas besoin. Plus simplement, plutôt que de dépendre d'une seule et même (grosse) interface présentant un ensemble conséquent de méthodes, il est proposé d'exploser cette interface en plusieurs (plus petites) interfaces. Ceci permet aux différents clients de n'utiliser qu'un sous-ensemble précis d'interfaces, répondant chacune à un besoin particulier.
+Ce principe stipule qu'un client ne peut en aucun cas dépendre d'une méthode dont il n'a pas besoin. 
+Plus simplement, plutôt que de dépendre d'une seule et même (grosse) interface présentant un ensemble conséquent de méthodes, il est proposé d'exploser cette interface en plusieurs (plus petites) interfaces. 
+Ceci permet aux différents consommateurs de n'utiliser qu'un sous-ensemble précis d'interfaces, répondant chacune à un besoin précis.
 
-L'exemple par défaut est d'avoir une interface permettant d'accéder à des éléments. Modifier cette interface pour permettre l'écriture impliquerait que toutes les applications ayant déjà accès à la première, obtiendraient (par défaut) un accès en écriture, ce qui n'est pas souhaité/souhaitable.
+Un exemple est d'avoir une interface permettant d'accéder à des éléments. 
+Modifier cette interface pour permettre l'écriture impliquerait que toutes les applications ayant déjà accès à la première, obtiendraient (par défaut) un accès en écriture, ce qui n'est pas souhaité/souhaitable.
 
 Pour contrer ceci, on aurait alors une première interface permettant la lecture, tandis qu'une deuxième (héritant de la première) permettrait l'écriture. On aurait alors le schéma suivant :
 
@@ -47,9 +129,11 @@ Pour contrer ceci, on aurait alors une première interface permettant la lecture
 
 ==== Dependency inversion
 
-Dans une architecture conventionnelle, les composants de haut-niveau dépendant directement des composants de bas-niveau. Une manière très simple d'implémenter ceci est d'instancier un nouveau composant.  L'inversion de dépendances stipule que c'est le composant de haut-niveau qui possède la définition de l'interface dont il a besoin, et le composant de bas-niveau qui l'implémente.
+Dans une architecture conventionnelle, les composants de haut-niveau dépendent directement des composants de bas-niveau. 
+L'inversion de dépendances stipule que c'est le composant de haut-niveau qui possède la définition de l'interface dont il a besoin, et le composant de bas-niveau qui l'implémente.
 
-Le composant de haut-niveau peut donc définir qu'il s'attend à avoir un `Publisher` pour publier du contenu vers un emplacement particulier. Plusieurs implémentation de cette interface peuvent alors être mise en place:
+Le composant de haut-niveau peut définir qu'il s'attend à avoir un `Publisher`, afin de publier du contenu vers un emplacement particulier. 
+Plusieurs implémentation de cette interface peuvent alors être mise en place:
 
  * Une publication par SSH
  * Une publication par FTP

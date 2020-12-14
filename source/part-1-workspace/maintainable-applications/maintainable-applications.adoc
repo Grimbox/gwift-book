@@ -16,7 +16,7 @@ Ces conseils sont valables pour n'importe quel langage.
  * *Gardez vos méthodes/fonctions courtes*. Pas plus de 15 lignes, en comptant les commentaires. Des exceptions sont possibles, mais dans une certaine mesure uniquement (pas plus de 6.9% de plus de 60 lignes; pas plus de 22.3% de plus de 30 lignes, au plus 43.7% de plus de 15 lignes et au moins 56.3% en dessous de 15 lignes). Oui, c'est dur à tenir, mais faisable.
  * *Conserver une complexité de McCabe en dessous de 5*, c'est-à-dire avec quatre branches au maximum. A nouveau, si une méthode présente une complexité cyclomatique de 15, la séparer en 3 fonctions avec une complexité de 5 conservera globalement le nombre 15, mais rendra le code de chacune de ces méthodes plus lisible, plus maintenable.
  * *N'écrivez votre code qu'une seule fois: évitez les duplications, copie, etc.*, c'est juste mal: imaginez qu'un bug soit découvert dans une fonction; il devra alors être corrigé dans toutes les fonctions qui auront été copiées/collées. C'est aussi une forme de régression.
- * *Conservez de petites interfaces*. Quatre paramètres, pas plus. Au besoin, refactorisez certains paramètres dans une classe, plus facile à tester.
+ * *Conservez de petites interfaces*. Quatre paramètres, pas plus. Au besoin, refactorisez certains paramètres dans une classe, qui sera plus facile à tester.
 
 ==== Au niveau des classes
 
