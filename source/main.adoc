@@ -24,15 +24,20 @@ Django se présente comme un "link:https://www.djangoproject.com/[Framework Web 
 
 Mis côte à côte, l'application de ces principes permet une meilleure stabilité du projet à moyen et long terme. Tout pour plaire à n'importe quel directeur IT.
 
-*Dans la première partie*, nous verrons comment configurer l'environnement, comment installer Django de manière isolée et comment démarrer un nouveau projet. Nous verrons comment gérer correctement les dépendances, les versions et comment appliquer et suivre un score de qualité de notre code. Nous verrons aussi que la configuration proposée par défaut par le framework n'est pas idéale dans la majorité des cas.
+*Dans la première partie*, nous verrons comment partir d'un environnement sain, comment le configurer correctement, comment installer Django de manière isolée et comment démarrer un nouveau projet. 
+Nous verrons rapidement comment gérer les dépendances, les versions et comment appliquer et suivre un score de qualité de notre code. 
+Nous verrons aussi que la configuration proposée par défaut par le framework n'est pas idéale dans la majorité des cas.
 
 Pour cela, nous présenterons différents outils, la rédaction de tests unitaires et d'intégration pour limiter les régressions, les règles de nomenclature et de contrôle du contenu, comment partir d'un squelette plus complet, ainsi que les bonnes étapes à suivre pour arriver à un déploiement rapide et fonctionnel avec peu d'efforts.
+
+A la fin de cette partie, vous disposerez d'un code propre et d'un projet fonctionnel (mais encore inutile, parce qu'encore vide).
 
 *Dans la deuxième partie*, nous détaillerons précisément les étapes de déploiement, avec la description et la configuration de l'infrastructure, des exemples concrets de mise à disposition sur deux distributions principales (Debian et CentOS), sur une _*Plateform as a Service*_, ainsi que l'utilisation de Docker et Docker-Compose.
 
 Nous aborderons également la supervision et la mise à jour d'une application existante, en respectant les bonnes pratiques d'administration système.
 
-*Dans la troisième partie*, nous aborderons les grands principes de modélisation, en suivant les lignes de conduites du cadre de travail. Nous aborderons les concepts clés qui permettent à une application de rester maintenable, les formulaires, leurs validations, comment gérer les données en entrée, les migrations de données et l'administration.
+*Dans la troisième partie*, nous aborderons les grands principes de modélisation, en suivant les lignes de conduites du cadre de travail. 
+Nous aborderons les concepts clés qui permettent à une application de rester maintenable, les formulaires, leurs validations, comment gérer les données en entrée, les migrations de données et l'administration.
 
 *Dans la quatrième partie*, nous mettrons ces concepts en pratique en présentant le développement de deux "vraies" applications: définition des tables, gestion des utilisateurs, ... et mise à disposition!
 
