@@ -13,18 +13,27 @@ En pratique, les points ci-dessus permettront de monter facilement un nouvel env
 
 Pour reprendre de manière très brute les différentes idées derrière cette méthode, nous avons:
 
-*#1 - Une base de code unique, suivie par un système de contrôle de versions*. Chaque déploiement de l'application se basera sur cette source, afin de minimiser les différences que l'on pourrait trouver entre deux environnements d'un même projet. On utilisera un dépôt Git - Github, Gitlab, Gitea, ... Au choix.
+*#1 - Une base de code unique, suivie par un système de contrôle de versions*. 
+
+Chaque déploiement de l'application se basera sur cette source, afin de minimiser les différences que l'on pourrait trouver entre deux environnements d'un même projet. On utilisera un dépôt Git - Github, Gitlab, Gitea, ... Au choix.
 
 image::images/diagrams/12-factors-1.png[align=center]
 
-*#2 - Déclarez explicitement les dépendances nécessaires au projet, et les isoler du reste du système lors de leur installation*. Chaque installation ou configuration doit toujours être faite de la même manière, et doit pouvoir être répétée quel que soit l'environnement cible.
+*#2 - Déclarez explicitement les dépendances nécessaires au projet, et les isoler du reste du système lors de leur installation* 
+
+Chaque installation ou configuration doit toujours être faite de la même manière, et doit pouvoir être répétée quel que soit l'environnement cible.
 
 Cela permet d'éviter que l'application n'utilise une dépendance qui soit déjà installée sur un des sytèmes de développement, et qu'elle soit difficile, voire impossible, à répercuter sur un autre environnement.
 Dans notre cas, cela pourra être fait au travers de https://pypi.org/project/pip/[PIP - Package Installer for Python] ou https://python-poetry.org/[Poetry].
 
 Mais dans tous les cas, chaque application doit disposer d'un environnement sain, qui lui est assigné, et vu le peu de ressources que cela coûte, il ne faut pas s'en priver.
 
-*#3 - Sauver la configuration directement au niveau de l'environnement*.
+Chaque dépendance pouvant être déclarée et épinglée dans un fichier, il suffira de créer un nouvel environment vierge, puis d'utiliser ce fichier comme paramètre pour installer les prérequis au bon fonctionnement de notre application et vérifier que cet environnement est bien reproductible. 
+
+WARNING: Il est important de bien "épingler" les versions liées aux dépendances de l'application. Cela peut éviter des effets de bord comme une nouvelle version d'une librairie dans laquelle un bug aurait pu avoir été introduit.footnote:[Au conditionnel du futur plus-que-parfait antérieur. Mais ça arrive. Et tout le temps au mauvais moment.]
+
+*#3 - Sauver la configuration directement au niveau de l'environnement*
+
 Nous voulons éviter d'avoir à recompiler/redéployer l'application parce que:
 
 . l'adresse du serveur de messagerie a été modifiée,
@@ -37,15 +46,16 @@ En allant un pas plus loin, cela permettra de paramétrer facilement un containe
 
 Toute clé de configuration (nom du serveur de base de données, adresse d'un service Web externe, clé d'API pour l'interrogation d'une ressource, ...) sera définie directement au niveau de l'hôte - à aucun moment, nous ne devons trouver un mot de passe en clair dans le dépôt source ou une valeur susceptible d'évoluer, écrite en dur dans le code.
 
-*#4 - Traiter les ressources externes comme des ressources attachées*.
-On parle de bases de données, de services de mise en cache, d'API externes, ...
-L'application doit être capable d'effectuer des changements au niveau de ces ressources sans que son code ne soit modifié. On parle alors de *ressources attachées*, dont la présence est nécessaire au bon fonctionnement de l'application, mais pour lesquelles le *type* n'est pas obligatoirement défini.
+*#4 - Traiter les ressources externes comme des ressources attachées*
+
+Nous parlons de bases de données, de services de mise en cache, d'API externes, ...
+L'application doit être capable d'effectuer des changements au niveau de ces ressources sans que son code ne soit modifié. Nous parlons alors de *ressources attachées*, dont la présence est nécessaire au bon fonctionnement de l'application, mais pour lesquelles le *type* n'est pas obligatoirement défini.
 
 Nous voulons par exemple "une base de données" et "une mémoire cache", et pas "une base MariaDB et une instance Memcached". De cette manière, les ressources peuvent être attachées et détachées d'un déploiement à la volée.
 
 Si une base de données ne fonctionne pas correctement (problème matériel?), l'administrateur pourrait simplement restaurer un nouveau serveur à partir d'une précédente sauvegarde, et l'attacher à l'application sans que le code source ne soit modifié. une solution consiste à passer toutes ces informations (nom du serveur et type de base de données, clé d'authentification, ...) directement via des variables d'environnement.
 
-*#5 - Séparer proprement les phases de construction, de mise à disposition et d'exécution*.
+*#5 - Séparer proprement les phases de construction, de mise à disposition et d'exécution*
 
 . La *construction* (_build_) convertit un code source en un ensemble de fichiers exécutables, associé à une version et à une transaction dans le système de gestion de sources.
 . La *mise à disposition* (_release_) associe cet ensemble à une configuration prête à être exécutée,
@@ -53,7 +63,7 @@ Si une base de données ne fonctionne pas correctement (problème matériel?), l
 
 Parmi les solutions possibles, nous pourrions nous pourrions nous baser sur les _releases_ de Gitea, sur un serveur d'artefacts ou sur https://fr.wikipedia.org/wiki/Capistrano_(logiciel)[Capistrano].
 
-*#6 - Les processus d'exécution ne doivent rien connaître ou conserver de l'état de l'application*.
+*#6 - Les processus d'exécution ne doivent rien connaître ou conserver de l'état de l'application*
 
 Toute information stockée en mémoire ou sur disque ne doit pas altérer le comportement futur de l'application, par exemple après un redémarrage non souhaité.
 
@@ -62,16 +72,43 @@ Si une réinitialisation devait être nécessaire, l'application ne devra pas co
 
 Il serait également difficile d'appliquer une mise à l'échelle de l'application si une donnée indispensable à son fonctionnement devait se trouver sur une seule machine où elle est exécutée.
 
-*#7 - Autoriser la liaison d'un port de l'application à un port du système hôte*. Les applications 12-factors sont auto-contenues et peuvent fonctionner en autonomie totale. L'idée est qu'elles puissent être joignables grâce à un mécanisme de ponts, où l'hôte effectue la redirection vers l'un des ports ouverts par l'application, typiquement, en HTTP ou via un autre protocole.
+*#7 - Autoriser la liaison d'un port de l'application à un port du système hôte*
+
+Les applications 12-factors sont auto-contenues et peuvent fonctionner en autonomie totale. 
+L'idée est qu'elles puissent être joignables grâce à un mécanisme de ponts, où l'hôte effectue la redirection vers l'un des ports ouverts par l'application, typiquement, en HTTP ou via un autre protocole.
 
 image::images/diagrams/12-factors-7.png[align=center]
 
-. *Faites confiance aux processus systèmes pour l'exécution de l'application*. Comme décrit plus haut, l'application doit utiliser des processus _stateless_ (sans état). On peut donc facilement créer et utiliser des processus supplémentaires pour tenir plus facilement une lourde charge, ou dédier des processus particuliers pour certaines tâches: requêtes HTTP _via_ des processus Web; _long-running_ jobs pour des processys asynchrones, ...
+*#8 - Faites confiance aux processus systèmes pour l'exécution de l'application*
 
-. *Améliorer la robustesse de l'application grâce à des arrêts élégants et à des démarrages rapides*. Par "arrêt élégant", on veut surtout éviter le `kill -9 <pid>` ou tout autre rechargement brutal du superviseur; de cette manière, on évite qu'une requête d'un utilisateur n'aboutisse sur un code d'erreur. Au contraire, les requêtes en cours doivent être terminées au mieux, tandis que le démarrage rapide de nouveaux processus limite les perturbations et améliore la balance du travail d'un processus en cours d'extinction vers des processus tout frais. L'intégration de ces mécanismes dès les premières étapes de développement limite les perturbations et facilite la prise en compte d'arrêts inopinés (problème matériel, redémarrage du système hôte, etc.).
+Comme décrit plus haut, l'application doit utiliser des processus _stateless_ (sans état). 
+Nous pouvons créer et utiliser des processus supplémentaires pour tenir plus facilement une lourde charge, ou dédier des processus particuliers pour certaines tâches: requêtes HTTP _via_ des processus Web; _long-running_ jobs pour des processus asynchrones, ... 
+Si cela existe au niveau du système, ne vous fatiguez pas: utilisez le.
 
-. *Conserver les différents environnements aussi similaires que possible, et limiter les divergences entre un environnement de développement et de production*. L'exemple donné est un développeur qui utilise macOS, NGinx et SQLite, tandis que l'environnement de production tourne sur une CentOS avec Apache2 et PostgreSQL. L'idée derrière ce concept limite les divergences entre environnements, facilite les déploiements et limite la casse et la découverte de modules non compatibles dès les premières phases de développement.
+*#9 - Améliorer la robustesse de l'application grâce à des arrêts élégants et à des démarrages rapides*
 
-. *Gérer les journeaux d'évènements comme des flux*. Une application ne doit jamais se soucier de l'endroit où ces évènements seront écrits, mais simplement de les envoyer sur la sortie `stdout`. De cette manière, qu'on soit en développement sur le poste d'un développeur avec une sortie console ou sur une machine de production avec un envoi vers une instance https://www.graylog.org/[Greylog], le routage des journaux sera réalisé en fonction de sa nécessité et de sa criticité.
+Par "arrêt élégant", nous voulons surtout éviter le `kill -9 <pid>` ou tout autre arrêt brutal d'un processus qui nécessiterait une intervention urgente du superviseur.
+De cette manière, les requêtes en cours pourront se terminer au mieux, tandis que le démarrage rapide de nouveaux processus améliorera la balance d'un processus en cours d'extinction vers des processus tout frais. 
 
-. *Isoler les tâches administratives du reste de l'application*. Evitez qu'une migration puisse être démarrée depuis une URL de l'application, ou qu'un envoi massif de notifications ne soit accessible pour n'importe quel utilisateur: les tâches administratives ne doivent être accessibles qu'à un administrateur. Les applications 12facteurs favorisent les langages qui mettent un environnement REPL (pour _Read_, _Eval_, _Print_ et _Loop_) à disposition (au hasad: https://pythonprogramminglanguage.com/repl/[Python]).
+L'intégration de ces mécanismes dès les premières étapes de développement limitera les perturbations et facilitera la prise en compte d'arrêts inopinés (problème matériel, redémarrage du système hôte, etc.).
+
+*#10 - Conserver les différents environnements aussi similaires que possible, et limiter les divergences entre un environnement de développement et de production*
+
+L'exemple donné est un développeur qui utilise macOS, NGinx et SQLite, tandis que l'environnement de production tourne sur une CentOS avec Apache2 et PostgreSQL. 
+L'idée derrière ce concept limite les divergences entre environnements, facilite les déploiements et limite la casse et la découverte de modules non compatibles dès les premières phases de développement.
+
+Pour vous donner un exemple tout bête, SQLite utilise un https://www.sqlite.org/datatype3.html[mécanisme de stockage dynamique], associée à la valeur plutôt qu'au schéma, _via_ un système d'affinités. Un autre moteur de base de données définira un schéma statique et rigide, où la valeur sera déterminée par son contenant.
+Un champ `URLField` proposé par Django a une longeur maximale par défaut de https://docs.djangoproject.com/en/3.1/ref/forms/fields/#django.forms.URLField[200 caractères].
+Si vous faites vos développements sous SQLite et que vous rencontrez une URL de plus de 200 caractères, votre développement sera passera parfaitement bien, mais plantera en production (ou en _staging_, si vous faites les choses un peu mieux) parce que les données seront tronquées...
+
+Conserver des environements similaires limite ce genre de désagréments.
+
+*#11 - Gérer les journeaux d'évènements comme des flux*
+
+Une application ne doit jamais se soucier de l'endroit où ses évènements seront écrits, mais simplement de les envoyer sur la sortie `stdout`. 
+De cette manière, que nous soyons en développement sur le poste d'un développeur avec une sortie console ou sur une machine de production avec un envoi vers une instance https://www.graylog.org/[Greylog] ou https://sentry.io/welcome/[Sentry], le routage des journaux sera réalisé en fonction de sa nécessité et de sa criticité, et non pas parce que le développeur l'a spécifié en dur dans son code.
+
+*#12 - Isoler les tâches administratives du reste de l'application*
+
+Evitez qu'une migration ne puisse être démarrée depuis une URL de l'application, ou qu'un envoi massif de notifications ne soit accessible pour n'importe quel utilisateur: les tâches administratives ne doivent être accessibles qu'à un administrateur. 
+Les applications 12facteurs favorisent les langages qui mettent un environnement REPL (pour _Read_, _Eval_, _Print_ et _Loop_) à disposition (au hasard: https://pythonprogramminglanguage.com/repl/[Python] ou https://kotlinlang.org/[Kotlin]), ce qui facilite les étapes de maintenance.
