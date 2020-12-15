@@ -3,48 +3,227 @@
 
 === Travailler en isolation
 
-Nous allons aborder la gestion et l'isolation des dépendances. Même dans le cas de petits projets, il est déconseillé de s'en passer. Cela évite les déploiements effectués à l'arrache à grand renfort de `sudo` et d'installation globale de dépendances.
-
+Nous allons aborder la gestion et l'isolation des dépendances. 
 Cette section est aussi utile pour une personne travaillant seule, que pour transmettre les connaissances à un nouveau membre de l'équipe ou pour déployer l'application elle-même.
 
-Cette pratique est cependant fortement déconseillée pour plusieurs raisons:
+Il en était déjà question au deuxième point des 12 facteurs: même dans le cas de petits projets, il est déconseillé de s'en passer. 
+Cela évite les déploiements effectués à l'arrache à grand renfort de `sudo` et d'installation globale de dépendances, pouvant potentiellement occasioner des conflits entre les applications déployées:
 
 . Il est tout à fait envisagable que deux applications différentes soient déployées sur un même hôte, et nécessitent chacune deux versions différentes d'une même dépendance.
-. Pour la reproductibilité d'un environnement spécifique. Cela évite notamment les réponses type "Ca juste marche chez moi", puisque la construction d'un nouvel environnement fait partie intégrante du processus de construction et de la documentation du projet; grace à elle, on a la possibilité de construire un environnement sain et d'appliquer des dépendances identiques, quelle que soit la machine hôte.
+. Pour la reproductibilité d'un environnement spécifique, cela évite notamment les réponses type "Ca juste marche chez moi", puisque la construction d'un nouvel environnement fait partie intégrante du processus de construction et de la documentation du projet; grâce à elle, nous avons la possibilité de construire un environnement sain et d'appliquer des dépendances identiques, quelle que soit la machine hôte.
 
 image::images/it-works-on-my-machine.jpg[]
 
+
+Dans la suite de ce chapitre, nous allons considérer deux projets différents: 
+
+. Gwift, une application permettant de gérer des listes de souhaits
+. Khana, une application de suivi d'apprentissage pour des élèves ou étudiants.
+
+==== Environnement virtuel
+
 Depuis la version 3.5 de Python, le module `venv` est https://docs.python.org/3/library/venv.html[la manière recommandée] pour créer un environnement virtuel.
 
-Il existe plusieurs autres modules permettant d'arriver au même résultat, avec quelques avantages et inconvénients pour chacun d'entre eux.
+NOTE: Il existe plusieurs autres modules permettant d'arriver au même résultat, avec quelques avantages et inconvénients pour chacun d'entre eux. Le plus prometteur d'entre eux est https://python-poetry.org/[Poetry], qui dispose d'une interface en ligne de commande plus propre et plus moderne que ce que PIP propose.
 
-NOTE: parler ici de poetry, pip, pipenv et rebondir sur le point 2 des 12 facteurs.
+Pour créer un nouvel environnement, vous aurez donc besoin:
 
-Comme on l'a vu ci-dessus, `django-admin` permet de créer un nouveau projet. On fait ici une distinction entre un **projet** et une **application**:
+. D'une installation de Python - https://www.python.org/
+. D'un terminal - voir le point <<../environment/_index.adoc#un-terminal,Un terminal>>
 
- * **Projet**: ensemble des applications, paramètres, pages HTML, middlwares, dépendances, etc., qui font que votre code fait ce qu'il est sensé faire.
- * **Application**: *contexte* éventuellement indépendant, permettant d'effectuer une partie isolée de ce que l'on veut faire.
 
-Pour `gwift`, on va notamment avoir
+NOTE: J'ai pour habitude de conserver mes projets dans un répertoire `~/Sources/` et mes environnements virtuels dans un répertoire `~/.venvs/`.
+Cette séparation évite que l'environnement virtuel ne se trouve dans le même répertoire que les sources, ou ne soit accidentellement envoyé vers le système de gestion de versions.
+Dans la suite de ce chapitre, je considérerai ces mêmes répertoires, mais n'hésitez pas à les modifier.
+
+Pur créer notre répertoire de travail et notre environnement virtuel, exécutez les commandes suivantes:
+
+[source,bash]
+----
+mkdir ~/.venvs/
+python -m venv ~/.venvs/gwift-venv
+----
+
+Ceci aura pour effet de créer un nouveau répertoire (`~/.venvs/gwift-env/`), dans lequel vous trouverez une installation complète de l'interpréteur Python. 
+Votre environnement virtuel est prêt, il n'y a plus qu'à indiquer que nous souhaitons l'utiliser, grâce à l'une des commandes suivantes:
+
+[source,bash]
+----
+# GNU/Linux, macOS
+source ~/.venvs/gwift-venv/bin/activate
+
+# MS Windows, avec Cmder
+~/.venvs/gwift-venv/Scripts/activate.bat
+
+# Pour les deux
+(gwift-env) fred@aerys:~/Sources/.venvs/gwift-env$ <1>
+----
+<1> Le terminal signale que nous sommes bien dans l'environnement `gwift-env`.
+
+A présent que l'environnement est activé, tous les binaires de cet environnement prendront le pas sur les binaires du système. 
+De la même manière, une variable `PATH` propre est définie et utilisée, afin que les librairies Python y soient stockées. 
+C'est donc dans cet environnement virtuel que nous retrouverons le code source de Django, ainsi que des librairies externes pour Python une fois que nous les aurons installées.
+
+Pour sortir de l'environnement virtuel, exécutez la commande `deactivate`.
+Si vous pensez ne plus en avoir besoin, supprimer le dossier. 
+Si nécessaire, il suffira d'en créer un nouveau.
+
+Pour gérer des versions différentes d'une même librairie, il nous suffit de jongler avec autant d'environnements que nécessaires. Une application nécessite une version de Django inférieure à la 2.0 ? On crée un environnement, on l'active et on installe ce qu'il faut.
+
+Cette technique fonctionnera autant pour un poste de développement que sur les serveurs destinés à recevoir notre application.
+
+NOTE: Par la suite, nous considérerons que l'environnement virtuel est toujours activé, même si `gwift-env` n'est pas indiqué.
+
+
+==== Gestion des dépendances, installation de Django et création d'un nouveau projet
+
+Comme nous en avons déjà discuté, PIP est la solution que nous avons choisie pour la gestion de nos dépendances.
+Pour installer une nouvelle librairie, vous pouvez simplement passer par la commande `pip install <my_awesome_library>`. 
+Dans le cas de Django, et après avoir activé l'environnement, nous pouvons à présent y installer Django. 
+Comme expliqué ci-dessus, la librairie restera indépendante du reste du système, et ne polluera aucun autre projet. nous exécuterons donc la commande suivante:
+
+[source,bash]
+----
+$ source ~/.venvs/gwift-env/bin/activate # ou ~/.venvs/gwift-env/Scrips/activate.bat pour Windows.
+$ pip install django
+Collecting django
+    Downloading Django-3.1.4
+100% |################################|
+Installing collected packages: django
+Successfully installed django-3.1.4
+----
+
+IMPORTANT: Ici, la commande `pip install django` récupère la *dernière version connue disponible dans les dépôts https://pypi.org/* (sauf si vous en avez définis d'autres. Mais c'est hors sujet).
+Nous en avons déjà discuté: il est important de bien spécifier la version que vous souhaitez utiliser, sans quoi vous risquez de rencontrer des effets de bord.
+
+L'installation de Django a ajouté un nouvel exécutable: `django-admin`, que l'on peut utiliser pour créer notre nouvel espace de travail.
+Par la suite, nous utiliserons `manage.py`, qui constitue un *wrapper* autour de `django-admin`.
+
+Pour démarrer notre projet, nous lançons `django-admin startproject gwift`:
+
+[source,bash]
+----
+$ django-admin startproject gwift
+----
+
+Cette action a pour effet de créer un nouveau dossier `gwift`, dans lequel nous trouvons la structure suivante:
+
+[source,bash]
+----
+$ tree gwift
+gwift
+├── gwift
+|   |── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py
+----
+
+
+C'est dans ce répertoire que vont vivre tous les fichiers liés au projet. Le but est de faire en sorte que toutes les opérations (maintenance, déploiement, écriture, tests, ...) puissent se faire à partir d'un seul point d'entrée.
+
+L'utilité de ces fichiers est définie ci-dessous:
+
+ * `settings.py` contient tous les paramètres globaux à notre projet.
+ * `urls.py` contient les variables de routes, les adresses utilisées et les fonctions vers lesquelles elles pointent.
+ * `manage.py`, pour toutes les commandes de gestion.
+ * `asgi.py` contient la définition de l'interface https://en.wikipedia.org/wiki/Asynchronous_Server_Gateway_Interface[ASGI], le protocole pour la passerelle asynchrone entre votre application et le serveur Web.
+ * `wsgi.py` contient la définition de l'interface https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface[WSGI], qui permettra à votre serveur Web (Nginx, Apache, ...) de faire un pont vers votre projet.
+
+NOTE: Indiquer qu'il est possible d'avoir plusieurs structures de dossiers et qu'il n'y a pas de "magie" derrière toutes ces commandes.
+
+Tant que nous y sommes, nous pouvons ajouter un répertoire dans lequel nous stockerons les dépendances et un fichier README:
+
+[source,bash]
+----
+$ mkdir requirements
+$ touch README.md
+----
+
+
+[source,bash]
+----
+(gwift) fred@aerys:~/Sources$ tree gwift
+gwift
+├── gwift
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── requirements <1>
+├── README.md <2>
+└── manage.py
+----
+<1> Ici
+<2> Et là
+
+
+
+Comme nous venons d'ajouter une dépendance à notre projet, profitons-en pour créer un fichier reprenant tous les dépendances de notre projet. 
+Celles-ci sont normalement placées dans un fichier `requirements.txt`. 
+Dans un premier temps, ce fichier peut être placé directement à la racine du projet, mais on préférera rapidement le déplacer dans un sous-répertoire spécifique (`requirements`), afin de grouper les dépendances en fonction de leur environnement de destination:
+
+ * `base.txt`
+ * `dev.txt`
+ * `production.txt`
+
+Au début de chaque fichier, il suffit d'ajouter la ligne `-r base.txt`, puis de lancer l'installation grâce à un `pip install -r <nom du fichier>`. 
+De cette manière, il est tout à fait acceptable de n'installer `flake8` et `django-debug-toolbar` qu'en développement par exemple. 
+Dans l'immédiat, nous allons ajouter `django` dans une version strictement inférieure à la version 3.2 dans le fichier `requirements/base.txt`.
+
+[source,bash]
+----
+$ echo 'django<3.2' > requirements/base.txt
+$ echo '-r base.txt' > requirements/prod.txt
+$ echo '-r base.txt' > requirements/dev.txt
+----
+
+IMPORTANT: Prenez directement l'habitude de spécifier la version ou les versions compatibles: les librairies que vous utilisez comme dépendances évoluent, de la même manière que vos projets. 
+Pour être sûr et certain le code que vous avez écrit continue à fonctionner, spécifiez la version de chaque librairie de dépendances.
+Entre deux versions d'une même librairie, des fonctions sont cassées, certaines signatures sont modifiées, des comportements sont altérés, etc. Il suffit de parcourir les pages de _Changements incompatibles avec les anciennes versions dans Django_ https://docs.djangoproject.com/fr/3.1/releases/3.0/[(par exemple ici pour le passage de la 3.0 à la 3.1)] pour réaliser que certaines opérations ne sont pas anodines, et que sans filet de sécurité, c'est le mur assuré.
+Avec les mécanismes d'intégration continue et de tests unitaires, nous verrons plus loin comment se prémunir d'un changement inattendu.
+
+
+=== Django
+
+Comme nous l'avons vu ci-dessus, `django-admin` permet de créer un nouveau projet. 
+Nous faisons ici une distinction entre un **projet** et une **application**:
+
+ * *Un projet* représente l'ensemble des applications, paramètres, pages HTML, middlewares, dépendances, etc., qui font que votre code fait ce qu'il est sensé faire.
+ * *Une application* est un contexte d'exécution, idéalement autonome, d'une partie du projet.
+
+Pour `gwift`, nous aurons:
+
+.Django Projet vs Applications
+image:images/django/django-project-vs-applications.png[]
 
 . une première application pour la gestion des listes de souhaits et des éléments,
 . une deuxième application pour la gestion des utilisateurs,
 . voire une troisième application qui gérera les partages entre utilisateurs et listes.
 
-On voit bien ici le principe de **contexte**: l'application viendra avec son modèle, ses tests, ses vues et son paramétrage. Elle pourra éventuellement être réutilisée dans un autre projet. C'est en ça que consistent les https://www.djangopackages.com/[paquets Django] déjà disponibles: ce sont simplement de petites applications empaquetées pour être réutilisées (eg. https://github.com/tomchristie/django-rest-framework[Django-Rest-Framework], https://github.com/django-debug-toolbar/django-debug-toolbar[Django-Debug-Toolbar], ...).
+Nous voyons également que la gestion des listes de souhaits et éléments aura besoin de la gestion des utilisateurs - elle n'est pas autonome -, tandis que la gestion des utilisateurs n'a aucune autre dépendance qu'elle-même.
 
-NOTE: analyser la structure de ces paquets et comparer avec la structure finale de l'environnement.
 
-=== Gestion
+Nous pouvons clairement visualiser le principe de **contexte** pour une application: celle-ci viendra avec son modèle, ses tests, ses vues et son paramétrage. 
+Elle pourra éventuellement être réutilisée dans un autre projet. 
+C'est en ça que consistent les https://www.djangopackages.com/[paquets Django] déjà disponibles: ce sont "_simplement_" de petites applications empaquetées et pouvant être réutilisées dans différents contextes (eg. https://github.com/tomchristie/django-rest-framework[Django-Rest-Framework], https://github.com/django-debug-toolbar/django-debug-toolbar[Django-Debug-Toolbar], ...).
 
-Comme expliqué un peu plus haut, le fichier `manage.py` est un *wrapper* sur les commandes `django-admin`. A partir de maintenant, nous n'utiliserons plus que celui-là pour tout ce qui touchera à la gestion de notre projet:
 
- * `manage.py check` pour vérifier (en surface...) que votre projet ne rencontre aucune erreur
- * `manage.py check --deploy`, pour vérifier (en surface aussi) que l'application est prête pour un déploiement.
+=== manage.py
+
+Le fichier `manage.py` que vous trouvez à la racine de votre projet est un *wrapper* sur les commandes `django-admin`. 
+A partir de maintenant, nous n'utiliserons plus que celui-là pour tout ce qui touchera à la gestion de notre projet:
+
+ * `manage.py check` pour vérifier (en surface...) que votre projet ne rencontre aucune erreur évidente
+ * `manage.py check --deploy`, pour vérifier (en surface aussi) que l'application est prête pour un déploiement
  * `manage.py runserver` pour lancer un serveur de développement
  * `manage.py test` pour découvrir les tests unitaires disponibles et les lancer.
 
-La liste complète peut être affichée avec `manage.py help`. Vous remarquerez que ces commandes sont groupées selon différentes catégories:
+La liste complète peut être affichée avec `manage.py help`. 
+Vous remarquerez que ces commandes sont groupées selon différentes catégories:
 
  * **auth**: création d'un nouveau super-utilisateur, changer le mot de passe pour un utilisateur existant.
  * **django**: vérifier la *compliance* du projet, lancer un *shell*, *dumper* les données de la base, effectuer une migration du schéma, ...
@@ -52,6 +231,40 @@ La liste complète peut être affichée avec `manage.py help`. Vous remarquerez 
  * **staticfiles**: gestion des fichiers statiques et lancement du serveur de développement.
 
 Nous verrons plus tard comment ajouter de nouvelles commandes.
+
+Si nous démarrons la commande `python manage.py runserver`, nous verrons la sortie console suivante:
+
+[source,bash]
+----
+$ python manage.py runserver
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+[...]
+
+December 15, 2020 - 20:45:07
+Django version 3.1.4, using settings 'gwift.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+----
+
+Si nous nous rendons sur la page http://127.0.0.1:8000 (ou http://localhost:8000) comme le propose si gentiment notre (nouveau) meilleur ami, nous verrons ceci:
+
+.python manage.py runserver (Non, ce n'est pas Challenger)
+image::images/django/manage-runserver.png[]
+
+IMPORTANT: Nous avons mis un morceau de la sortie console entre crochet `[...]` ci-dessus, car elle concerne les migrations.
+_A priori_, vous avez également dû recevoir une insulte type `You have 18 unapplied migration(s). [...] Run 'python manage.py migrate' to apply them.`
+Cela concerne les migrations, et c'est un point que nous verrons un peu plus tard.
+
+
+
+TODO: JE ME SUIS ARRETE ICI <----
+
+
+
 
 === Structure d'une application
 
@@ -131,4 +344,30 @@ NOTE: vérifier s'il s'agit bien d'une forme de convention :-p
 
 NOTE: Vérifier aussi comment les applications sont construites. Type DRF, Django Social Auth, tout ça.
 
+=== Structure finale de l'environnement
 
+Nous avons donc la strucutre finale pour notre environnement de travail:
+
+[source,bash]
+----
+$ (gwift) fred@aerys:~/Sources/gwift$ tree gwift
+gwift
+├── docs
+│   └── README.md
+├── gwift
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── Makefile
+├── manage.py
+├── requirements
+│   ├── base.txt
+│   ├── dev.txt
+│   └── prod.txt
+├── setup.cfg
+└── tox.ini
+
+3 directories, 13 files
+----
