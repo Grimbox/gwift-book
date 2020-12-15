@@ -12,3 +12,6 @@ admonition:
       name: fa-fire
       stroke_color: ff0000
       size: 24
+image:
+  caption:
+    align: inherit
