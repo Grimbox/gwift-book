@@ -13,6 +13,9 @@ Et malgré ces quelques points, Python reste un langage généraliste accessible
 Il fonctionne avec un système d'améliorations basées sur des propositions: les PEP, ou "**Python Enhancement Proposal**".
 Chacune d'entre elles doit être approuvée par le http://fr.wikipedia.org/wiki/Benevolent_Dictator_for_Life[Benevolent Dictator For Life].
 
+Si vous avez besoin d'un aide-mémoire ou d'une liste exhaustive des types et structures de données du langage, référez-vous au lien suivant: https://gto76.github.io/python-cheatsheet/[Python Cheat Sheet].
+
+NOTE: Le langage Python utilise un typage dynamique appelé https://fr.wikipedia.org/wiki/Duck_typing[*duck typing*]: "_When I see a bird that quacks like a duck, walks like a duck, has feathers and webbed feet and associates with ducks — I’m certainly going to assume that he is a duck_" (Source: http://en.wikipedia.org/wiki/Duck_test[Wikipedia (as usual)]).
 
 ==== PEP8 - Style Guide for Python Code
 
@@ -42,12 +45,71 @@ Il existe une solution qui couvre ces deux domaines: https://github.com/PyCQA/fl
 Sur base de la même interface que `pep8`, vous rencontreez en plus tous les avantages liés à `pyflakes`
 
 
-==== PEP257
+==== PEP257 - Docstring Conventions
 
-NOTE: à remplir avec `pydocstyle`.
+Python étant un langage interprété fortement typé, il est plus que conseillé, au même titre que les tests unitaires, de documenter son code.
+Cela impose une certaine rigueur, mais améliore énormément la qualité (et la reprise) du code par une tierce personne. Cela implique aussi de **tout** documenter: les modules, les paquets, les classes, les fonctions, méthodes, ... Tout doit avoir un *docstring* associé :-).
 
-NOTE: parler de Napoleon.
+Il existe plusieurs types de conventions de documentation:
 
+. PEP 257
+. Numpy
+. Google Style (parfois connue sous l'intitulé `Napoleon`)
+. ...
+
+Les https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings[conventions proposées par Google] nous semblent  plus faciles à lire que du RestructuredText, mais sont parfois moins bien intégrées que les docstrings officiellement supportées (typiquement, par exemple par https://clize.readthedocs.io/en/stable/[clize] qui ne reconnait que du RestructuredText).
+L'exemple donné dans les styleguide est celui-ci:
+
+[source,python]
+----
+def fetch_smalltable_rows(table_handle: smalltable.Table,
+                          keys: Sequence[Union[bytes, str]],
+                          require_all_keys: bool = False,
+) -> Mapping[bytes, Tuple[str]]:
+    """Fetches rows from a Smalltable.
+
+    Retrieves rows pertaining to the given keys from the Table instance
+    represented by table_handle.  String keys will be UTF-8 encoded.
+
+    Args:
+        table_handle: An open smalltable.Table instance.
+        keys: A sequence of strings representing the key of each table
+          row to fetch.  String keys will be UTF-8 encoded.
+        require_all_keys: Optional; If require_all_keys is True only
+          rows with values set for all keys will be returned.
+
+    Returns:
+        A dict mapping keys to the corresponding table row data
+        fetched. Each row is represented as a tuple of strings. For
+        example:
+
+        {b'Serak': ('Rigel VII', 'Preparer'),
+         b'Zim': ('Irk', 'Invader'),
+         b'Lrrr': ('Omicron Persei 8', 'Emperor')}
+
+        Returned keys are always bytes.  If a key from the keys argument is
+        missing from the dictionary, then that row was not found in the
+        table (and require_all_keys must have been False).
+
+    Raises:
+        IOError: An error occurred accessing the smalltable.
+    """
+----
+
+C'est-à-dire:
+
+. Une courte ligne d'introduction, descriptive, indiquant ce que la fonction ou la méthode réalise. Attention, la documentation ne doit pas indiquer _comment_ la fonction/méthode est implémentée, mais ce qu'elle fait concrètement (et succintement).
+. Une ligne vide
+. Une description plus complète et plus verbeuse
+. Une ligne vide
+. La description des arguments et paramètres, des valeurs de retour (+ exemples) et les exceptions qui peuvent être levées.
+
+Un exemple (encore) plus complet peut être trouvé https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html#example-google[dans le dépôt sphinxcontrib-napoleon].
+
+Pour ceux que cela pourrait intéresser, il existe https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring[une extension pour Codium], comme nous le verrons juste après, qui permet de générer automatiquement le squelette de documentation d'un bloc de code:
+
+.autodocstring
+image::images/environment/python-docstring-vscode.png[]
 
 === Environnement de développement
 
@@ -117,10 +179,18 @@ Chaque "*commit*" correspond à une sauvegarde atomique d'un état ou d'un ensem
 De cette manière, il est beaucoup plus facile pour le développeur de se concenter sur un sujet en particulier, dans la mesure où celui-ci ne doit pas obligatoirement être clôturé pour appliquer un changement de contexte.
 
 .Git en action
-image::images/diagrams/git.png[]
+image::images/diagrams/git-workflow.png[]
 
 Cas pratique: vous développez cette nouvelle fonctionnalité qui va révolutionner le monde de demain et d'après-demain, quand, tout à coup (!), vous vous rendez compte que vous avez perdu votre conformité aux normes PCI parce les données des titulaires de cartes ne sont pas isolées correctement.
-Il suffit alors de sauver le travail en cours, revenir sur la branche principale, créer un "hotfix", solutionner le problème, pousser le correctif sur la branche principal, et revenir tranquillou sur votre branche de développement pour fignoler ce générateur de noms de dinosaures rigolos que l'univers vous réclame à cor et à a cri.
+Il suffit alors de
+
+. sauver le travail en cours (`git add . && git commit -m [WIP]`)
+. revenir sur la branche principale (`git checkout main`)
+. créer un "hotfix" (`git checkout -b hotfix/pci-compliance`)
+. solutionner le problème (sans doute un `;` en trop ?)
+. sauver le correctif sur cette branche (`git add . && git commit -m "Did it!"`)
+. récupérer ce correctif sur la branche principal (`git checkout main && git merge hotfix/pci-compliance`)
+. et revenir tranquillou sur votre branche de développement pour fignoler ce générateur de noms de dinosaures rigolos que l'univers vous réclame à cor et à a cri (`git checkout features/dinolol`)
 
 Finalement, sachez qu'il existe plusieurs manières de gérer ces flux d'informations.
 Les plus connus sont https://www.gitflow.com/[Gitflow] et https://www.reddit.com/r/programming/comments/7mfxo6/a_branching_strategy_simpler_than_gitflow/[Threeflow].

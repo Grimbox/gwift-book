@@ -1,13 +1,13 @@
-== Django
+=== Notre première application Django
 
 Comme on l'a vu ci-dessus, `django-admin` permet de créer un nouveau projet. On fait ici une distinction entre un **projet** et une **application**:
 
  * **Projet**: ensemble des applications, paramètres, pages HTML, middlwares, dépendances, etc., qui font que votre code fait ce qu'il est sensé faire.
  * **Application**: *contexte* éventuellement indépendant, permettant d'effectuer une partie isolée de ce que l'on veut faire.
 
-Pour `gwift`, on va notamment avoir 
+Pour `gwift`, on va notamment avoir
 
-. une première application pour la gestion des listes de souhaits et des éléments, 
+. une première application pour la gestion des listes de souhaits et des éléments,
 . une deuxième application pour la gestion des utilisateurs,
 . voire une troisième application qui gérera les partages entre utilisateurs et listes.
 
@@ -93,13 +93,13 @@ Par soucis de clarté, déplacez ce nouveau répertoire `wish` dans votre réper
  * `models.py` pour représenter et structurer nos données.
  * `tests.py` pour les tests unitaires.
 
-  
+
 === Migrations et schéma de bases de données
-  
+
 https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html[reset migrations].
-  
-  En gros, soit on supprime toutes les migrations (en conservant le fichier __init__.py), soit on 
-  réinitialise proprement les migrations avec un --fake-initial (sous réserve que toutes les personnes qui 
+
+  En gros, soit on supprime toutes les migrations (en conservant le fichier __init__.py), soit on
+  réinitialise proprement les migrations avec un --fake-initial (sous réserve que toutes les personnes qui
   utilisent déjà le projet s'y conforment... Ce qui n'est pas gagné.
 
 === Tests unitaires
@@ -107,7 +107,7 @@ https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migration
 Plein de trucs à compléter ici ;-) Est-ce qu'on passe par pytest ou par le framework intégré ? Quels sont les avantages de l'un % à l'autre ?
  * `views.py` pour définir ce que nous pouvons faire avec nos données.
 
-NOTE: vérifier s'il s'agit bien d'une forme de convention :-p 
+NOTE: vérifier s'il s'agit bien d'une forme de convention :-p
 
 NOTE: Vérifier aussi comment les applications sont construites. Type DRF, Django Social Auth, tout ça.
 

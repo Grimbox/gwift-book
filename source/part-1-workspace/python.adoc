@@ -1,3 +1,0 @@
-https://gto76.github.io/python-cheatsheet/[Python Cheat Sheet]
-
-*duck typing*: "_When I see a bird that quacks like a duck, walks like a duck, has feathers and webbed feet and associates with ducks—I’m certainly going to assume that he is a duck_" (Source: http://en.wikipedia.org/wiki/Duck_test[Wikipedia (as usual)]). 
