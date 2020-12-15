@@ -1,4 +1,24 @@
-=== Notre première application Django
+== Un projet Django
+
+
+=== Travailler en isolation
+
+On va aborder la gestion et l'isolation des dépendances. Il est tout à fait possible de s'en passer complètement dans le cadre de "petits" projets ou d'applications déployées sur des machines dédiées, et de fonctionner à grand renforts de "sudo" et d'installation globale des dépendances.
+
+Cette section est aussi utile pour une personne travaillant seule, que pour transmettre les connaissances à un nouveau membre de l'équipe ou pour déployer l'application elle-même.
+
+Cette pratique est cependant fortement déconseillée pour plusieurs raisons:
+
+. Il est tout à fait envisagable que deux applications différentes soient déployées sur un même hôte, et nécessitent chacune deux versions différentes d'une même dépendance.
+. Pour la reproductibilité d'un environnement spécifique. Cela évite notamment les réponses type "Ca juste marche chez moi", puisque la construction d'un nouvel environnement fait partie intégrante du processus de construction et de la documentation du projet; grace à elle, on a la possibilité de construire un environnement sain et d'appliquer des dépendances identiques, quelle que soit la machine hôte.
+
+image::images/it-works-on-my-machine.jpg
+
+Depuis la version 3.5 de Python, le module `venv` est https://docs.python.org/3/library/venv.html[recommandé] afin de créer un environnement virtuel.
+
+Il existe plusieurs autres modules permettant d'arriver au même résultat, avec quelques avantages et inconvénients pour chacun d'entre eux.
+
+NOTE: parler ici de poetry, pip, pipenv et rebondir sur le point 2 des 12 facteurs.
 
 Comme on l'a vu ci-dessus, `django-admin` permet de créer un nouveau projet. On fait ici une distinction entre un **projet** et une **application**:
 

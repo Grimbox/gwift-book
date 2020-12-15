@@ -1,21 +1,5 @@
 == Travailler en isolation
 
-On va aborder la gestion et l'isolation des dépendances. Il est tout à fait possible de s'en passer complètement dans le cadre de "petits" projets ou d'applications déployées sur des machines dédiées, et de fonctionner à grand renforts de "sudo" et d'installation globale des dépendances. 
-
-Cette section est aussi utile pour une personne travaillant seule, que pour transmettre les connaissances à un nouveau membre de l'équipe ou pour déployer l'application elle-même.
-
-Cette pratique est cependant fortement déconseillée pour plusieurs raisons: 
-
-. Il est tout à fait envisagable que deux applications différentes soient déployées sur un même hôte, et nécessitent chacune deux versions différentes d'une même dépendance.
-. Pour la reproductibilité d'un environnement spécifique. Cela évite notamment les réponses type "Ca juste marche chez moi", puisque la construction d'un nouvel environnement fait partie intégrante du processus de construction et de la documentation du projet; grace à elle, on a la possibilité de construire un environnement sain et d'appliquer des dépendances identiques, quelle que soit la machine hôte.
-
-image::images/it-works-on-my-machine.jpg
-
-Depuis la version 3.5 de Python, le module `venv` est https://docs.python.org/3/library/venv.html[recommandé] afin de créer un environnement virtuel.
-
-Il existe plusieurs autres modules permettant d'arriver au même résultat, avec quelques avantages et inconvénients pour chacun d'entre eux. 
-
-NOTE: parler ici de poetry, pip, pipenv et rebondir sur le point 2 des 12 facteurs.
 
 === Création de l'environnement virtuel
 
@@ -35,7 +19,7 @@ Nous pouvons ensuite l'activer grâce à la commande `source gwift-env/bin/activ
 ----
 (gwift-env) fred@aerys:~/Sources/.venvs/gwift-env$ <1>
 ----
-<1> Le *shell* signale que nous sommes bien dans l'environnement `gwift-env`. 
+<1> Le *shell* signale que nous sommes bien dans l'environnement `gwift-env`.
 
 Par la suite, nous considérerons que l'environnement virtuel est toujours activé, même si `gwift-env` à chaque snippet de code.
 
@@ -87,7 +71,7 @@ gwift
 └── manage.py
 ----
 
-C'est sans ce répertoire que vont vivre tous les fichiers liés au projet. Le but est de faire en sorte que toutes les opérations (maintenance, déploiement, écriture, tests, ...) puissent se faire à partir d'un seul point d'entrée. 
+C'est sans ce répertoire que vont vivre tous les fichiers liés au projet. Le but est de faire en sorte que toutes les opérations (maintenance, déploiement, écriture, tests, ...) puissent se faire à partir d'un seul point d'entrée.
 
 L'utilité de ces fichiers est définie ci-dessous:
 
@@ -140,9 +124,9 @@ $ echo '-r base.txt' > requirements/prod.txt
 $ echo '-r base.txt' > requirements/dev.txt
 ----
 
-Prenez directement l'habitude de spécifier la version ou les versions compatibles: les librairies que vous utilisez comme dépendances évoluent, de la même manière que vos projets. Des fonctions sont cassées, certaines signatures sont modifiées, des comportements sont altérés, etc. 
+Prenez directement l'habitude de spécifier la version ou les versions compatibles: les librairies que vous utilisez comme dépendances évoluent, de la même manière que vos projets. Des fonctions sont cassées, certaines signatures sont modifiées, des comportements sont altérés, etc.
 
-Pour être sûr et certain le code que vous avez écrit continue à fonctionner, spécifiez la version de chaque librairie de dépendances. 
+Pour être sûr et certain le code que vous avez écrit continue à fonctionner, spécifiez la version de chaque librairie de dépendances.
 
 Avec les mécanismes d'intégration continue et de tests unitaires, on verra plus loin comment se prémunir d'un changement inattendu.
 

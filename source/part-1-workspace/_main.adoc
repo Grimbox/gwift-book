@@ -22,9 +22,9 @@ include::maintainable-applications/_index.adoc[]
 
 include::environment/_index.adoc[]
 
-include::venvs.adoc[]
+include::django/_index.adoc[]
 
-include::django.adoc[]
+include::venvs.adoc[]
 
 include::unit_tests.adoc[]
 
