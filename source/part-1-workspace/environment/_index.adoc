@@ -112,11 +112,15 @@ image::images/xkcd-1597-git.png[]
 
 Même pour un développeur solitaire, un système de gestion de versions (quel qu'il soit) reste indispensable.
 
-Chaque "branche" correspond à une tâche à réaliser: un bogue à corriger (_Hotfix A_), une nouvelle fonctionnalité à ajouter ou un "_truc à essayer_" footnote:[Oui, comme dans "Attends, j'essaie vite un truc, si ça marche, c'est beau."] (_Feature A_ et _Feature B_).
-De cette manière, il est beaucoup plus facile pour le développeur de se concenter sur un sujet en particulier, dans la mesure où ce sujet ne doit pas obligatoirement être clôturé pour changer de contexte.
+Chaque "*branche*" correspond à une tâche à réaliser: un bogue à corriger (_Hotfix A_), une nouvelle fonctionnalité à ajouter ou un "_truc à essayer_" footnote:[Oui, comme dans "Attends, j'essaie vite un truc, si ça marche, c'est beau."] (_Feature A_ et _Feature B_).
+Chaque "*commit*" correspond à une sauvegarde atomique d'un état ou d'un ensemble de modifications cohérentes entre elles.footnote:[Il convient donc de s'abstenir de modifier le CSS d'une application et la couche d'accès à la base de données, sous peine de se faire huer par ses relecteurs au prochain stand-up.]
+De cette manière, il est beaucoup plus facile pour le développeur de se concenter sur un sujet en particulier, dans la mesure où celui-ci ne doit pas obligatoirement être clôturé pour appliquer un changement de contexte.
 
 .Git en action
 image::images/diagrams/git.png[]
 
 Cas pratique: vous développez cette nouvelle fonctionnalité qui va révolutionner le monde de demain et d'après-demain, quand, tout à coup (!), vous vous rendez compte que vous avez perdu votre conformité aux normes PCI parce les données des titulaires de cartes ne sont pas isolées correctement.
 Il suffit alors de sauver le travail en cours, revenir sur la branche principale, créer un "hotfix", solutionner le problème, pousser le correctif sur la branche principal, et revenir tranquillou sur votre branche de développement pour fignoler ce générateur de noms de dinosaures rigolos que l'univers vous réclame à cor et à a cri.
+
+Finalement, sachez qu'il existe plusieurs manières de gérer ces flux d'informations.
+Les plus connus sont https://www.gitflow.com/[Gitflow] et https://www.reddit.com/r/programming/comments/7mfxo6/a_branching_strategy_simpler_than_gitflow/[Threeflow].
