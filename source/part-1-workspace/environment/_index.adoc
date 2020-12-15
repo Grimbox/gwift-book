@@ -50,6 +50,8 @@ Sur base de la même interface que `pep8`, vous rencontreez en plus tous les ava
 Python étant un langage interprété fortement typé, il est plus que conseillé, au même titre que les tests unitaires, de documenter son code.
 Cela impose une certaine rigueur, mais améliore énormément la qualité (et la reprise) du code par une tierce personne. Cela implique aussi de **tout** documenter: les modules, les paquets, les classes, les fonctions, méthodes, ... Tout doit avoir un *docstring* associé :-).
 
+WARNING: Documentation: be obsessed!
+
 Il existe plusieurs types de conventions de documentation:
 
 . PEP 257
