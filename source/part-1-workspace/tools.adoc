@@ -1,39 +1,7 @@
 == Chaîne d'outils
 
-=== PEP8 - Style Guide for Python Code
 
-Le langage Python fonctionne avec un système d'améliorations basées sur des propositions: les PEP, ou "**Python Enhancement Proposal**". Chacune d'entre elles doit être approuvée par le http://fr.wikipedia.org/wiki/Benevolent_Dictator_for_Life[Benevolent Dictator For Life].
-
-La première qui va nous intéresser est la https://www.python.org/dev/peps/pep-0008/[PEP 8 -- Style Guide for Python Code]. Elle spécifie comment du code Python doit être organisé ou formaté, quelles sont les conventions pour l’indentation, le nommage des variables et des classes, … En bref, elle décrit comment écrire du code proprement pour que d’autres développeurs puissent le reprendre facilement, ou simplement que votre base de code ne dérive lentement vers un seuil de non-maintenabilité.
-
-Sur cette base, un outil existe et listera l'ensemble des conventions qui ne sont pas correctement suivies dans votre projet: pep8. Pour l'installer, passez par pip. Lancez ensuite la commande pep8 suivie du chemin à analyser (`.`, le nom d'un répertoire, le nom d'un fichier `.py`, ...). Si vous souhaitez uniquement avoir le nombre d'erreur de chaque type, saisissez les options `--statistics -qq`.
-
-[source,bash]
-----
-
-$ pep8 . --statistics -qq
-
-7       E101 indentation contains mixed spaces and tabs
-6       E122 continuation line missing indentation or outdented
-8       E127 continuation line over-indented for visual indent
-23      E128 continuation line under-indented for visual indent
-3       E131 continuation line unaligned for hanging indent
-12      E201 whitespace after '{'
-13      E202 whitespace before '}'
-86      E203 whitespace before ':'
-----
-
-Si vous ne voulez pas être dérangé sur votre manière de coder, et que vous voulez juste avoir un retour sur une analyse de votre code, essayez `pyflakes`: il analysera vos sources à la recherche de sources d'erreurs possibles (imports inutilisés, méthodes inconnues, etc.).
-
-Finalement, la solution qui couvre ces deux domaines existe et s'intitule https://github.com/PyCQA/flake8[flake8]. Sur base la même interface que `pep8`, vous aurez en plus tous les avantages liés à `pyflakes` concernant votre code source.
-
-==== PEP257
-
-NOTE: à remplir avec `pydocstyle`.
-
-NOTE: parler de Napoleon.
-
-==== Tests
+=== Tests
 
 Comme tout bon *framework* qui se respecte, Django embarque tout un environnement facilitant le lancement de tests; chaque application est créée par défaut avec un fichier **tests.py**, qui inclut la classe `TestCase` depuis le package `django.test`:
 
@@ -68,7 +36,7 @@ django_coverage_plugin
 [run]
 branch = True
 omit = ../*migrations*
-plugins = 
+plugins =
     django_coverage_plugin
 
 [report]
@@ -151,7 +119,7 @@ def compare(a, b, c, d, e):
                     return 1
 ----
 
-Potentiellement, les tests unitaires qui seront nécessaires à couvrir tous les cas de figure seront au nombre de quatre: le cas par défaut (a est différent de b, rien ne se passe), puis les autres cas, jusqu'à arriver à l'impression à l'écran et à la valeur de retour. La complexité cyclomatique d'un bloc est évaluée sur base du nombre d'embranchements possibles; par défaut, sa valeur est de 1. Si on rencontre une condition, elle passera à 2, etc. 
+Potentiellement, les tests unitaires qui seront nécessaires à couvrir tous les cas de figure seront au nombre de quatre: le cas par défaut (a est différent de b, rien ne se passe), puis les autres cas, jusqu'à arriver à l'impression à l'écran et à la valeur de retour. La complexité cyclomatique d'un bloc est évaluée sur base du nombre d'embranchements possibles; par défaut, sa valeur est de 1. Si on rencontre une condition, elle passera à 2, etc.
 
 Pour l'exemple ci-dessous, on va en fait devoir vérifier au moins chacun des cas pour s'assurer que la couverture est complète. On devrait donc trouver:
 
@@ -160,7 +128,7 @@ Pour l'exemple ci-dessous, on va en fait devoir vérifier au moins chacun des ca
  . Un test pour entrer dans la condition `c == d`
  . Un test pour entrer dans la condition `d == e`
  . Et s'assurer que n'importe quel autre cas retournera la valeur `None`.
- 
+
 On a donc bien besoin de minimum cinq tests pour couvrir l'entièreté des cas présentés.
 
 Le nombre de tests unitaires nécessaires à la couverture d'un bloc fonctionnel est au minimum égal à la complexité cyclomatique de ce bloc. Une possibilité pour améliorer la maintenance du code est de faire baisser ce nombre, et de le conserver sous un certain seuil. Certains recommandent de le garder sous une complexité de 10; d'autres de 5.
@@ -255,7 +223,7 @@ test.py:18:1: W391 blank line at end of file
 On trouve des erreurs:
 
 * de *conventions*: le nombre de lignes qui séparent deux fonctions, le nombre d'espace après un opérateur, une ligne vide à la fin du fichier, ... Ces _erreurs_ n'en sont pas vraiment, elles indiquent juste de potentiels problèmes de communication si le code devait être lu ou compris par une autre personne.
-* de *définition*: une variable assignée mais pas utilisée ou une lexème non trouvé. Cette dernière information indique clairement un bug potentiel. 
+* de *définition*: une variable assignée mais pas utilisée ou une lexème non trouvé. Cette dernière information indique clairement un bug potentiel.
 
 L'étape d'après consiste à invoquer pylint. Lui, il est directement moins conciliant:
 
@@ -291,7 +259,7 @@ En gros, j'ai programmé comme une grosse bouse anémique (et oui, le score d'é
 * de la redéfinition de variables (W0621).
 
 
-Pour reprendre la http://pylint.pycqa.org/en/latest/user_guide/message-control.html[documentation], chaque code possède sa signification (ouf!): 
+Pour reprendre la http://pylint.pycqa.org/en/latest/user_guide/message-control.html[documentation], chaque code possède sa signification (ouf!):
 
 * C convention related checks
 * R refactoring related checks
@@ -309,14 +277,14 @@ PyLint est la version **++**, pour ceux qui veulent un code propre et sans bavur
 
 https://black.readthedocs.io/en/stable/[Black].
 
-Une chose qui fonctionne bien avec le langage Go, c'est que les outils de base sont intégrés au compilateur : le formatage de code et les tests unitaires sont à la portée de tout le monde au travers de deux commandes simples : 
+Une chose qui fonctionne bien avec le langage Go, c'est que les outils de base sont intégrés au compilateur : le formatage de code et les tests unitaires sont à la portée de tout le monde au travers de deux commandes simples :
 
 . `go fmt`
 . `go test`
 
 En Python, c'est plus complexe que cela, puisqu'il n'existe pas une manière unique d'arriver à un résultat (on l'a vu ci-dessus, rien que pour les tests, on a au moins deux librairies...).
 
-Pour revenir à Go : est-ce que ce formatage est idéal et accepté par tout le monde ? Non. 
+Pour revenir à Go : est-ce que ce formatage est idéal et accepté par tout le monde ? Non.
 
 Black fait le même travail: il arrive à un compromis entre la clarté du code, la facilité d'installation et d'intégration et un résultat. Ce résultat ne sera pas parfait, mais il conviendra dans 97,83% des cas (au moins).
 
@@ -326,5 +294,5 @@ Black fait le même travail: il arrive à un compromis entre la clarté du code,
 === mypy
 
 === Towncrier
-  
+
 voir https://pypi.org/project/towncrier/[ici]

@@ -1,0 +1,122 @@
+== Boite à outils
+
+=== Python
+
+Le langage https://www.python.org/[Python] est un https://docs.python.org/3/faq/general.html#what-is-python[langage de programmation] interprété, interactif, orienté objet (souvent), fonctionnel (parfois), open source, multi-plateformes, flexible, facile à apprendre et difficile à maîtriser.
+
+.https://xkcd.com/353/
+image::images/xkcd-353-python.png[]
+
+A première vue, certains concepts restent difficiles à aborder: l'indentation définit l'étendue d'un bloc (classe, fonction, méthode, boucle, condition, ...), il n'y a pas de typage fort des variables et le compilateur n'est pas là pour assurer le filet de sécurité avant la mise en production (puisqu'il n'y a pas de compilateur 😛).
+Et malgré ces quelques points, Python reste un langage généraliste accessible et "bon partout", et de pouvoir se reposer sur un écosystème stable et fonctionnel.
+
+Il fonctionne avec un système d'améliorations basées sur des propositions: les PEP, ou "**Python Enhancement Proposal**".
+Chacune d'entre elles doit être approuvée par le http://fr.wikipedia.org/wiki/Benevolent_Dictator_for_Life[Benevolent Dictator For Life].
+
+
+==== PEP8 - Style Guide for Python Code
+
+La première PEP qui va nous intéresser est la https://www.python.org/dev/peps/pep-0008/[PEP 8 -- Style Guide for Python Code]. Elle spécifie comment du code Python doit être organisé ou formaté, quelles sont les conventions pour l’indentation, le nommage des variables et des classes, ...
+En bref, elle décrit comment écrire du code proprement, afin que d’autres développeurs puissent le reprendre facilement, ou simplement que votre base de code ne dérive lentement vers un seuil de non-maintenabilité.
+
+Dans cet objectif, un outil existe et listera l'ensemble des conventions qui ne sont pas correctement suivies dans votre projet: pep8. Pour l'installer, passez par pip. Lancez ensuite la commande pep8 suivie du chemin à analyser (`.`, le nom d'un répertoire, le nom d'un fichier `.py`, ...). Si vous souhaitez uniquement avoir le nombre d'erreur de chaque type, saisissez les options `--statistics -qq`.
+
+
+[source,bash]
+----
+$ pep8 . --statistics -qq
+
+7       E101 indentation contains mixed spaces and tabs
+6       E122 continuation line missing indentation or outdented
+8       E127 continuation line over-indented for visual indent
+23      E128 continuation line under-indented for visual indent
+3       E131 continuation line unaligned for hanging indent
+12      E201 whitespace after '{'
+13      E202 whitespace before '}'
+86      E203 whitespace before ':'
+----
+
+Si vous ne voulez pas être dérangé sur votre manière de coder, et que vous voulez juste avoir un retour sur une analyse de votre code, essayez `pyflakes`: cette librairie analysera vos sources à la recherche de sources d'erreurs possibles (imports inutilisés, méthodes inconnues, etc.).
+
+Il existe une solution qui couvre ces deux domaines: https://github.com/PyCQA/flake8[flake8].
+Sur base de la même interface que `pep8`, vous rencontreez en plus tous les avantages liés à `pyflakes`
+
+
+==== PEP257
+
+NOTE: à remplir avec `pydocstyle`.
+
+NOTE: parler de Napoleon.
+
+
+=== Environnement de développement
+
+Concrètement, nous pourrions tout à fait nous limiter à Notepad ou Notepad++.
+Mais à moins d'aimer se fouetter avec un câble USB, nous apprécions la complétion du code, la coloration syntaxique, l'intégration des tests unitaires et d'un debugger, ainsi que deux-trois sucreries qui feront plaisir à n'importe quel développeur.
+
+Si vous manquez d'idées ou si vous ne savez pas par où commencer:
+
+* https://vscodium.com/[VSCodium], avec les plugins https://marketplace.visualstudio.com/items?itemName=ms-python.python[Python]et https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens[GitLens]
+* https://www.jetbrains.com/pycharm/[PyCharm]
+* https://www.vim.org/[Vim] avec les plugins https://github.com/davidhalter/jedi-vim[Jedi-Vim] et https://github.com/preservim/nerdtree[nerdtree]
+
+Si vous hésitez, et même si Codium n'est pas le plus léger (la faute à https://www.electronjs.org/[Electron]...), il fera correctement son travail (à savoir: faciliter le vôtre), en intégrant suffisament de fonctionnalités qui gâteront les papilles émoustillées du développeur impatient.
+
+.Codium en action
+image::images/environment/codium.png[]
+
+=== Un terminal
+
+_A priori_, les IDE footnote:[Integrated Development Environment] proposés ci-dessus fournissent par défaut ou _via_ des greffons un terminal intégré.
+Ceci dit, disposer d'un terminal séparé facilite parfois certaines tâches.
+
+A nouveau, si vous manquez d'idées:
+
+. Si vous êtes sous Windows, téléchargez une copie de https://cmder.net/[Cmder]. Il n'est pas le plus rapide, mais propose une intégration des outils Unix communs (`ls`, `pwd`, `grep`, `ssh`, `git`, ...) sans trop se fouler.
+. Pour tout autre système, vous devriez disposer en natif de ce qu'il faut.
+
+.Mise en abîme
+image::images/environment/terminal.png[]
+
+=== Un gestionnaire de base de données
+
+Django gère plusieurs moteurs de base de données.
+Certains sont gérés nativement par Django (PostgreSQL, MariaDB, SQLite); _a priori_, ces trois-là sont disponibles pour tous les systèmes d'exploitation. D'autres moteurs nécessitent des librairies tierces (Oracle, Microsoft SQL Server).
+
+Il n'est pas obligatoire de disposer d'une application de gestion pour ces moteurs: pour les cas d'utilisation simples, le shell Django pourra largement suffire (nous y reviendrons).
+Mais pour faciliter la gestion des bases de données elles-même, et si vous n'êtes pas à l'aise avec la ligne de commande, choisissez l'une des applications d'administration ci-dessous en fonction du moteur de base de données que vous souhaitez utiliser.
+
+* Pour *PostgreSQL*, il existe https://www.pgadmin.org/[pgAdmin]
+* Pour *MariaDB* ou *MySQL*, partez sur https://www.phpmyadmin.net/[PHPMyAdmin]
+* Pour *SQLite*, il existe https://sqlitebrowser.org/[SQLiteBrowser]
+PHPMyAdmin ou PgAdmin.
+
+
+=== Un gestionnaire de mots de passe
+
+Nous en auront besoin pour gé(né)rer des phrases secrètes pour nos applications.
+Si vous n'en utilisez pas déjà un, partez sur https://keepassxc.org/[KeepassXC]: il est multi-plateformes, suivi et s'intègre correctement aux différents environnements, tout en restant accessible.
+
+image::images/environment/keepass.png[]
+
+
+=== Un système de gestion de versions
+
+Il existe plusieurs systèmes de gestion de versions.
+Le plus connu à l'heure actuelle est https://git-scm.com/[Git], notamment pour sa (très) grande flexibilité et sa rapidité d'exécution.
+Il est une aide précieuse pour développer rapidement des preuves de concept, switcher vers une nouvelle fonctionnalité, un bogue à réparer ou une nouvelle release à proposer au téléchargement.
+Ses deux plus gros défauts concerneraient peut-être sa courbe d'apprentissage pour les nouveaux venus et la complexité des actions qu'il permet de réaliser.
+
+.https://xkcd.com/1597/
+image::images/xkcd-1597-git.png[]
+
+Même pour un développeur solitaire, un système de gestion de versions (quel qu'il soit) reste indispensable.
+
+Chaque "branche" correspond à une tâche à réaliser: un bogue à corriger (_Hotfix A_), une nouvelle fonctionnalité à ajouter ou un "_truc à essayer_" footnote:[Oui, comme dans "Attends, j'essaie vite un truc, si ça marche, c'est beau."] (_Feature A_ et _Feature B_).
+De cette manière, il est beaucoup plus facile pour le développeur de se concenter sur un sujet en particulier, dans la mesure où ce sujet ne doit pas obligatoirement être clôturé pour changer de contexte.
+
+.Git en action
+image::images/diagrams/git.png[]
+
+Cas pratique: vous développez cette nouvelle fonctionnalité qui va révolutionner le monde de demain et d'après-demain, quand, tout à coup (!), vous vous rendez compte que vous avez perdu votre conformité aux normes PCI parce les données des titulaires de cartes ne sont pas isolées correctement.
+Il suffit alors de sauver le travail en cours, revenir sur la branche principale, créer un "hotfix", solutionner le problème, pousser le correctif sur la branche principal, et revenir tranquillou sur votre branche de développement pour fignoler ce générateur de noms de dinosaures rigolos que l'univers vous réclame à cor et à a cri.

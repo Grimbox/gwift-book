@@ -13,5 +13,6 @@ admonition:
       stroke_color: ff0000
       size: 24
 image:
+  align: center
   caption:
     align: inherit

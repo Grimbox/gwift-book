@@ -16,11 +16,11 @@ Dans cette partie, nous allons parler de *méthode de travail*, avec comme objec
 . prévoir un rollback si cela plante
 . se préparer une tisane en regardant nos flux RSS (si cette technologie existe encore...).
 
-NOTE: La plupart des commandes qui seront présentées dans ce livre le seront depuis un shell sous GNU/Linux. Certaines d'entre elles pourraient devoir être adaptées si vous utilisez un autre système d'exploitation (macOS) ou n'importe quelle autre grosse bouse commerciale (MS Windows).
+NOTE: La plupart des commandes qui seront présentées dans ce livre le seront depuis un shell sous GNU/Linux. Certaines d'entre elles pourraient devoir être adaptées si vous utilisez un autre système d'exploitation (macOS) ou n'importe quelle autre grosse bouse commerciale.
 
-include::building-maintainable-applications.adoc[]
+include::maintainable-applications/_index.adoc[]
 
-include::environment/index.adoc[]
+include::environment/_index.adoc[]
 
 include::venvs.adoc[]
 
