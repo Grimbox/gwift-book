@@ -64,6 +64,8 @@ A présent que l'environnement est activé, tous les binaires de cet environneme
 De la même manière, une variable `PATH` propre est définie et utilisée, afin que les librairies Python y soient stockées.
 C'est donc dans cet environnement virtuel que nous retrouverons le code source de Django, ainsi que des librairies externes pour Python une fois que nous les aurons installées.
 
+NOTE: Pour les curieux, un environnement virtuel n'est jamais qu'un répertoire dans lequel se trouve une installation fraîche de l'interpréteur, vers laquelle pointe les liens symboliques des binaires. Si vous recherchez l'emplacement de l'interpréteur avec la commande `which python`, vous recevrez comme réponse `/home/fred/.venvs/gwift-env/bin/python`.
+
 Pour sortir de l'environnement virtuel, exécutez la commande `deactivate`.
 Si vous pensez ne plus en avoir besoin, supprimer le dossier.
 Si nécessaire, il suffira d'en créer un nouveau.
@@ -212,7 +214,7 @@ Nous pouvons clairement visualiser le principe de **contexte** pour une applicat
 C'est en ça que consistent les https://www.djangopackages.com/[paquets Django] déjà disponibles: ce sont "_simplement_" de petites applications empaquetées et pouvant être réutilisées dans différents contextes (eg. https://github.com/tomchristie/django-rest-framework[Django-Rest-Framework], https://github.com/django-debug-toolbar/django-debug-toolbar[Django-Debug-Toolbar], ...).
 
 
-=== manage.py
+==== manage.py
 
 Le fichier `manage.py` que vous trouvez à la racine de votre projet est un *wrapper* sur les commandes `django-admin`.
 A partir de maintenant, nous n'utiliserons plus que celui-là pour tout ce qui touchera à la gestion de notre projet:
@@ -260,48 +262,47 @@ Si vous avez suivi les étapes jusqu'ici, vous avez également dû voir un messa
 Cela concerne les migrations, et c'est un point que nous verrons un peu plus tard.
 
 
+==== Création d'une nouvelle application
 
-TODO: JE ME SUIS ARRETE ICI <----
+Maintenant que nous avons a vu à quoi servait `manage.py`, nous pouvons créer notre nouvelle application grâce à la commande `manage.py startapp <label>`.
 
+Notre première application servira à structurer les listes de souhaits, les éléments qui les composent et les parties que chaque utilisateur pourra offrir. 
+De manière générale, essayez de trouver un nom éloquent, court et qui résume bien ce que fait l'application. 
+Pour nous, ce sera donc `wish`. 
 
-
-
-=== Structure d'une application
-
-Maintenant que l'on a vu à quoi servait `manage.py`, on peut créer notre nouvelle application grâce à la commande `manage.py startapp <label>`.
-
-Cette application servira à structurer les listes de souhaits, les éléments qui les composent et les parties que chaque utilisateur pourra offrir. Essayez de trouver un nom éloquent, court et qui résume bien ce que fait l'application. Pour nous, ce sera donc `wish`. C'est parti pour `manage.py startapp wish`!
+C'est parti pour `manage.py startapp wish`!
 
 [source,bash]
 ----
 $ python manage.py startapp wish
 ----
 
-Résultat? Django nous a créé un répertoire `wish`, dans lequel on trouve les fichiers et dossiers suivants:
+Résultat? Django nous a créé un répertoire `wish`, dans lequel nous trouvons les fichiers et dossiers suivants:
 
- * `wish/admin.py` servira à structurer l'administration de notre application. Chaque information peut en effet être administrée facilement au travers d'une interface générée à la volée par le framework. On y reviendra par la suite.
  * `wish/__init__.py` pour que notre répertoire `wish` soit converti en package Python.
- * `wish/migrations/`, dossier dans lequel seront stockées toutes les différentes migrations de notre application.
- * `wish/models.py` pour représenter et structurer nos données.
+ * `wish/admin.py` servira à structurer l'administration de notre application. Chaque information peut être administrée facilement au travers d'une interface générée à la volée par le framework. Nous y reviendrons par la suite.
+ * `wish/migrations/` est le dossier dans lequel seront stockées toutes les différentes migrations de notre application (= toutes les modifications que nous apporterons aux données que nous souhaiterons manipuler)
+ * `wish/models.py` représentera et structurera nos données, et est intimement lié aux migrations.
  * `wish/tests.py` pour les tests unitaires.
 
-Par soucis de clarté, déplacez ce nouveau répertoire `wish` dans votre répertoire `gwift` existant. C'est une forme de convention. La structure de vos répertoires devient celle-ci:
+NOTE: Par soucis de clarté, vous pouvez déplacer ce nouveau répertoire `wish` dans votre répertoire `gwift` existant. 
+C'est une forme de convention. 
+
+La structure de vos répertoires devient celle-ci:
 
 [source,bash]
 ----
 (gwift-env) fred@aerys:~/Sources/gwift$ tree .
 .
-├── docs
-│   └── README.md
 ├── gwift
-│   ├── asgi.py
 │   ├── __init__.py
+│   ├── asgi.py
 │   ├── settings.py
 │   ├── urls.py
 │   ├── wish <1>
+│   │   ├── __init__.py
 │   │   ├── admin.py
 │   │   ├── apps.py
-│   │   ├── __init__.py
 │   │   ├── migrations
 │   │   │   └── __init__.py
 │   │   ├── models.py
@@ -310,6 +311,7 @@ Par soucis de clarté, déplacez ce nouveau répertoire `wish` dans votre réper
 │   └── wsgi.py
 ├── Makefile
 ├── manage.py
+├── README.md
 ├── requirements
 │   ├── base.txt
 │   ├── dev.txt
@@ -317,57 +319,63 @@ Par soucis de clarté, déplacez ce nouveau répertoire `wish` dans votre réper
 ├── setup.cfg
 └── tox.ini
 
-6 directories, 22 files
+5 directories, 22 files
 ----
-<1> Notre application a bien été créée, et on l'a déplacée dans le répertoire `gwift` !
- * `admin.py` servira à structurer l'administration de notre application. Chaque information peut en effet être administrée facilement au travers d'une interface générée à la volée par le framework. On y reviendra par la suite.
- * `__init__.py` pour que notre répertoire `wish` soit converti en package Python.
- * `migrations/`, dossier dans lequel seront stockées toutes les différentes migrations de notre application.
- * `models.py` pour représenter et structurer nos données.
- * `tests.py` pour les tests unitaires.
+<1> Notre application a bien été créée, et nous l'avons déplacée dans le répertoire `gwift` !
+ 
 
 
-=== Migrations et schéma de bases de données
+==== Fonctionement général
 
-https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html[reset migrations].
+-> diagramme django
 
-  En gros, soit on supprime toutes les migrations (en conservant le fichier __init__.py), soit on
-  réinitialise proprement les migrations avec un --fake-initial (sous réserve que toutes les personnes qui
-  utilisent déjà le projet s'y conforment... Ce qui n'est pas gagné.
 
-=== Tests unitaires
+==== 12 facteurs et configuration globale
 
-Plein de trucs à compléter ici ;-) Est-ce qu'on passe par pytest ou par le framework intégré ? Quels sont les avantages de l'un % à l'autre ?
- * `views.py` pour définir ce que nous pouvons faire avec nos données.
+-> Faire le lien avec les settings
+-> Faire le lien avec les douze facteurs
+-> Construction du fichier setup.cfg
 
-NOTE: vérifier s'il s'agit bien d'une forme de convention :-p
 
-NOTE: Vérifier aussi comment les applications sont construites. Type DRF, Django Social Auth, tout ça.
-
-=== Structure finale de l'environnement
+=== Structure finale de notre environnement
 
 Nous avons donc la strucutre finale pour notre environnement de travail:
 
 [source,bash]
 ----
-$ (gwift) fred@aerys:~/Sources/gwift$ tree gwift
-gwift
-├── docs
-│   └── README.md
+(gwift-env) fred@aerys:~/Sources/gwift$ tree .
+.
 ├── gwift
-│   ├── asgi.py
 │   ├── __init__.py
+│   ├── asgi.py
 │   ├── settings.py
 │   ├── urls.py
+│   ├── wish <1>
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── migrations
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   └── views.py
 │   └── wsgi.py
 ├── Makefile
 ├── manage.py
+├── README.md
 ├── requirements
 │   ├── base.txt
 │   ├── dev.txt
 │   └── prod.txt
 ├── setup.cfg
 └── tox.ini
-
-3 directories, 13 files
 ----
+
+=== 
+
+=== Cookie cutter
+
+* Créez systématiquement un environnement virtuel pour chaque projet sur lequel vous travaillez
+* La description des dépendances utilisées pour un projet doivent faire partie intégrante des sources
+
+C'est ici que le projet http://cookiecutter.readthedocs.io/en/latest/readme.html[CookieCutter] va être intéressant: les X premières étapes peuvent être *bypassées* par une simple commande.

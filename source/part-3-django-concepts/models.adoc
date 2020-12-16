@@ -180,6 +180,11 @@ Toujours dans une optique de centralisation, les migrations sont directement emb
 
 A noter que les migrations n'appliqueront de modifications que si le schéma est impacté. Ajouter une propriété `related_name` sur une ForeignKey n'engendrera aucune nouvelle action de migration, puisque ce type d'action ne s'applique que sur l'ORM, et pas directement sur la base de données: au niveau des tables, rien ne change. Seul le code et le modèle sont impactés.
 
+
+https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html[reset migrations].
+
+>  En gros, soit on supprime toutes les migrations (en conservant le fichier __init__.py), soit on réinitialise proprement les migrations avec un --fake-initial (sous réserve que toutes les personnes qui utilisent déjà le projet s'y conforment... Ce qui n'est pas gagné.
+
 === Shell
 
 

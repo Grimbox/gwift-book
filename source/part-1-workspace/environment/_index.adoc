@@ -41,14 +41,13 @@ $ pep8 . --statistics -qq
 
 Si vous ne voulez pas être dérangé sur votre manière de coder, et que vous voulez juste avoir un retour sur une analyse de votre code, essayez `pyflakes`: cette librairie analysera vos sources à la recherche de sources d'erreurs possibles (imports inutilisés, méthodes inconnues, etc.).
 
-Il existe une solution qui couvre ces deux domaines: https://github.com/PyCQA/flake8[flake8].
-Sur base de la même interface que `pep8`, vous rencontreez en plus tous les avantages liés à `pyflakes`
-
 
 ==== PEP257 - Docstring Conventions
 
-Python étant un langage interprété fortement typé, il est plus que conseillé, au même titre que les tests unitaires, de documenter son code.
-Cela impose une certaine rigueur, mais améliore énormément la qualité (et la reprise) du code par une tierce personne. Cela implique aussi de **tout** documenter: les modules, les paquets, les classes, les fonctions, méthodes, ... Tout doit avoir un *docstring* associé :-).
+Python étant un langage interprété fortement typé, il est plus que conseillé, au même titre que les tests unitaires que nous verrons plus bas, de documenter son code.
+Cela impose une certaine rigueur, mais améliore énormément la qualité (et la reprise) du code par une tierce personne. 
+Cela implique aussi de **tout** documenter: les modules, les paquets, les classes, les fonctions, méthodes, ...
+Tout doit avoir un *docstring* associé :-).
 
 WARNING: Documentation: be obsessed!
 
@@ -112,6 +111,287 @@ Pour ceux que cela pourrait intéresser, il existe https://marketplace.visualstu
 
 .autodocstring
 image::images/environment/python-docstring-vscode.png[]
+
+NOTE: Nous le verrons plus loin, Django permet de rendre la documentation immédiatement accessible depuis son interface d'administration.
+
+==== Linters
+
+Il existe plusieurs niveaux de _linters_: 
+
+. Le premier niveau concerne https://pypi.org/project/pycodestyle/[pycodestyle] (anciennement, `pep8` justement...), qui analyse votre code à la recherche d'erreurs de convention.
+. Le deuxième niveau concerne https://pypi.org/project/pyflakes/[pyflakes]. Pyflakes est un _simple_ footnote:[Ce n'est pas moi qui le dit, c'est la doc du projet] programme qui recherchera des erreurs parmi vos fichiers Python.
+. Le troisième niveau est https://pypi.org/project/flake8/[Flake8], qui regroupe les deux premiers niveaux, en plus d'y ajouter flexibilité, extensions et une analyse de complexité de McCabe.
+. Le quatrième niveau footnote:[Oui, en Python, il n'y a que quatre cercles à l'Enfer] est https://pylint.org/[PyLint].
+
+PyLint est le meilleur ami de votre _moi_ futur, un peu comme quand vous prenez le temps de faire la vaisselle pour ne pas avoir à la faire le lendemain: il rendra votre code soyeux et brillant, en posant des affirmations spécifiques. 
+A vous de les traiter en corrigeant le code ou en apposant un _tag_ indiquant que vous avez pris connaissance de la remarque, que vous en avez tenu compte, et que vous choisissez malgré tout de faire autrement.
+
+Pour vous donner une idée, voici ce que cela pourrait donner avec un code pas très propre et qui ne sert à rien:
+
+[source,python]
+----
+from datetime import datetime
+
+"""On stocke la date du jour dans la variable ToD4y"""
+
+ToD4y = datetime.today()
+
+def print_today(ToD4y):
+    today = ToD4y
+    print(ToD4y)
+
+def GetToday():
+    return ToD4y
+
+
+if __name__ == "__main__":
+    t =   Get_Today()
+    print(t)
+
+
+----
+
+Avec Flake8, nous obtiendrons ceci:
+
+[source,bash]
+----
+test.py:7:1: E302 expected 2 blank lines, found 1
+test.py:8:5: F841 local variable 'today' is assigned to but never used
+test.py:11:1: E302 expected 2 blank lines, found 1
+test.py:16:8: E222 multiple spaces after operator
+test.py:16:11: F821 undefined name 'Get_Today'
+test.py:18:1: W391 blank line at end of file
+----
+
+Nous trouvons des erreurs:
+
+* de *conventions*: le nombre de lignes qui séparent deux fonctions, le nombre d'espace après un opérateur, une ligne vide à la fin du fichier, ... Ces _erreurs_ n'en sont pas vraiment, elles indiquent juste de potentiels problèmes de communication si le code devait être lu ou compris par une autre personne.
+* de *définition*: une variable assignée mais pas utilisée ou une lexème non trouvé. Cette dernière information indique clairement un bug potentiel. Ne pas en tenir compte nuira sans doute à la santé de votre code (et risque de vous réveiller à cinq heures du mat', quand votre application se prendra méchamment les pieds dans le tapis).
+
+L'étape d'après consiste à invoquer pylint. Lui, il est directement moins conciliant:
+
+
+[source,text]
+----
+$ pylint test.py
+************* Module test
+test.py:16:6: C0326: Exactly one space required after assignment
+    t =   Get_Today()
+      ^ (bad-whitespace)
+test.py:18:0: C0305: Trailing newlines (trailing-newlines)
+test.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+test.py:3:0: W0105: String statement has no effect (pointless-string-statement)
+test.py:5:0: C0103: Constant name "ToD4y" doesn't conform to UPPER_CASE naming style (invalid-name)
+test.py:7:16: W0621: Redefining name 'ToD4y' from outer scope (line 5) (redefined-outer-name)
+test.py:7:0: C0103: Argument name "ToD4y" doesn't conform to snake_case naming style (invalid-name)
+test.py:7:0: C0116: Missing function or method docstring (missing-function-docstring)
+test.py:8:4: W0612: Unused variable 'today' (unused-variable)
+test.py:11:0: C0103: Function name "GetToday" doesn't conform to snake_case naming style (invalid-name)
+test.py:11:0: C0116: Missing function or method docstring (missing-function-docstring)
+test.py:16:4: C0103: Constant name "t" doesn't conform to UPPER_CASE naming style (invalid-name)
+test.py:16:10: E0602: Undefined variable 'Get_Today' (undefined-variable)
+
+--------------------------------------------------------------------
+Your code has been rated at -5.45/10
+----
+
+En gros, j'ai programmé comme une grosse bouse anémique (et oui, le score d'évaluation du code permet bien d'aller en négatif). En vrac, on trouve des problèmes liés:
+
+* au nommage (C0103) et à la mise en forme (C0305, C0326, W0105)
+* à des variables non définies (E0602)
+* de la documentation manquante (C0114, C0116)
+* de la redéfinition de variables (W0621).
+
+
+Pour reprendre la http://pylint.pycqa.org/en/latest/user_guide/message-control.html[documentation], chaque code possède sa signification (ouf!):
+
+* C convention related checks
+* R refactoring related checks
+* W various warnings
+* E errors, for probable bugs in the code
+* F fatal, if an error occurred which prevented pylint from doing further* processing.
+
+TODO: Expliquer comment faire pour tagger une explication.
+
+==== Formatage de code
+
+Nous avons parlé ci-dessous de style de codage pour Python (PEP8), de style de rédaction pour la documentation (PEP257), d'un _linter_ pour nous indiquer quels morceaux de code doivent absolument être revus, ... 
+Reste que ces tâches sont [line-through]#parfois# (très) souvent fastidieuses: écrire un code propre et systématiquement cohérent est une tâche ardue. Heureusement, il existe des outils pour nous aider (un peu).
+
+A nouveau, il existe plusieurs possibilités de formatage automatique du code.
+Même si elle n'est pas parfaite, https://black.readthedocs.io/en/stable/[Black] arrive à un compromis entre la clarté du code, la facilité d'installation et d'intégration et un résultat. 
+
+Est-ce que ce formatage est idéal et accepté par tout le monde ? 
+Non. Même Pylint arrivera parfois à râler.
+Mais ce formatage conviendra dans 97,83% des cas (au moins).
+
+> By using Black, you agree to cede control over minutiae of hand-formatting. In return, Black gives you speed, determinism, and freedom from pycodestyle nagging about formatting. You will save time and mental energy for more important matters.
+>
+> Black makes code review faster by producing the smallest diffs possible. Blackened code looks the same regardless of the project you’re reading. Formatting becomes transparent after a while and you can focus on the content instead.
+
+Traduit rapidement à partir de la langue de Batman: "_En utilisant Black, vous cédez le contrôle sur le formatage de votre code. En retour, Black vous fera gagner un max de temps, diminuera votre charge mentale et fera revenir l'être aimé_". Mais la partie réellement intéressante concerne le fait que "_Tout code qui sera passé par Black aura la même forme, indépendamment du project sur lequel vous serez en train de travailler. L'étape de formatage deviendra transparente, et vous pourrez vous concentrer sur le contenu_".
+
+
+==== Complexité cyclomatique
+
+A nouveau, un greffon pour `flake8` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre `--max-complexity`. Toute fonction dans la complexité est supérieure à cette valeur sera considérée comme trop complexe.
+
+
+==== Typage statique
+
+-> Mypy
+
+==== Tests unitaires
+
+*-> PyTest*
+
+Comme tout bon *framework* qui se respecte, Django embarque tout un environnement facilitant le lancement de tests; chaque application est créée par défaut avec un fichier **tests.py**, qui inclut la classe `TestCase` depuis le package `django.test`:
+
+[source,python]
+----
+from django.test import TestCase
+
+class TestModel(TestCase):
+    def test_str(self):
+        raise NotImplementedError('Not implemented yet')
+----
+
+Idéalement, chaque fonction ou méthode doit être testée afin de bien en valider le fonctionnement, indépendamment du reste des composants. Cela permet d'isoler chaque bloc de manière unitaire, et permet de ne pas rencontrer de régression lors de l'ajout d'une nouvelle fonctionnalité ou de la modification d'une existante. Il existe plusieurs types de tests (intégration, comportement, ...); on ne parlera ici que des tests unitaires.
+
+Avoir des tests, c'est bien. S'assurer que tout est testé, c'est mieux. C'est là qu'il est utile d'avoir le pourcentage de code couvert par les différents tests, pour savoir ce qui peut être amélioré.
+
+TODO: Vérifier  comment les applications sont construites. Type DRF, Django Social Auth, tout ça.
+
+
+==== Couverture de code
+
+La couverture de code est une analyse qui donne un pourcentage lié à la quantité de code couvert par les tests. Attention qu'il ne s'agit pas de vérifier que le code est **bien** testé, mais juste de vérifier **quelle partie** du code est testée. En Python, il existe le paquet https://pypi.python.org/pypi/coverage/[coverage], qui se charge d'évaluer le pourcentage de code couvert par les tests. Ajoutez-le dans le fichier `requirements/base.txt`, et lancez une couverture de code grâce à la commande `coverage`. La configuration peut se faire dans un fichier `.coveragerc` que vous placerez à la racine de votre projet, et qui sera lu lors de l'exécution.
+
+[source,bash]
+----
+# requirements/base.text
+[...]
+coverage
+django_coverage_plugin
+----
+
+[source,bash]
+----
+# .coveragerc to control coverage.py
+[run]
+branch = True
+omit = ../*migrations*
+plugins =
+    django_coverage_plugin
+
+[report]
+ignore_errors = True
+
+[html]
+directory = coverage_html_report
+----
+
+
+[source,bash]
+----
+$ coverage run --source "." manage.py test
+$ coverage report
+
+    Name                      Stmts   Miss  Cover
+    ---------------------------------------------
+    gwift\gwift\__init__.py       0      0   100%
+    gwift\gwift\settings.py      17      0   100%
+    gwift\gwift\urls.py           5      5     0%
+    gwift\gwift\wsgi.py           4      4     0%
+    gwift\manage.py               6      0   100%
+    gwift\wish\__init__.py        0      0   100%
+    gwift\wish\admin.py           1      0   100%
+    gwift\wish\models.py         49     16    67%
+    gwift\wish\tests.py           1      1     0%
+    gwift\wish\views.py           6      6     0%
+    ---------------------------------------------
+    TOTAL                        89     32    64%
+    ----
+
+$ coverage html
+----
+
+Ceci vous affichera non seulement la couverture de code estimée, et générera également vos fichiers sources avec les branches non couvertes.
+
+
+==== Matrice de compatibilité
+
+Décrire un fichier tox.ini
+
+[source,bash]
+----
+$ touch tox.ini
+----
+
+
+==== Configuration globale
+
+Décrire le fichier setup.cfg
+
+[source,bash]
+----
+$ touch setup.cfg
+----
+
+
+==== Makefile
+
+Pour gagner un peu de temps, n'hésitez pas à créer un fichier `Makefile` que vous placerez à la racine du projet. L'exemple ci-dessous permettra, grâce à la commande `make coverage`, d'arriver au même résultat que ci-dessus:
+
+[source,makefile]
+----
+# Makefile for gwift
+#
+
+# User-friendly check for coverage
+ifeq ($(shell which coverage >/dev/null 2>&1; echo $$?), 1)
+    $(error The 'coverage' command was not found. Make sure you have coverage installed)
+endif
+
+.PHONY: help coverage
+
+help:
+    @echo "  coverage to run coverage check of the source files."
+
+coverage:
+    coverage run --source='.' manage.py test; coverage report; coverage html;
+    @echo "Testing of coverage in the sources finished."
+----
+
+
+==== The Zen of Python
+
+[source,python]
+----
+>>> import this
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+----
+
 
 === Environnement de développement
 

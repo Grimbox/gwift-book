@@ -1,0 +1,58 @@
+=== Complexité de McCabe
+
+La https://fr.wikipedia.org/wiki/Nombre_cyclomatique[complexité cyclomatique] (ou complexité de McCabe) peut s'apparenter à mesure de difficulté de compréhension du code, en fonction du nombre d'embranchements trouvés dans une même section. 
+Quand le cycle d'exécution du code rencontre une condition, il peut soit rentrer dedans, soit passer directement à la suite. 
+
+Par exemple:
+
+[source,python]
+----
+if True == False:
+    pass # never happens
+
+# continue ...
+----
+
+TODO: faut vraiment reprendre un cas un peu plus lisible. Là, c'est naze.
+
+La condition existe, mais nous ne passerons jamais dedans. 
+A l'inverse, le code suivant aura une complexité moisie à cause du nombre de conditions imbriquées:
+
+[source,python]
+----
+def compare(a, b, c, d, e):
+    if a == b:
+        if b == c:
+            if c == d:
+                if d == e:
+                    print('Yeah!')
+                    return 1
+----
+
+Potentiellement, les tests unitaires qui seront nécessaires à couvrir tous les cas de figure seront au nombre de cinq: 
+
+. le cas par défaut (a est différent de b, rien ne se passe), 
+. le cas où `a` est égal à `b`, mais où `b` est différent de `c`
+. le cas où `a` est égal à `b`, `b` est égal à `c`, mais `c` est différent de `d`
+. le cas où `a` est égal à `b`, `b` est égal à `c`, `c` est égal à `d`, mais `d` est différent de `e`
+. le cas où `a` est égal à `b`, `b` est égal à `c`, `c` est égal à `d` et `d` est égal à `e`
+
+La complexité cyclomatique d'un bloc est évaluée sur base du nombre d'embranchements possibles; par défaut, sa valeur est de 1. 
+Si nous rencontrons une condition, elle passera à 2, etc.
+
+Pour l'exemple ci-dessous, nous allons devoir vérifier au moins chacun des cas pour nous assurer que la couverture est complète. 
+Nous devrions donc trouver:
+
+. Un test où rien de se passe (`a != b`)
+. Un test pour entrer dans la condition `a == b`
+. Un test pour entrer dans la condition `b == c`
+. Un test pour entrer dans la condition `c == d`
+. Un test pour entrer dans la condition `d == e`
+
+Nous avons donc bien besoin de minimum cinq tests pour couvrir l'entièreté des cas présentés.
+
+Le nombre de tests unitaires nécessaires à la couverture d'un bloc fonctionnel est au minimum égal à la complexité cyclomatique de ce bloc. 
+Une possibilité pour améliorer la maintenance du code est de faire baisser ce nombre, et de le conserver sous un certain seuil. 
+Certains recommandent de le garder sous une complexité de 10; d'autres de 5.
+
+NOTE: A noter que refactoriser un bloc pour en extraire une méthode n'améliorera pas la complexité cyclomatique globale de l'application. Mais nous visons ici une amélioration *locale*.
