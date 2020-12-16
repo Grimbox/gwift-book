@@ -201,14 +201,14 @@ image::images/django/django-project-vs-apps-gwift.png[]
 
 Nous voyons également que la gestion des listes de souhaits et éléments aura besoin de la gestion des utilisateurs - elle n'est pas autonome -, tandis que la gestion des utilisateurs n'a aucune autre dépendance qu'elle-même.
 
-Pour `khana`, nous aurons:
+Pour `khana`, nous pourrions avoir quelque chose comme ceci:
 
 .Django Project vs Applications
 image::images/django/django-project-vs-apps-khana.png[]
 
-
-Nous pouvons clairement visualiser le principe de **contexte** pour une application: celle-ci viendra avec son modèle, ses tests, ses vues et son paramétrage.
-Elle pourra éventuellement être réutilisée dans un autre projet.
+En rouge, vous pouvez voir quelque chose que nous avons déjà vu: la gestion des utilisateurs et la possibilité qu'ils auront de communiquer entre eux.
+Ceci pourrait être commun aux deux applications.
+Nous pouvons clairement visualiser le principe de **contexte** pour une application: celle-ci viendra avec son modèle, ses tests, ses vues et son paramétrage et pourrait ainsi être réutilisée dans un autre projet.
 C'est en ça que consistent les https://www.djangopackages.com/[paquets Django] déjà disponibles: ce sont "_simplement_" de petites applications empaquetées et pouvant être réutilisées dans différents contextes (eg. https://github.com/tomchristie/django-rest-framework[Django-Rest-Framework], https://github.com/django-debug-toolbar/django-debug-toolbar[Django-Debug-Toolbar], ...).
 
 
@@ -256,7 +256,7 @@ Si nous nous rendons sur la page http://127.0.0.1:8000 (ou http://localhost:8000
 image::images/django/manage-runserver.png[]
 
 IMPORTANT: Nous avons mis un morceau de la sortie console entre crochet `[...]` ci-dessus, car elle concerne les migrations.
-_A priori_, vous avez également dû recevoir une insulte type `You have 18 unapplied migration(s). [...] Run 'python manage.py migrate' to apply them.`
+Si vous avez suivi les étapes jusqu'ici, vous avez également dû voir un message type `You have 18 unapplied migration(s). [...] Run 'python manage.py migrate' to apply them.`
 Cela concerne les migrations, et c'est un point que nous verrons un peu plus tard.
 
 
