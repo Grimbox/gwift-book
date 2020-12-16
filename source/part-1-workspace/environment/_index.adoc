@@ -464,7 +464,7 @@ De cette manière, il est beaucoup plus facile pour le développeur de se concen
 image::images/diagrams/git-workflow.png[]
 
 Cas pratique: vous développez cette nouvelle fonctionnalité qui va révolutionner le monde de demain et d'après-demain, quand, tout à coup (!), vous vous rendez compte que vous avez perdu votre conformité aux normes PCI parce les données des titulaires de cartes ne sont pas isolées correctement.
-Il suffit alors de
+Il suffit alors de:
 
 . sauver le travail en cours (`git add . && git commit -m [WIP]`)
 . revenir sur la branche principale (`git checkout main`)
@@ -476,3 +476,7 @@ Il suffit alors de
 
 Finalement, sachez qu'il existe plusieurs manières de gérer ces flux d'informations.
 Les plus connus sont https://www.gitflow.com/[Gitflow] et https://www.reddit.com/r/programming/comments/7mfxo6/a_branching_strategy_simpler_than_gitflow/[Threeflow].
+
+=== Décrire ses changements
+
+-> parler de la bonne structure d'un commit.
