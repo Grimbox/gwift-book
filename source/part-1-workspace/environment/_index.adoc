@@ -321,12 +321,27 @@ Ceci vous affichera non seulement la couverture de code estimée, et générera 
 
 ==== Matrice de compatibilité
 
-Décrire un fichier tox.ini
+L'intérêt de la matrice de compatibilité consiste à spécifier un ensemble de plusieurs versions d'un même interpréteur (ici, Python), afin de s'assurer que votre application continue à fonctionner. Nous sommes donc un cran plus haut que la spécification des versions des librairies, puisque nous nous situons directement au niveau de l'interpréteur.
 
-[source,bash]
+L'outil le plus connu est https://tox.readthedocs.io/en/latest/[Tox], qui consiste en un outil basé sur virtualenv et qui permet:
+
+. de vérifier que votre application s'installe correctement avec différentes versions de Python et d'interpréteurs
+. de démarrer des tests parmi ces différents environnements
+
+[source,ini]
 ----
-$ touch tox.ini
+# content of: tox.ini , put in same dir as setup.py
+[tox]
+envlist = py27,py36
+
+[testenv]
+deps =
+    -r requirements/dev.txt
+commands =
+    pytest
 ----
+
+Démarrez ensuite la commande `tox`, pour démarrer la commande `pytest` sur les environnements Python 2.7 et 3.6, après avoir installé nos dépendances présentes dans le fichier `requirements/dev.txt`.
 
 
 ==== Configuration globale
@@ -339,11 +354,17 @@ $ touch setup.cfg
 ----
 
 
+==== Dockerfile
+
+
+
+
 ==== Makefile
 
-Pour gagner un peu de temps, n'hésitez pas à créer un fichier `Makefile` que vous placerez à la racine du projet. L'exemple ci-dessous permettra, grâce à la commande `make coverage`, d'arriver au même résultat que ci-dessus:
+Pour gagner un peu de temps, n'hésitez pas à créer un fichier `Makefile` que vous placerez à la racine du projet.
+L'exemple ci-dessous permettra, grâce à la commande `make coverage`, d'arriver au même résultat que ci-dessus:
 
-[source,makefile]
+[source,text]
 ----
 # Makefile for gwift
 #
@@ -362,6 +383,8 @@ coverage:
     coverage run --source='.' manage.py test; coverage report; coverage html;
     @echo "Testing of coverage in the sources finished."
 ----
+
+Pour la petite histoire, `make` peu sembler un peu désuet, mais reste extrêmement efficace.
 
 
 ==== The Zen of Python
