@@ -45,7 +45,7 @@ Si vous ne voulez pas être dérangé sur votre manière de coder, et que vous v
 ==== PEP257 - Docstring Conventions
 
 Python étant un langage interprété fortement typé, il est plus que conseillé, au même titre que les tests unitaires que nous verrons plus bas, de documenter son code.
-Cela impose une certaine rigueur, mais améliore énormément la qualité (et la reprise) du code par une tierce personne. 
+Cela impose une certaine rigueur, mais améliore énormément la qualité (et la reprise) du code par une tierce personne.
 Cela implique aussi de **tout** documenter: les modules, les paquets, les classes, les fonctions, méthodes, ...
 Tout doit avoir un *docstring* associé :-).
 
@@ -116,14 +116,14 @@ NOTE: Nous le verrons plus loin, Django permet de rendre la documentation imméd
 
 ==== Linters
 
-Il existe plusieurs niveaux de _linters_: 
+Il existe plusieurs niveaux de _linters_:
 
 . Le premier niveau concerne https://pypi.org/project/pycodestyle/[pycodestyle] (anciennement, `pep8` justement...), qui analyse votre code à la recherche d'erreurs de convention.
 . Le deuxième niveau concerne https://pypi.org/project/pyflakes/[pyflakes]. Pyflakes est un _simple_ footnote:[Ce n'est pas moi qui le dit, c'est la doc du projet] programme qui recherchera des erreurs parmi vos fichiers Python.
 . Le troisième niveau est https://pypi.org/project/flake8/[Flake8], qui regroupe les deux premiers niveaux, en plus d'y ajouter flexibilité, extensions et une analyse de complexité de McCabe.
 . Le quatrième niveau footnote:[Oui, en Python, il n'y a que quatre cercles à l'Enfer] est https://pylint.org/[PyLint].
 
-PyLint est le meilleur ami de votre _moi_ futur, un peu comme quand vous prenez le temps de faire la vaisselle pour ne pas avoir à la faire le lendemain: il rendra votre code soyeux et brillant, en posant des affirmations spécifiques. 
+PyLint est le meilleur ami de votre _moi_ futur, un peu comme quand vous prenez le temps de faire la vaisselle pour ne pas avoir à la faire le lendemain: il rendra votre code soyeux et brillant, en posant des affirmations spécifiques.
 A vous de les traiter en corrigeant le code ou en apposant un _tag_ indiquant que vous avez pris connaissance de la remarque, que vous en avez tenu compte, et que vous choisissez malgré tout de faire autrement.
 
 Pour vous donner une idée, voici ce que cela pourrait donner avec un code pas très propre et qui ne sert à rien:
@@ -215,13 +215,13 @@ TODO: Expliquer comment faire pour tagger une explication.
 
 ==== Formatage de code
 
-Nous avons parlé ci-dessous de style de codage pour Python (PEP8), de style de rédaction pour la documentation (PEP257), d'un _linter_ pour nous indiquer quels morceaux de code doivent absolument être revus, ... 
+Nous avons parlé ci-dessous de style de codage pour Python (PEP8), de style de rédaction pour la documentation (PEP257), d'un _linter_ pour nous indiquer quels morceaux de code doivent absolument être revus, ...
 Reste que ces tâches sont [line-through]#parfois# (très) souvent fastidieuses: écrire un code propre et systématiquement cohérent est une tâche ardue. Heureusement, il existe des outils pour nous aider (un peu).
 
 A nouveau, il existe plusieurs possibilités de formatage automatique du code.
-Même si elle n'est pas parfaite, https://black.readthedocs.io/en/stable/[Black] arrive à un compromis entre la clarté du code, la facilité d'installation et d'intégration et un résultat. 
+Même si elle n'est pas parfaite, https://black.readthedocs.io/en/stable/[Black] arrive à un compromis entre la clarté du code, la facilité d'installation et d'intégration et un résultat.
 
-Est-ce que ce formatage est idéal et accepté par tout le monde ? 
+Est-ce que ce formatage est idéal et accepté par tout le monde ?
 Non. Même Pylint arrivera parfois à râler.
 Mais ce formatage conviendra dans 97,83% des cas (au moins).
 
@@ -366,7 +366,7 @@ coverage:
 
 ==== The Zen of Python
 
-[source,python]
+[source,text]
 ----
 >>> import this
 The Zen of Python, by Tim Peters
