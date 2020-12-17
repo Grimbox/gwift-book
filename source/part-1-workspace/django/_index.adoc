@@ -266,9 +266,9 @@ Cela concerne les migrations, et c'est un point que nous verrons un peu plus tar
 
 Maintenant que nous avons a vu à quoi servait `manage.py`, nous pouvons créer notre nouvelle application grâce à la commande `manage.py startapp <label>`.
 
-Notre première application servira à structurer les listes de souhaits, les éléments qui les composent et les parties que chaque utilisateur pourra offrir. 
-De manière générale, essayez de trouver un nom éloquent, court et qui résume bien ce que fait l'application. 
-Pour nous, ce sera donc `wish`. 
+Notre première application servira à structurer les listes de souhaits, les éléments qui les composent et les parties que chaque utilisateur pourra offrir.
+De manière générale, essayez de trouver un nom éloquent, court et qui résume bien ce que fait l'application.
+Pour nous, ce sera donc `wish`.
 
 C'est parti pour `manage.py startapp wish`!
 
@@ -285,8 +285,8 @@ Résultat? Django nous a créé un répertoire `wish`, dans lequel nous trouvons
  * `wish/models.py` représentera et structurera nos données, et est intimement lié aux migrations.
  * `wish/tests.py` pour les tests unitaires.
 
-NOTE: Par soucis de clarté, vous pouvez déplacer ce nouveau répertoire `wish` dans votre répertoire `gwift` existant. 
-C'est une forme de convention. 
+NOTE: Par soucis de clarté, vous pouvez déplacer ce nouveau répertoire `wish` dans votre répertoire `gwift` existant.
+C'est une forme de convention.
 
 La structure de vos répertoires devient celle-ci:
 
@@ -322,12 +322,13 @@ La structure de vos répertoires devient celle-ci:
 5 directories, 22 files
 ----
 <1> Notre application a bien été créée, et nous l'avons déplacée dans le répertoire `gwift` !
- 
+
 
 
 ==== Fonctionement général
 
--> diagramme django
+.How it works
+image::images/diagrams/django-how-it-works.png[]
 
 
 ==== 12 facteurs et configuration globale
@@ -371,7 +372,7 @@ Nous avons donc la strucutre finale pour notre environnement de travail:
 └── tox.ini
 ----
 
-=== 
+===
 
 === Cookie cutter
 
