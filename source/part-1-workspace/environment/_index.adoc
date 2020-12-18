@@ -500,6 +500,6 @@ Il suffit alors de:
 Finalement, sachez qu'il existe plusieurs manières de gérer ces flux d'informations.
 Les plus connus sont https://www.gitflow.com/[Gitflow] et https://www.reddit.com/r/programming/comments/7mfxo6/a_branching_strategy_simpler_than_gitflow/[Threeflow].
 
-=== Décrire ses changements
+==== Décrire ses changements
 
 -> parler de la bonne structure d'un commit.

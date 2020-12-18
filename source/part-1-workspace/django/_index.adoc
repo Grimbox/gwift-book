@@ -327,9 +327,111 @@ La structure de vos répertoires devient celle-ci:
 
 ==== Fonctionement général
 
+Le métier de programmeur est devenu de plus en plus complexe. Il y a 20 ans, nous pouvions nous contenter d'une simple page PHP dans laquelle nous mixions l'ensemble des actios à réaliser: requêtes en bases de données, construction de la page, ... 
+La recherche d'une solution a un problème n'était pas spécialement plus complexe - dans la mesure où le rendu des enregistrements en direct n'était finalement qu'une forme un chouia plus évoluée du `print()` ou des `System.out.println()` - mais c'était l'évolutivité des applications qui en prenait un coup: une grosse partie des tâches étaient dupliquées entre les différentes pages, et l'ajout d'une nouvelle fonctionnalité était relativement ardue.
+
+Django (et d'autres cadriciels) résolvent ce problème en se basant ouvertement sur le principe de `Don't repeat yourself` footnote:[DRY].
+Chaque morceau de code ne doit apparaitre qu'une seule fois, afin de limiter au maximum la redite (et donc, l'application d'un même correctif à différents endroits).
+
+Le chemin parcouru par une requête est expliqué en (petits) détails ci-dessous.
+
 .How it works
 image::images/diagrams/django-how-it-works.png[]
 
+*1. Un utilisateur ou un visiteur souhaite accéder à une URL hébergée et servie par notre application*. 
+Ici, nous prenons l'exemple de l'URL fictive `https://gwift/wishes/91827`.
+Lorsque cette URL "arrive" dans notre application, son point d'entrée se trouvera au niveau des fichiers `asgi.py` ou `wsgi.py`. Nous verrons cette partie plus tard, et nous pouvons nous concentrer sur le chemin interne qu'elle va parcourir.
+
+*Etape 0* - La première étape consiste à vérifier que cette URL répond à un schéma que nous avons défini dans le fichier `gwift/urls.py`. 
+
+*Etape 1* - Si ce n'est pas le cas, l'application n'ira pas plus loin et retournera une erreur à l'utilisateur.
+
+
+*Etape 2* - Django va parcourir l'ensemble des _patterns_ présents dans le fichier `urls.py` et s'arrêtera sur le premier qui correspondra à la requête qu'il a reçue. 
+Ce cas est relativement trivial: la requête `/wishes/91827` a une correspondance au niveau de la ligne `path("wishes/<int:wish_id>` dans l'exemple ci-dessous. 
+Django va alors appeler la fonction footnote:[Qui ne sera pas toujours une fonction. Django s'attend à trouver un _callable_, c'est-à-dire n'importe quel élément qu'il peut appeler comme une fonction.] associée à ce _pattern_, c'est-à-dire `wish_details` du module `gwift.views`.
+
+[source,python]
+----
+from django.contrib import admin
+from django.urls import path
+
+from gwift.views import wish_details <1>
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path("wishes/<int:wish_id>", wish_details), <2>
+]
+----
+<1> Nous importons la fonction `wish_details` du module `gwift.views`
+<2> Champomy et cotillons! Nous avons une correspondance avec `wishes/details/91827`
+
+
+Nous n'allons pas nous occuper de l'accès à la base de données pour le moment (nous nous en occuperons dans un prochain chapitre) et nous nous contenterons de remplir un canevas avec un ensemble de données. 
+Le module `gwift.views` qui se trouve dans le fichier `gwift/views.py` peut ressembler à ceci:
+
+[source,python]
+----
+[...]
+
+from datetime import datetime
+
+
+def wishes_details(request: HttpRequest, wish_id: int) -> HttpResponse:
+    context = {
+        "user_name": "Bond,"
+        "user_first_name": "James",
+        "now": datetime.now()
+    }
+
+    return render(
+        request,
+        "wish_details.html",
+        context
+    )
+----
+
+Pour résumer, cette fonction permet:
+
+. De construire un _contexte_, qui est représenté sous la forme d'un dictionnaire associant des clés à des valeurs. Les clés sont respectivement `user_name`, `user_first_name` et `now`, tandis que leurs valeurs respectives sont `Bond`, `James` et le `moment présent` footnote:[Non, pas celui d'Eckhart Tolle].
+. Nous passons ensuite ce dictionnaire à un canevas, `wish_details.html`
+. L'application du contexte sur le canevas nous donne un résultat.
+
+[source,html]
+----
+<!-- fichier wish_details.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Page title</title>
+</head>
+<body>
+  <h1>Hi!</h1>
+  <p>My name is {{ user_name }}. {{ user_first_name }} {{ user_name }}.</p>
+  <p>This page was generated at {{ now }}</p>
+</body>
+</html>
+----
+
+Après application de notre contexte sur ce template, nous obtiendrons ce document, qui sera renvoyé au navigateur de l'utilisateur qui aura fait la requête initiale:
+
+[source,html]
+----
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Page title</title>
+</head>
+<body>
+  <h1>Hi!</h1>
+  <p>My name is Bond. James Bond.</p>
+  <p>This page was generated at 2027-03-19 19:47:38</p>
+</body>
+</html>
+----
+
+.Résultat
+image::images/django/django-first-template.png[]
 
 ==== 12 facteurs et configuration globale
 
