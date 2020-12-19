@@ -22,8 +22,14 @@ from django.shortcuts import render
 from .models import Wishlist
 
 def wishlists(request):
-	w = Wishlist.objects.all()
-	return render(request, 'wish/list.html', { 'wishlists': w })
+	wishlists = Wishlist.objects.all()
+	return render(
+		request, 
+		'wish/list.html', 
+		{ 
+			'wishlists': wishlists 
+		}
+	)
 ----
 
 Rien qu'ici, on doit déjà tester deux choses:

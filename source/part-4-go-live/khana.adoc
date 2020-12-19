@@ -1,0 +1,21 @@
+== Khana
+
+Khana est une application de suivi d'apprentissage pour des élèves ou étudiants. 
+Nous voulons pouvoir:
+
+. Lister les élèves
+. Faire des listes de présence pour les élèves
+. Pouvoir planifier ses cours
+. Pouvoir suivre l'apprentissage des élèves, les liens qu'ils ont entre les éléments à apprendre:
+  . pour écrire une phrase, il faut pouvoir écrire des mots, connaître la grammaire, et connaître la conjugaison 
+. pour écrire des mots, il faut savoir écrire des lettres
+. ...
+
+Plusieurs professeurs s'occupent d'une même classe; il faut pouvoir écrire des notes, envoyer des messages aux autres professeurs, etc.
+
+Il faut également pouvoir définir des dates de contrôle, voir combien de semaines il reste pour s'assurer d'avoir vu toute la matiètre.
+
+Et pouvoir encoder les points des contrôles.
+
+.Khana
+image::images/django/django-project-vs-apps-khana.png[]

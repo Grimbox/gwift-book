@@ -1,0 +1,20 @@
+= Ressources et bibliographie
+
+* https://simpleisbetterthancomplex.com/series/beginners-guide/1.11/[Simple Is Better Than Complex]
+* https://www.feldroy.com/collections/two-scoops-press/products/two-scoops-of-django-1-11[Two Scoops of Django 1.11]
+* https://www.feldroy.com/products/django-crash-course[Django Crash Course]
+* https://www.amazon.com/dp/B07BDGC57[Django Design Patterns and Best Practices] (Packt Publishing)
+* https://books.agiliq.com/en/latest/README.html[Books by Agiliq]
+
+include::code-snippets.adoc[]
+
+include::legacy.adoc[]
+
+. https://simpleisbetterthancomplex.com/series/beginners-guide/1.11/[A Complete Beginner's Guide to Django]:
+  . https://simpleisbetterthancomplex.com/series/2017/09/04/a-complete-beginners-guide-to-django-part-1.html[Getting Started]
+  . https://simpleisbetterthancomplex.com/series/2017/09/11/a-complete-beginners-guide-to-django-part-2.html[Fundamentals]
+  . https://simpleisbetterthancomplex.com/series/2017/09/18/a-complete-beginners-guide-to-django-part-3.html[Advanced Concepts]
+  . https://simpleisbetterthancomplex.com/series/2017/09/25/a-complete-beginners-guide-to-django-part-4.html[Authentication]
+  . https://simpleisbetterthancomplex.com/series/2017/10/02/a-complete-beginners-guide-to-django-part-5.html[Django ORM]
+  . https://simpleisbetterthancomplex.com/series/2017/10/09/a-complete-beginners-guide-to-django-part-6.html[Class Based Views]
+  . https://simpleisbetterthancomplex.com/series/2017/10/16/a-complete-beginners-guide-to-django-part-7.html[Deployment]
