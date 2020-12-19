@@ -406,7 +406,7 @@ Pour résumer, cette fonction permet:
   <title>Page title</title>
 </head>
 <body>
-  <h1>Hi!</h1>
+  <h1>👤 Hi!</h1>
   <p>My name is {{ user_name }}. {{ user_first_name }} {{ user_name }}.</p>
   <p>This page was generated at {{ now }}</p>
 </body>
@@ -423,7 +423,7 @@ Après application de notre contexte sur ce template, nous obtiendrons ce docume
   <title>Page title</title>
 </head>
 <body>
-  <h1>Hi!</h1>
+  <h1>👤 Hi!</h1>
   <p>My name is Bond. James Bond.</p>
   <p>This page was generated at 2027-03-19 19:47:38</p>
 </body>
