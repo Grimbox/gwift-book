@@ -237,9 +237,78 @@ Traduit rapidement à partir de la langue de Batman: "_En utilisant Black, vous 
 A nouveau, un greffon pour `flake8` existe et donnera une estimation de la complexité de McCabe pour les fonctions trop complexes. Installez-le avec `pip install mccabe`, et activez-le avec le paramètre `--max-complexity`. Toute fonction dans la complexité est supérieure à cette valeur sera considérée comme trop complexe.
 
 
-==== Typage statique
+==== Typage statique - https://www.python.org/dev/peps/pep-0585/[PEP585]
 
--> Mypy
+Nous vous disions ci-dessus que Python était un langage dynamique interprété. 
+Concrètement, cela signifie que des erreurs pouvant être détectées à la compilation avec d'autres langages, ne le sont pas avec Python.
+
+Il existe cependant une solution à ce problème, sous la forme de http://mypy-lang.org/[Mypy], qui peut (sous vous le souhaitez ;-)) vérifier une forme de typage statique de votre code source, grâce à une expressivité du code, basée sur des annotations (facultatives, elles aussi).
+
+Ces vérifications se présentent de la manière suivante:
+
+[source,python]
+----
+from typing import List
+
+
+def first_int_elem(l: List[int]) -> int:
+    return l[0] if l else None
+
+
+if __name__ == "__main__":
+    print(first_int_elem([1, 2, 3]))
+    print(first_int_elem(['a', 'b', 'c']))
+----
+
+Est-ce que le code ci-dessous fonctionne correctement ? 
+*Oui*:
+
+[source,bash]
+----
+λ python mypy-test.py
+1
+a
+----
+
+Malgré que nos annotations déclarent une liste d'entiers, rien ne nous empêche de lui envoyer une liste de caractères, sans que cela ne lui pose de problèmes.
+
+Est-ce que Mypy va râler ? *Oui, aussi*.
+Non seulement nous retournons la valeur `None` si la liste est vide alors que nous lui annoncions un entier en sortie, mais en plus, nous l'appelons avec une liste de caractères, alors que nous nous attendions à une liste d'entiers:
+
+[source,bash]
+----
+λ mypy mypy-test.py
+mypy-test.py:7: error: Incompatible return value type (got "Optional[int]", expected "int")
+mypy-test.py:12: error: List item 0 has incompatible type "str"; expected "int"
+mypy-test.py:12: error: List item 1 has incompatible type "str"; expected "int"
+mypy-test.py:12: error: List item 2 has incompatible type "str"; expected "int"
+Found 4 errors in 1 file (checked 1 source file)
+----
+
+Pour corriger ceci, nous devons:
+
+. Importer le type `Optional` et l'utiliser en sortie de notre fonction `first_int_elem`
+. Eviter de lui donner de mauvais paramètres ;-)
+
+[source,python]
+----
+from typing import List, Optional
+
+
+def first_int_elem(l: List[int]) -> Optional[int]:
+    return l[0] if l else None
+
+
+if __name__ == "__main__":
+    print(first_int_elem([1, 2, 3]))
+----
+
+[source,bash]
+----
+λ mypy mypy-test.py
+Success: no issues found in 1 source file
+----
+
 
 ==== Tests unitaires
 
