@@ -502,4 +502,13 @@ Les plus connus sont https://www.gitflow.com/[Gitflow] et https://www.reddit.com
 
 ==== Décrire ses changements
 
--> parler de la bonne structure d'un commit.
+La description d'un changement se fait _via_ la commande `git commit`. 
+Il est possible de lui passer directement le message associé à ce changement grâce à l'attribut `-m`, mais c'est une pratique relativement déconseillée: un _commit_ ne doit effectivement pas obligatoirement être décrit sur une seule ligne. 
+Une description plus complète, accompagnée des éventuels tickets ou références, sera plus complète, plus agréable à lire, et plus facile à revoir pour vos éventuels relecteurs.
+
+De plus, la plupart des plateformes de dépôts présenteront ces informations de manière ergonomique. Par exemple:
+
+.Un exemple de commit affiché dans Gitea
+image::images/environment/gitea-commit-message.png[]
+
+La première ligne est reprise comme titre (normalement, sur 50 caractères maximum); le reste est repris comme de la description.
