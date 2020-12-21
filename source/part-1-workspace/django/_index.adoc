@@ -367,7 +367,11 @@ urlpatterns = [
 <2> Champomy et cotillons! Nous avons une correspondance avec `wishes/details/91827`
 
 
-Nous n'allons pas nous occuper de l'accès à la base de données pour le moment (nous nous en occuperons dans un prochain chapitre) et nous nous contenterons de remplir un canevas avec un ensemble de données. 
+TODO: En fait, il faudrait quand même s'occuper du modèle ici. 
+TODO: et de la mise en place de l'administration, parce que nous en aurons besoin pour les étapes de déploiement.
+
+[line-through]#Nous n'allons pas nous occuper de l'accès à la base de données pour le moment (nous nous en occuperons dans un prochain chapitre) et nous nous contenterons de remplir un canevas avec un ensemble de données.#
+
 Le module `gwift.views` qui se trouve dans le fichier `gwift/views.py` peut ressembler à ceci:
 
 [source,python]
@@ -474,11 +478,30 @@ Nous avons donc la strucutre finale pour notre environnement de travail:
 └── tox.ini
 ----
 
-===
-
 === Cookie cutter
 
-* Créez systématiquement un environnement virtuel pour chaque projet sur lequel vous travaillez
-* La description des dépendances utilisées pour un projet doivent faire partie intégrante des sources
+Pfiou! Ca en fait des commandes et du boulot pour "juste" démarrer un nouveau projet, non? Sachant qu'en plus, nous avons dû modifier des fichiers, déplacer des dossiers, ajouter des dépendances, configurer une base de données, ... 
 
-C'est ici que le projet http://cookiecutter.readthedocs.io/en/latest/readme.html[CookieCutter] va être intéressant: les X premières étapes peuvent être *bypassées* par une simple commande.
+Bonne nouvelle! Il existe des générateurs, permettant de démarrer rapidement un nouveau projet sans (trop) se prendre la tête. Le plus connu (et le plus personnalisable) est https://cookiecutter.readthedocs.io/[Cookie-Cutter], qui se base sur des canevas _type https://pypi.org/project/Jinja2/[Jinja2]_, pour créer une arborescence de dossiers et fichiers conformes à votre manière de travailler. Et si vous avez la flemme de créer votre propre canevas, vous pouvez utiliser https://cookiecutter-django.readthedocs.io[ceux qui existent déjà].
+
+Pour démarrer, créez un environnement virtuel (comme d'habitude):
+
+[source,bash]
+----
+λ python -m venv .venvs\cookie-cutter-khana
+λ .venvs\cookie-cutter-khana\Scripts\activate.bat
+(cookie-cutter-khana) λ pip install cookiecutter
+
+  Collecting cookiecutter
+  [...]
+  Successfully installed Jinja2-2.11.2 MarkupSafe-1.1.1 arrow-0.17.0 binaryornot-0.4.4 certifi-2020.12.5 chardet-4.0.0 click-7.1.2 cookiecutter-1.7.2 idna-2.10 jinja2-time-0.2.0 poyo-0.5.0 python-dateutil-2.8.1 python-slugify-4.0.1 requests-2.25.1 six-1.15.0 text-unidecode-1.3 urllib3-1.26.2
+
+(cookie-cutter-khana) λ cookiecutter https://github.com/pydanny/cookiecutter-django
+
+  [...]
+
+ [SUCCESS]: Project initialized, keep up the good work!
+----
+
+Si vous explorez les différents fichiers, vous trouverez beaucoup de similitudes avec la configuration que nous vous proposions ci-dessus. 
+En fonction de votre expérience, vous serez tenté de modifier certains paramètres, pour faire correspondre ces sources avec votre utilisation ou vos habitudes.

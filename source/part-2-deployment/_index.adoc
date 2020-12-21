@@ -85,8 +85,6 @@ include::heroku.adoc[]
 
 include::docker.adoc[]
 
-
-
 WARNING: le serveur de déploiement ne doit avoir qu'un accès en lecture au dépôt source.
 
 On peut aussi passer par fabric, ansible, chef ou puppet.
@@ -115,4 +113,3 @@ See https://mattsegal.dev/nginx-django-reverse-proxy-config.html
 
 * Let's Encrypt !
 
-include::database.adoc[]

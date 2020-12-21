@@ -18,3 +18,5 @@ image.png
 L'image de base python passe de 179 à 740 MB. Et là j'en ai pour presque 1,5 GB d'un coup.
 
 Mais par contre, j'ai un python 3.7 direct et postgres 10 sans rien faire ou presque.
+
+La partie ci-dessous a été reprise telle quelle de https://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html[la documentation de cookie-cutter-django].

@@ -1,1 +1,127 @@
 === Heroku
+
+https://www.heroku.com[Heroku] est une _Plateform As A Service_ footnote:[Aussi abrégé "PaaS" pour les conaisseurs], où vous choisissez le _service_ dont vous avez besoin (une base de données, un service de cache, un service applicatif, ...), vous lui envoyer les paramètres nécessaires et le tout démarre gentiment sans que vous ne deviez superviser l'hôte. 
+Ce mode démarrage ressemble énormément aux 12 facteurs dont nous avons déjà parlé plus tôt - raison de plus pour que notre application soit directement prête à y être déployée, d'autant plus qu'il ne sera pas possible de modifier un fichier une fois qu'elle aura démarré: si vous souhaitez modifier un paramètre, cela reviendra à couper l'actuelle et envoyer de nouveaux paramètres et recommencer le déploiement depuis le début.
+
+.Invest in apps, not ops. Heroku handles the hard stuff — patching and upgrading, 24/7 ops and security, build systems, failovers, and more — so your developers can stay focused on building great apps.
+image::images/deployment/heroku.png[]
+
+Pour un projet de type "hobby" et pour l'exemple de déploiement ci-dessous, il est tout à fait possible de s'en sortir sans dépenser un kopek, afin de tester nos quelques idées ou mettre rapidement un _Most Valuable Product_ en place. La seule contrainte consistera à pouvoir héberger des fichiers envoyés par vos utilisateurs - ceci pourra être fait en configurant un _bucket S3_ chez Amazon (beurk), Scaleway ou OVH footnote:[Entre autres.]
+
+Le fonctionnement est relativement simple: pour chaque application, Heroku crée un dépôt Git qui lui est associé. Au travers de la commande `heroku create`, vous associez en fait une nouvelle référence à votre code source:
+
+[source,bash]
+----
+$ heroku create
+Creating app... done, ⬢ young-temple-86098
+https://young-temple-86098.herokuapp.com/ | https://git.heroku.com/young-temple-86098.git
+
+$ cat .git/config
+[core]
+        repositoryformatversion = 0
+        filemode = false
+        bare = false
+        logallrefupdates = true
+        symlinks = false
+        ignorecase = true
+[remote "heroku"]
+        url = https://git.heroku.com/still-thicket-66406.git
+        fetch = +refs/heads/*:refs/remotes/heroku/*
+----
+
+Pour envoyer une nouvelle version, il suffit dès lors (après l'avoir paramétrée), de pousser la référence grâce à la commande `git push heroku master`.
+
+Prêt à vous lancer ? Commencez par créer un compte: https://signup.heroku.com/python. 
+
+==== Configuration du compte Heroku
+
++ Récupération des valeurs d'environnement pour les réutiliser ci-dessous.
+
+Vous aurez peut-être besoin d'un coup de pouce pour démarrer votre première application; heureusement, la documentation est super bien faite:
+
+.Heroku: Commencer à travailler avec un langage
+image::images/deployment/heroku-new-app.png[]
+
+Installez ensuite la CLI (_Command Line Interface_) en suivant https://devcenter.heroku.com/articles/heroku-cli[la documentation suivante].
+
+Au besoin, cette CLI existe pour:
+
+. macOS, _via_ `brew `
+. Windows, grâce à un https://cli-assets.heroku.com/heroku-x64.exe[binaire x64] (la version 32 bits existe aussi, mais il est peu probable que vous en ayez besoin)
+. GNU/Linux, via un script Shell `curl https://cli-assets.heroku.com/install.sh | sh` ou sur https://snapcraft.io/heroku[SnapCraft].
+
+Une fois installée, connectez-vous:
+
+[source,bash]
+----
+$ heroku login
+----
+
+Et créer votre application:
+
+[source,bash]
+----
+$ heroku create
+Creating app... done, ⬢ young-temple-86098
+https://young-temple-86098.herokuapp.com/ | https://git.heroku.com/young-temple-86098.git
+----
+
+.Notre application est à présent configurée!
+image::images/deployment/heroku-new-app-created.png[]
+
+Ajoutons lui une base de données, que nous sauvegarderons à intervalle régulier:
+
+[source,bash]
+----
+$ heroku addons:create heroku-postgresql:hobby-dev
+Creating heroku-postgresql:hobby-dev on ⬢ still-thicket-66406... free
+Database has been created and is available
+ ! This database is empty. If upgrading, you can transfer
+ ! data from another database with pg:copy
+Created postgresql-clear-39693 as DATABASE_URL
+Use heroku addons:docs heroku-postgresql to view documentation
+
+$ heroku pg:backups schedule --at '14:00 Europe/Brussels' DATABASE_URL
+Scheduling automatic daily backups of postgresql-clear-39693 at 14:00 Europe/Brussels... done
+----
+
+[source,bash]
+----
+# Copié/collé de https://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html
+heroku create --buildpack https://github.com/heroku/heroku-buildpack-python
+
+heroku addons:create heroku-redis:hobby-dev
+
+heroku addons:create mailgun:starter
+
+heroku config:set PYTHONHASHSEED=random
+
+heroku config:set WEB_CONCURRENCY=4
+
+heroku config:set DJANGO_DEBUG=False
+heroku config:set DJANGO_SETTINGS_MODULE=config.settings.production
+heroku config:set DJANGO_SECRET_KEY="$(openssl rand -base64 64)"
+
+# Generating a 32 character-long random string without any of the visually similar characters "IOl01":
+heroku config:set DJANGO_ADMIN_URL="$(openssl rand -base64 4096 | tr -dc 'A-HJ-NP-Za-km-z2-9' | head -c 32)/"
+
+# Set this to your Heroku app url, e.g. 'bionic-beaver-28392.herokuapp.com'
+heroku config:set DJANGO_ALLOWED_HOSTS=
+
+# Assign with AWS_ACCESS_KEY_ID
+heroku config:set DJANGO_AWS_ACCESS_KEY_ID=
+
+# Assign with AWS_SECRET_ACCESS_KEY
+heroku config:set DJANGO_AWS_SECRET_ACCESS_KEY=
+
+# Assign with AWS_STORAGE_BUCKET_NAME
+heroku config:set DJANGO_AWS_STORAGE_BUCKET_NAME=
+
+git push heroku master
+
+heroku run python manage.py createsuperuser
+
+heroku run python manage.py check --deploy
+
+heroku open
+----

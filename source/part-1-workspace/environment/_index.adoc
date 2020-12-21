@@ -288,7 +288,8 @@ Found 4 errors in 1 file (checked 1 source file)
 Pour corriger ceci, nous devons:
 
 . Importer le type `Optional` et l'utiliser en sortie de notre fonction `first_int_elem`
-. Eviter de lui donner de mauvais paramètres ;-)
+. Eviter de lui donner de 
+mauvais paramètres ;-)
 
 [source,python]
 ----
@@ -458,9 +459,13 @@ Pour la petite histoire, `make` peu sembler un peu désuet, mais reste extrêmem
 
 ==== The Zen of Python
 
-[source,text]
+[source,python]
 ----
 >>> import this
+----
+
+[source,text]
+----
 The Zen of Python, by Tim Peters
 
 Beautiful is better than ugly.
