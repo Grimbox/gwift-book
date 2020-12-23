@@ -85,6 +85,8 @@ $ heroku pg:backups schedule --at '14:00 Europe/Brussels' DATABASE_URL
 Scheduling automatic daily backups of postgresql-clear-39693 at 14:00 Europe/Brussels... done
 ----
 
+TODO: voir comment récupérer le backup de la db :-p
+
 [source,bash]
 ----
 # Copié/collé de https://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html
