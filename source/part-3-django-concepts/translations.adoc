@@ -1,0 +1,8 @@
+=== Traductions
+
+[source,bash]
+----
+python manage.py makemessages
+----
+
++ plein d'explications: traductions, génération, interface (urls, breadcrumbs, ...).

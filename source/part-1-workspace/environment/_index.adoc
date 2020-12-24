@@ -586,3 +586,163 @@ De plus, la plupart des plateformes de dépôts présenteront ces informations d
 image::images/environment/gitea-commit-message.png[]
 
 La première ligne est reprise comme titre (normalement, sur 50 caractères maximum); le reste est repris comme de la description.
+
+=== Un système de virtualisation
+
+Par "_système de virtualisation_", nous entendons n'importe quel application, système d'exploitation, système de containeurisation, ... qui permette de créer ou recréer un environnement de développement aussi proche que celui en production.
+Les solutions sont nombreuses:
+
+* https://www.virtualbox.org/[VirtualBox]
+* https://www.vagrantup.com/[Vagrant]
+* https://www.docker.com/[Docker]
+* https://linuxcontainers.org/lxc/[Linux Containers (LXC)]
+* https://docs.microsoft.com/fr-fr/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v[Hyper-V]
+
+Ces quelques propositions se situent un cran plus loin que la "simple" isolation d'un environnement, puisqu'elles vous permettront de construire un environnement complet.
+Elles constituent donc une étape supplémentaires dans la configuration de votre espace de travail, mais en amélioreront la qualité.
+
+Dans la suite, nous détaillerons Vagrant et Docker, qui constituent deux solutions automatisables et multiplateformes, dont la configuration peut faire partie intégrante de vos sources.
+
+==== Vagrant
+
+
+==== Docker
+
+
+[source,dockerfile]
+----
+version: '3'
+
+volumes:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: khana_local_django
+    container_name: django
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "8000:8000"
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: khana_production_postgres
+    container_name: postgres
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data:Z
+      - local_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.local/.postgres
+
+  docs:
+    image: khana_local_docs
+    container_name: docs
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./khana:/app/khana:z
+    ports:
+      - "7000:7000"
+    command: /start-docs
+
+  redis:
+    image: redis:5.0
+    container_name: redis
+
+  celeryworker:
+    <<: *django
+    image: khana_local_celeryworker
+    container_name: celeryworker
+    depends_on:
+      - redis
+      - postgres
+      
+    ports: []
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *django
+    image: khana_local_celerybeat
+    container_name: celerybeat
+    depends_on:
+      - redis
+      - postgres
+      
+    ports: []
+    command: /start-celerybeat
+
+  flower:
+    <<: *django
+    image: khana_local_flower
+    container_name: flower
+    ports:
+      - "5555:5555"
+    command: /start-flower
+
+----
+
+
+[source,dockerfile]
+----
+FROM python:3.8-slim-buster
+
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
+RUN apt-get update \
+  # dependencies for building Python packages
+  && apt-get install -y build-essential \
+  # psycopg2 dependencies
+  && apt-get install -y libpq-dev \
+  # Translations dependencies
+  && apt-get install -y gettext \
+  # cleaning up unused files
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && rm -rf /var/lib/apt/lists/*
+
+# Requirements are installed here to ensure they will be cached.
+COPY ./requirements /requirements
+RUN pip install -r /requirements/local.txt
+
+COPY ./compose/production/django/entrypoint /entrypoint
+RUN sed -i 's/\r$//g' /entrypoint
+RUN chmod +x /entrypoint
+
+COPY ./compose/local/django/start /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
+
+COPY ./compose/local/django/celery/worker/start /start-celeryworker
+RUN sed -i 's/\r$//g' /start-celeryworker
+RUN chmod +x /start-celeryworker
+
+COPY ./compose/local/django/celery/beat/start /start-celerybeat
+RUN sed -i 's/\r$//g' /start-celerybeat
+RUN chmod +x /start-celerybeat
+
+COPY ./compose/local/django/celery/flower/start /start-flower
+RUN sed -i 's/\r$//g' /start-flower
+RUN chmod +x /start-flower
+
+WORKDIR /app
+
+ENTRYPOINT ["/entrypoint"]
+----

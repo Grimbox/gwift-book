@@ -444,6 +444,45 @@ image::images/django/django-first-template.png[]
 -> Construction du fichier setup.cfg
 
 
+==== setup.cfg
+
+(Repris de cookie-cutter-django)
+
+[source,ini]
+----
+[flake8]
+max-line-length = 120
+exclude = .tox,.git,*/migrations/*,*/static/CACHE/*,docs,node_modules,venv
+
+[pycodestyle]
+max-line-length = 120
+exclude = .tox,.git,*/migrations/*,*/static/CACHE/*,docs,node_modules,venv
+
+[mypy]
+python_version = 3.8
+check_untyped_defs = True
+ignore_missing_imports = True
+warn_unused_ignores = True
+warn_redundant_casts = True
+warn_unused_configs = True
+plugins = mypy_django_plugin.main
+
+[mypy.plugins.django-stubs]
+django_settings_module = config.settings.test
+
+[mypy-*.migrations.*]
+# Django migrations should not produce any errors:
+ignore_errors = True
+
+[coverage:run]
+include = khana/*
+omit = *migrations*, *tests*
+plugins =
+    django_coverage_plugin
+
+----
+
+
 === Structure finale de notre environnement
 
 Nous avons donc la strucutre finale pour notre environnement de travail:
@@ -505,3 +544,11 @@ Pour démarrer, créez un environnement virtuel (comme d'habitude):
 
 Si vous explorez les différents fichiers, vous trouverez beaucoup de similitudes avec la configuration que nous vous proposions ci-dessus. 
 En fonction de votre expérience, vous serez tenté de modifier certains paramètres, pour faire correspondre ces sources avec votre utilisation ou vos habitudes.
+
+NOTE: Il est aussi possible d'utiliser l'argument `--template`, suivie d'un argument reprenant le nom de votre projet (`<my_project>`), lors de l'initialisation d'un projet avec la commande `startproject` de `django-admin`, afin de calquer votre arborescence sur un projet existant. 
+La https://docs.djangoproject.com/en/stable/ref/django-admin/#startproject[documentation] à ce sujet est assez complète.
+
+[source,bash]
+----
+django-admin.py startproject --template=https://github.com/notanumber/django-vagrant/archive/master.zip <my_project> --name=Vagrantfile --extension=py --extension=sls
+----
