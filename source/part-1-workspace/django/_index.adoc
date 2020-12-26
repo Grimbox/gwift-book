@@ -550,5 +550,5 @@ La https://docs.djangoproject.com/en/stable/ref/django-admin/#startproject[docum
 
 [source,bash]
 ----
-django-admin.py startproject --template=https://github.com/notanumber/django-vagrant/archive/master.zip <my_project> --name=Vagrantfile --extension=py --extension=sls
+django-admin.py startproject --template=https://[...].zip <my_project>
 ----
