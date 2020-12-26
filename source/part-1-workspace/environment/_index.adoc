@@ -605,6 +605,51 @@ Dans la suite, nous détaillerons Vagrant et Docker, qui constituent deux soluti
 
 ==== Vagrant
 
+Vagrant consiste en un outil de création et de gestion d'environnements virtualisés, en respectant toujours une même manière de travailler, indépendamment des choix techniques et de l'infrastructure que vous pourriez sélectionner.
+
+> Vagrant is a tool for building and managing virtual machine environments in a single workflow. With an easy-to-use workflow and focus on automation, Vagrant lowers development environment setup time, increases production parity, and makes the "works on my machine" excuse a relic of the past. footnote:[https://www.vagrantup.com/intro]
+
+La partie la plus importante de la configuration de Vagrant pour votre projet consiste à placer un fichier `Vagrantfile` - _a priori_ à la racine de votre projet - et qui contiendra les information suivantes:
+
+* Le choix du _fournisseur_ (*provider*) de virtualisation (Virtualbox, Hyper-V et Docker sont natifs; il est également possible de passer par VMWare, AWS, etc.)
+* Une _box_, qui consiste à lui indiquer le type et la version attendue du système virtualisé (Debian 10, Ubuntu 20.04, etc. - et https://app.vagrantup.com/boxes/search[il y a du choix]).
+* La manière dont la fourniture (*provisioning*) de l'environnement doit être réalisée: scripts Shell, fichiers, Ansible, Puppet, Chef, ... Choisissez votre favori :-) même s'il est toujours possible de passer par une installation et une maintenance manuelle, après s'être connecté sur la machine.
+* Si un espace de stockage doit être partagé entre la machine virtuelle et l'hôte
+* Les ports qui doivent être transmis de la machine virtuelle vers l'hôte.
+
+La syntaxe de ce fichier `Vagrantfile` est en https://www.ruby-lang.org/en/[Ruby]. Vous trouverez ci-dessous un exemple, généré (et nettoyé) après avoir exécuté la commande `vagrant init`:
+
+[source,ruby]
+----
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/bionic64"
+  
+  config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+  config.vm.provider "virtualbox" do |vb|  
+    vb.gui = true
+    vb.memory = "1024"
+  end
+  
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt-get install -y nginx
+  SHELL
+end
+----
+
+Dans le fichier ci-dessus, nous créons: 
+
+* Une nouvelle machine virtuelle (ie. _invitée_) sous Ubuntu Bionic Beaver, en x64
+* Avec une correspondance du port `80` de la machine vers le port `8080` de l'hôte, en limitant l'accès à celui-ci - accédez à `localhost:8080` et vous accéderez au port `80` de la machine virtuelle.
+* En utilisant Virtualbox comme backend - la mémoire vive allouée sera limitée à 1Go de RAM et nous ne voulons pas voir l'interface graphique au démarrage
+* Et pour finir, nous voulons appliquer un script de mise à jour `apt-get update` et installer le paquet `nginx`
+
+NOTE: Par défaut, le répertoire courant (ie. le répertoire dans lequel notre fichier `Vagrantfile` se trouve) sera synchronisé dans le répertoire `/vagrant` sur la machine invitée.
+
 
 ==== Docker
 
