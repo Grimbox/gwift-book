@@ -653,6 +653,7 @@ NOTE: Par défaut, le répertoire courant (ie. le répertoire dans lequel notre 
 
 ==== Docker
 
+(copié/collé de cookie-cutter-django)
 
 [source,dockerfile]
 ----
@@ -791,3 +792,5 @@ WORKDIR /app
 
 ENTRYPOINT ["/entrypoint"]
 ----
+
+NOTE: Voir comment nous pouvons intégrer toutes ces commandes au niveau de la CI et au niveau du déploiement (Docker-compose ?)
