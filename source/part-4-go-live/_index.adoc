@@ -10,6 +10,6 @@ La première chose à faire est de définir nos besoins du point de vue de l'uti
 Ensuite, nous pourrons traduire ces besoins en fonctionnalités et finalement effectuer le développement.
 
 
-include::gwift.adoc[]
+include::gwift/_main.adoc[]
 
-include::khana.adoc[]
+include::khana/_main.adoc[]

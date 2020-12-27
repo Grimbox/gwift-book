@@ -9,10 +9,6 @@ include::models.adoc[]
 
 include::tests.adoc[]
 
-include::key-points.adoc[]
-
 include::refactoring.adoc[]
 
 include::user-management.adoc[]
-
-include::console.adoc[]

@@ -79,8 +79,6 @@ La machine hôte peut être louée chez Digital Ocean, Scaleway, OVH, Vultr, ...
 
 include::debian.adoc[]
 
-include::ansible.adoc[]
-
 include::heroku.adoc[]
 
 include::docker.adoc[]

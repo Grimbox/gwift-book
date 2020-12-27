@@ -67,7 +67,7 @@ https://young-temple-86098.herokuapp.com/ | https://git.heroku.com/young-temple-
 ----
 
 .Notre application est à présent configurée!
-image::images/deployment/heroku-new-app-created.png[]
+image::images/deployment/heroku-app-created.png[]
 
 Ajoutons lui une base de données, que nous sauvegarderons à intervalle régulier:
 
