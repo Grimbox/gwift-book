@@ -47,14 +47,10 @@ Bonne lecture.
 
 include::part-1-workspace/_main.adoc[]
 
-include::part-2-deployment/00-main.adoc[]
+include::part-2-deployment/_main.adoc[]
 
 include::part-3-django-concepts/_index.adoc[]
 
 include::part-4-go-live/_index.adoc[]
 
 include::part-9-resources/_index.adoc[]
-
-
-
-
