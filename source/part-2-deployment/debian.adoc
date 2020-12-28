@@ -357,8 +357,9 @@ git checkout vX.Y.Z
 pip install -U requirements/prod.txt
 python manage.py migrate
 python manage.py collectstatic
-gunicorn reload -HUP
+kill -HUP `ps -C gunicorn fch -o pid | head -n 1` <1>
 ----
+<1> https://stackoverflow.com/questions/26902930/how-do-i-restart-gunicorn-hup-i-dont-know-masterpid-or-location-of-pid-file
 
 ==== Configuration des sauvegardes
 
