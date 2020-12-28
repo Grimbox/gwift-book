@@ -50,7 +50,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-logger.debug('helloworld');
+logger.debug('helloworld')
 ----
 
 https://docs.djangoproject.com/en/stable/topics/logging/#examples[Par exemples].
