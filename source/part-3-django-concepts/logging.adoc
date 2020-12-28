@@ -1,6 +1,16 @@
 == Logging
 
-Si on veut propager les logs entre applications, il faut bien spécifier l'attribut `propagate`, sans quoi on s'arrêtera au module sans prendre en considération les sous-modules.
+La configuration des _loggers_ est relativement simple, un peu plus complexe si nous nous penchons dessus, et franchement complète si nous creusons encore.
+Il est ainsi possible de définir des formattages, gestionnaires (_handlers_) et loggers distincts, en fonction de nos applications.
+
+Sauf que comme nous l'avons vu avec les 12 facteurs, nous devons traiter les informations de notre application comme un flux d'évènements. 
+Il n'est donc pas réellement nécessaire de chipoter la configuration, puisque la seule classe qui va réellement nous intéresser concerne les `StreamHandler`.
+La configuration que nous allons utiliser est celle-ci:
+
+. Formattage: à définir - mais la variante suivante est complète, lisible et pratique: `{levelname} {asctime} {module} {process:d} {thread:d} {message}`
+. Handler: juste un, qui définit un `StreamHandler`
+. Logger: pour celui-ci, nous avons besoin d'un niveau (`level`) et de savoir s'il faut propager les informations vers les sous-paquets, auquel cas il nous suffira de fixer la valeur de `propagate` à `True`.
+
 
 [source,python]
 ----
@@ -10,60 +20,37 @@ LOGGING = {
     'formatters': {
         'verbose': {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
         },
         'simple': {
             'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
         },
     },
     'handlers': {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': "simple"
+            'formatter': "verbose"
         }
     },
     'loggers': {
-        'connexys': {
+        'khana': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': env("LOG_LEVEL", default="DEBUG"),
             'propagate': True,
-        },
-        'stp': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
+        },        
     }
 }
 ----
 
-Par exemple:
+Pour utiliser nos loggers, il suffit de copier le petit bout de code suivant:
 
 [source,python]
 ----
-'loggers': {
-    'mv': {  # Parent
-        'handlers': ['file'],
-        'level': 'DEBUG',
-    },
-    'mv.models': { # Enfant
-        'handlers': ['console'],
-        'level': 'DEBUG',
-        'propagate': True,
-    }
-},
-----
+import logging
 
-Et dans le fichier `mv/models.py`, on a ceci: 
-
-[source,python]
-----
 logger = logging.getLogger(__name__)
+
 logger.debug('helloworld');
 ----
 
-Le log sera écrit dans la console **ET** dans le fichier.
-
-Par contre, si on retire l'attribut `propagate: True` (ou qu'on le change en `propagate: False`), le même code ci-dessus n'écrit que dans la console. Simplement parce que le log associé à un package considère par défaut ses enfants, alors que le log associé à un module pas. [Par exemple](https://docs.djangoproject.com/en/2.1/topics/logging/#examples).
+https://docs.djangoproject.com/en/stable/topics/logging/#examples[Par exemples].
