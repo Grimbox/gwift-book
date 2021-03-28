@@ -6,9 +6,9 @@ Il est du coup probable d'oublier une partie des désidérata, de zapper une fon
 Aborder le déploiement dès le début permet également de rédiger dès le début les procédures d'installation, de mises à jour et de sauvegardes.
 Déploier une nouvelle version sera aussi simple que de récupérer la dernière archive depuis le dépôt, la placer dans le bon répertoire, appliquer des actions spécifiques (et souvent identiques entre deux versions), puis redémarrer les services adéquats, et la procédure complète se résumera à quelques lignes d'un script bash.
 
-
 Le serveur que django met à notre disposition _via_ la commande `runserver` est extrêmement pratique, mais il est uniquement prévu pour la phase  développement: en production, il est inutile de passer par du code Python pour charger des fichiers statiques (feuilles de style, fichiers JavaScript, images, ...).
-De même, Django propose par défaut une base de données SQLite, qui fonctionne parfaitement dès lors que l'on connait ses limites et que l'on se limite à un utilisateur à la fois. En production, il est légitime que la base de donnée soit capable de supporter plusieurs utilisateurs et connexions simultanément... En restant avec les paramètres par défaut, il est plus que probable que vous rencontriez rapidement des erreurs de verrou parce qu'un autre processus a déjà pris la main pour écrire ses données.
+De même, Django propose par défaut une base de données SQLite, qui fonctionne parfaitement dès lors que l'on connait ses limites et que l'on se limite à un utilisateur à la fois. En production, il est légitime que la base de donnée soit capable de supporter plusieurs utilisateurs et connexions simultanément... 
+En restant avec les paramètres par défaut, il est plus que probable que vous rencontriez rapidement des erreurs de verrou parce qu'un autre processus a déjà pris la main pour écrire ses données.
 En bref, vous avez quelque chose qui fonctionne, mais qui ressemble de très loin à ce dont vous aurez besoin au final.
 
 Dans cette partie, nous aborderons les points suivants:
@@ -18,19 +18,47 @@ Dans cette partie, nous aborderons les points suivants:
 * Configurer les outils nécessaires à la bonne exécution de ce code et de ses fonctionnalités: les différentes méthodes de supervision de l'application, comment analyser les fichiers de logs, comment intercepter correctement une erreur si elle se présente et comment remonter l'information.
 * Rendre notre application accessible depuis l'extérieur.
 
-== Infrastructure
+== Infrastructure & composants
 
-Si on schématise l'infrastructure et le chemin parcouru par une éventuelle requête, nous devrions arriver à quelque chose de synthéthique:
+Pour une mise ne production, le standard _de facto_ est le suivant:
 
-. l'utilisateur fait une requête via son navigateur (Firefox ou Chrome)
-. le navigateur envoie une requête http, sa version, un verbe (GET, POST, ...), un port et éventuellement du contenu
-. le firewall du serveur (Debian GNU/Linux, CentOS, ...) vérifie si la requête peut être prise en compte
-. la requête est transmise à l'application qui écoute sur le port (probablement 80 ou 443; et _a priori_ Nginx)
-. elle est ensuite transmise par socket et est prise en compte par Gunicorn
-. qui la transmet ensuite à l'un de ses _workers_ (= un processus Python)
-. après exécution, une réponse est renvoyée à l'utilisateur.
+ * Nginx comme reverse proxy
+ * HAProxy pour la distribution de charge
+ * Gunicorn ou Uvicorn comme serveur d'application
+ * Supervisor pour le monitoring
+ * PostgreSQL ou MariaDB comme base de données.
+ * Celery et RabbitMQ pour l'exécution de tâches asynchrones
+ * Redis / Memcache pour la mise à en cache (et pour les sessions ? A vérifier).
+
+Si nous schématisons l'infrastructure et le chemin parcouru par une requête, nous pourrions arriver à la synthèse suivante:
+
+. L'utilisateur fait une requête via son navigateur (Firefox ou Chrome)
+. Le navigateur envoie une requête http, sa version, un verbe (GET, POST, ...), un port et éventuellement du contenu
+. Le firewall du serveur (Debian GNU/Linux, CentOS, ...) vérifie si la requête peut être prise en compte
+. La requête est transmise à l'application qui écoute sur le port (probablement 80 ou 443; et _a priori_ Nginx)
+. Elle est ensuite transmise par socket et est prise en compte par un des _workers_ (= un processus Python) instancié par Gunicorn. Si l'un de ces travailleurs venait à planter, il serait automatiquement réinstancié par Supervisord.
+. Qui la transmet ensuite à l'un de ses _workers_ (= un processus Python). 
+. Après exécution, une réponse est renvoyée à l'utilisateur.
 
 image::images/diagrams/architecture.png[]
+
+=== Reverse proxy
+
+Le principe du *proxy inverse* est de pouvoir rediriger du trafic entrant vers une application hébergée sur le système. 
+Il serait tout à fait possible de rendre notre application directement accessible depuis l'extérieur, mais le proxy a aussi l'intérêt de pouvoir élever la sécurité du serveur (SSL) et décharger le serveur applicatif grâce à un mécanisme de cache ou en compressant certains résultats footnote:[https://fr.wikipedia.org/wiki/Proxy_inverse]
+
+
+=== Load balancer
+
+=== Workers
+
+=== Supervision des processus
+
+=== Base de données
+
+=== Tâches asynchrones
+
+=== Mise en cache
 
 == Code source
 
@@ -47,14 +75,7 @@ Il est possible de démarrer petit, et de suivre l'évolution des besoins en fon
 
 == Outils de supervision et de mise à disposition
 
-Pour une mise ne production, le standard _de facto_ est le suivant:
 
- * Nginx comme reverse proxy
- * Gunicorn ou Uvicorn comme serveur d'application
- * Supervisorctl pour le monitoring
- * PostgreSQL ou MariaDB comme base de données.
- * Celery et RabbitMQ pour l'exécution de tâches asynchrones
- * Redis / Memcache pour la mise à en cache (et pour les sessions ? A vérifier).
 
 == Méthode de déploiement
 
