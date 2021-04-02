@@ -457,6 +457,7 @@ L'outil le plus connu est https://tox.readthedocs.io/en/latest/[Tox], qui consis
 # content of: tox.ini , put in same dir as setup.py
 [tox]
 envlist = py36,py37,py38,py39
+skipsdist = true
 
 [testenv]
 deps =
@@ -465,8 +466,10 @@ commands =
     pytest
 ----
 
-Démarrez ensuite la commande `tox`, pour démarrer la commande `pytest` sur les environnements Python 2.7 et 3.6, après avoir installé nos dépendances présentes dans le fichier `requirements/dev.txt`.
+Démarrez ensuite la commande `tox`, pour démarrer la commande `pytest` sur les environnements Python 3.6, 3.7, 3.8 et 3.9, après avoir installé nos dépendances présentes dans le fichier `requirements/dev.txt`.
 
+WARNING: pour que la commande ci-dessus fonctionne correctement, il sera nécessaire que vous ayez les différentes versions d'interpréteurs installées.
+Ci-dessus, la commande retournera une erreur pour chaque version non trouvée, avec une erreur type `ERROR:   pyXX: InterpreterNotFound: pythonX.X`.
 
 ==== Configuration globale
 

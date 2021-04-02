@@ -1,0 +1,7 @@
+== Migrations
+
+Dans cette section, nous allons voir comment les migrations fonctionnent. 
+Dans une première version, elles peuvent sembler un peu magiques, dans la mesure où elles appliquent des modifications au niveau du schéma de données en se basant uniquement sur des modifications effectuées sur le modèle.
+
+Pour repartir de notre exemple ci-dessus, nous avions un modèle reprenant quelques classes, et saupoudrées de propriétés.
+Pour schématiser, chaque classe correspond à une table dans la base de données, tandis que que chaque propriété correspond à un champ de cette table.
