@@ -2,24 +2,33 @@
 
 On va aborder la modélisation des objets en elle-même, qui s'apparente à la conception de la base de données. 
 
-Django utilise un modèle https://fr.wikipedia.org/wiki/Mapping_objet-relationnel[ORM] - c'est-à-dire que chaque objet peut s'apparenter à une table SQL, mais en ajoutant une couche propre au paradigme orienté objet. Il sera ainsi possible de définir facilement des notions d'héritage (tout en restant dans une forme d'héritage simple), la possibilité d'utiliser des propriétés spécifiques, des classes intermédiaires, ... 
+Django utilise un modèle https://fr.wikipedia.org/wiki/Mapping_objet-relationnel[ORM] - c'est-à-dire que chaque objet peut s'apparenter à une table SQL, mais en ajoutant une couche propre au paradigme orienté objet. 
+Il sera ainsi possible de définir facilement des notions d'héritage (tout en restant dans une forme d'héritage simple), la possibilité d'utiliser des propriétés spécifiques, des classes intermédiaires, ... 
 
-L'avantage de tout ceci est que tout reste au niveau du code. Si l'on revient sur la méthodologie des douze facteurs, ce point concerne principalement la minimisation de la divergence entre les environnements d'exécution. Déployer une nouvelle instance de l'application pourra être réalisé directement à partir d'une seule et même commande, dans la mesure où *tout est embarqué au niveau du code*.
+L'avantage de tout ceci est que tout reste au niveau du code. 
+Si nous revenons sur la méthodologie des douze facteurs, ce point-ci concerne principalement la minimisation de la divergence entre les environnements d'exécution. 
+Déployer une nouvelle instance de l'application pourra être réalisé directement à partir d'une seule et même commande, dans la mesure où *tout est embarqué au niveau du code*.
 
 Assez de blabla, on démarre !
 
-=== Types de champs
+=== Modélisation de base
+
+==== Types de champs
 
 
-=== Clés étrangères et relations
+==== Clés étrangères et relations
 
 . ForeignKey
 . ManyToManyField
 . OneToOneField
 
-Dans les examples ci-dessus, nous avons vu les relations multiples (1-N), représentées par des *ForeignKey* d'une classe A vers une classe B. Il existe également les champs de type *ManyToManyField*, afin de représenter une relation N-N. Les champs de type *OneToOneField*, pour représenter une relation 1-1.
+Dans les examples ci-dessus, nous avons vu les relations multiples (1-N), représentées par des clés étrangères (**ForeignKey**) d'une classe A vers une classe B. 
+Pour représenter d'autres types de relations, il existe également les champs de type *ManyToManyField*, afin de représenter une relation N-N. Les champs de type *OneToOneField*, pour représenter une relation 1-1.
 
-Dans notre modèle ci-dessus, nous n'avons jusqu'à présent eu besoin que des relations 1-N: la première entre les listes de souhaits et les souhaits; la seconde entre les souhaits et les parts.
+Dans notre modèle ci-dessus, nous n'avons jusqu'à présent eu besoin que des relations 1-N: 
+
+. La première entre les listes de souhaits et les souhaits; 
+. La seconde entre les souhaits et les parts.
 
 [source,python]
 ----
@@ -49,102 +58,27 @@ class Item(models.Model):
     wishlist = models.ForeignKey(Wishlist, related_name='items')
 ----
 
-A partir de maintenant, on peut accéder à nos propriétés de la manière suivante:
+NOTE: Si, dans une classe A, plusieurs relations sont liées à une classe B, Django ne saura pas à quoi correspondra la relation inverse. Pour palier à ce problème, nous fixons une valeur à l'attribut `related_name`. Par facilité (et pas conventions), prenez l'habitude de toujours ajouter cet attribut. Votre modèle gagnera en cohérence et en lisibilité.
+
+A partir de maintenant, nous pouvons accéder à nos propriétés de la manière suivante:
 
 [source,python]
 ----
 # python manage.py shell
 
 >>> from wish.models import Wishlist, Item
->>> w = Wishlist('Liste de test', 'description')
->>> w = Wishlist.create('Liste de test', 'description')
->>> i = Item.create('Element de test', 'description', w)
+>>> wishlist = Wishlist.create('Liste de test', 'description')
+>>> item = Item.create('Element de test', 'description', w)
 >>>
->>> i.wishlist
+>>> item.wishlist
 <Wishlist: Wishlist object>
 >>>
->>> w.items.all()
+>>> wishlist.items.all()
 [<Item: Item object>]
 ----
 
-Remarque: si, dans une classe A, plusieurs relations sont liées à une classe B, Django ne saura pas à quoi correspondra la relation inverse. Pour palier à ce problème et pour gagner en cohérence, on fixe alors une valeur à l'attribut `related_name`.
 
-=== Querysets et managers
-  
-  NOTE : faudra sortir les queryset du chapitre...
-
-* http://stackoverflow.com/questions/12681653/when-to-use-or-not-use-iterator-in-the-django-orm
-* https://docs.djangoproject.com/en/1.9/ref/models/querysets/#django.db.models.query.QuerySet.iterator
-* http://blog.etianen.com/blog/2013/06/08/django-querysets/
-
-L'ORM de Django (et donc, chacune des classes qui composent votre modèle) propose par défaut deux objets hyper importants: 
-
-* Les managers, qui consistent en un point d'entrée pour accéder aux objets persistants
-* Les querysets, qui permettent de filtrer des ensembles ou sous-ensemble d'objets. Les querysets peuvent s'imbriquer, pour ajouter
-d'autres filtres à des filtres existants.
-
-Ces deux propriétés vont de paire; par défaut, chaque classe de votre modèle propose un attribut `objects`, qui correspond 
-  à un manager (ou un gestionnaire, si vous préférez). Ce gestionnaire constitue l'interface par laquelle vous accéderez à la base de données. Mais pour cela, vous aurez aussi besoin d'appliquer certains requêtes ou filtres. Et pour cela, vous aurez besoin des `querysets`, qui consistent en des ... ensembles de requêtes :-).
-
-Si on veut connaître la requête SQL sous-jacente à l'exécution du queryset, il suffit d'appeler la fonction str() sur la propriété `query`:
-  
-[source,python]
-----
-queryset = Wishlist.objects.all()
-  
-print(queryset.query)
-----
-  
-Conditions AND et OR sur un queryset
-  
-  Pour un `AND`, il suffit de chaîner les conditions. ** trouver un exemple ici ** :-)
-  
-  Mais en gros : bidule.objects.filter(condition1, condition2)
-  
-  Il existe deux autres options : combiner deux querysets avec l'opérateur `&` ou combiner des Q objects avec ce même opérateur.
-  
-Soit encore combiner des filtres:
-  
-[source,python]
-----
-from core.models import Wish
-
-Wish.objects <1> 
-Wish.objects.filter(name__icontains="test").filter(name__icontains="too") <2>
-----
-<1> Ca, c'est notre manager. 
-<2> Et là, on chaîne les requêtes pour composer une recherche sur tous les souhaits dont le nom contient (avec une casse insensible) la chaîne "test" et dont le nom contient la chaîne "too". 
-  
-Pour un 'OR', on a deux options : 
-  
-  . Soit passer par deux querysets, typiuqment `queryset1 | queryset2`
-  . Soit passer par des `Q objects`, que l'on trouve dans le namespace `django.db.models`.
-  
-[source,python]
-----
-from django.db.models import Q
-  
-condition1 = Q(...)
-condition2 = Q(...)
-  
-bidule.objects.filter(condition1 | condition2)
-----
-
-L'opérateur inverse (_NOT_)
-  
-Idem que ci-dessus : soit on utilise la méthode `exclude` sur le queryset, soit l'opérateur `~` sur un Q object;
-  
-  
-Ajouter les sujets suivants : 
-  
-  . Prefetch
-  . select_related
-  
-=== Aggregate vs. Annotate
-  
-https://docs.djangoproject.com/en/3.1/topics/db/aggregation/
-
-=== Metamodèle
+==== Metamodèle
 
 Quand on prend une classe (par exemple, `Wishlist` que l'on a défini ci-dessus), on voit qu'elle hérite par défaut de `models.Model`. On peut regarder les propriétés définies dans cette classe en analysant le fichier `lib\site-packages\django\models\base.py`. On y voit notamment que `models.Model` hérite de `ModelBase` au travers de https://pypi.python.org/pypi/six[six] pour la rétrocompatibilité vers Python 2.7.
 
@@ -172,26 +106,8 @@ Les propriétés de la classe Meta les plus utiles sont les suivates:
 * `verbose_name` pour indiquer le nom à utiliser au singulier pour définir votre classe 
 * `verbose_name_plural`, pour le pluriel.
 
-=== Migrations
+==== Shell
 
-Les migrations (comprendre les "_migrations du schéma de base de données_") sont intimement liées à la représentation d'un contexte fonctionnel. L'ajout d'une nouvelle information, d'un nouveau champ ou d'une nouvelle fonction peut s'accompagner de tables de données à mettre à jour ou de champs à étendre.
-
-Toujours dans une optique de centralisation, les migrations sont directement embarquées au niveau du code. Le développeur s'occupe de créer les migrations en fonction des actions à entreprendre; ces migrations peuvent être retravaillées, _squashées_, ... et feront partie intégrante du processus de mise à jour de l'application. 
-
-A noter que les migrations n'appliqueront de modifications que si le schéma est impacté. Ajouter une propriété `related_name` sur une ForeignKey n'engendrera aucune nouvelle action de migration, puisque ce type d'action ne s'applique que sur l'ORM, et pas directement sur la base de données: au niveau des tables, rien ne change. Seul le code et le modèle sont impactés.
-
-
-https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html[reset migrations].
-
->  En gros, soit on supprime toutes les migrations (en conservant le fichier __init__.py), soit on réinitialise proprement les migrations avec un --fake-initial (sous réserve que toutes les personnes qui utilisent déjà le projet s'y conforment... Ce qui n'est pas gagné.
-
-=== Shell
-
-
-=== Les validateurs
-
-
-=== A retenir
 
 ==== Constructeurs
 

@@ -5,3 +5,16 @@ Dans une première version, elles peuvent sembler un peu magiques, dans la mesur
 
 Pour repartir de notre exemple ci-dessus, nous avions un modèle reprenant quelques classes, et saupoudrées de propriétés.
 Pour schématiser, chaque classe correspond à une table dans la base de données, tandis que que chaque propriété correspond à un champ de cette table.
+
+Une migration consiste donc à appliquer un ensemble de modifications, qui exercent un ensemble de transformations, pour que le schéma de base de données corresponde au modèle de l'application.
+
+Les migrations (comprendre les "_migrations du schéma de base de données_") sont intimement liées à la représentation d'un contexte fonctionnel. L'ajout d'une nouvelle information, d'un nouveau champ ou d'une nouvelle fonction peut s'accompagner de tables de données à mettre à jour ou de champs à étendre.
+
+Toujours dans une optique de centralisation, les migrations sont directement embarquées au niveau du code. Le développeur s'occupe de créer les migrations en fonction des actions à entreprendre; ces migrations peuvent être retravaillées, _squashées_, ... et feront partie intégrante du processus de mise à jour de l'application. 
+
+A noter que les migrations n'appliqueront de modifications que si le schéma est impacté. Ajouter une propriété `related_name` sur une ForeignKey n'engendrera aucune nouvelle action de migration, puisque ce type d'action ne s'applique que sur l'ORM, et pas directement sur la base de données: au niveau des tables, rien ne change. Seul le code et le modèle sont impactés.
+
+
+https://simpleisbetterthancomplex.com/tutorial/2016/07/26/how-to-reset-migrations.html[reset migrations].
+
+>  En gros, soit on supprime toutes les migrations (en conservant le fichier __init__.py), soit on réinitialise proprement les migrations avec un --fake-initial (sous réserve que toutes les personnes qui utilisent déjà le projet s'y conforment... Ce qui n'est pas gagné.
