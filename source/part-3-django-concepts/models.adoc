@@ -1,12 +1,12 @@
 == Modélisation
 
-On va aborder la modélisation des objets en elle-même, qui s'apparente à la conception de la base de données. 
+On va aborder la modélisation des objets en elle-même, qui s'apparente à la conception de la base de données.
 
-Django utilise un modèle https://fr.wikipedia.org/wiki/Mapping_objet-relationnel[ORM] - c'est-à-dire que chaque objet peut s'apparenter à une table SQL, mais en ajoutant une couche propre au paradigme orienté objet. 
-Il sera ainsi possible de définir facilement des notions d'héritage (tout en restant dans une forme d'héritage simple), la possibilité d'utiliser des propriétés spécifiques, des classes intermédiaires, ... 
+Django utilise un paradigme de type https://fr.wikipedia.org/wiki/Mapping_objet-relationnel[ORM] - c'est-à-dire que chaque type d'objet peut s'apparenter à une table SQL, mais en ajoutant une couche propre au modèle orienté objet.
+Il est ainsi possible de définir facilement des notions d'héritage (tout en restant dans une forme d'héritage simple), la possibilité d'utiliser des propriétés spécifiques, des classes intermédiaires, ...
 
-L'avantage de tout ceci est que tout reste au niveau du code. 
-Si nous revenons sur la méthodologie des douze facteurs, ce point-ci concerne principalement la minimisation de la divergence entre les environnements d'exécution. 
+L'avantage de tout ceci est que tout reste au niveau du code.
+Si l'on revient sur la méthodologie des douze facteurs, ce point concerne principalement la minimisation de la divergence entre les environnements d'exécution.
 Déployer une nouvelle instance de l'application pourra être réalisé directement à partir d'une seule et même commande, dans la mesure où *tout est embarqué au niveau du code*.
 
 Assez de blabla, on démarre !
@@ -22,12 +22,12 @@ Assez de blabla, on démarre !
 . ManyToManyField
 . OneToOneField
 
-Dans les examples ci-dessus, nous avons vu les relations multiples (1-N), représentées par des clés étrangères (**ForeignKey**) d'une classe A vers une classe B. 
+Dans les examples ci-dessus, nous avons vu les relations multiples (1-N), représentées par des clés étrangères (**ForeignKey**) d'une classe A vers une classe B.
 Pour représenter d'autres types de relations, il existe également les champs de type *ManyToManyField*, afin de représenter une relation N-N. Les champs de type *OneToOneField*, pour représenter une relation 1-1.
 
-Dans notre modèle ci-dessus, nous n'avons jusqu'à présent eu besoin que des relations 1-N: 
+Dans notre modèle ci-dessus, nous n'avons jusqu'à présent eu besoin que des relations 1-N:
 
-. La première entre les listes de souhaits et les souhaits; 
+. La première entre les listes de souhaits et les souhaits;
 . La seconde entre les souhaits et les parts.
 
 [source,python]
@@ -103,7 +103,7 @@ Pour sélectionner un objet au pif : `return Category.objects.order_by("?").firs
 Les propriétés de la classe Meta les plus utiles sont les suivates:
 
 * `ordering` pour spécifier un ordre de récupération spécifique.
-* `verbose_name` pour indiquer le nom à utiliser au singulier pour définir votre classe 
+* `verbose_name` pour indiquer le nom à utiliser au singulier pour définir votre classe
 * `verbose_name_plural`, pour le pluriel.
 
 ==== Shell
