@@ -173,7 +173,7 @@ Dans l'immédiat, nous allons ajouter `django` dans une version strictement inf�
 
 [source,bash]
 ----
-$ echo 'django<3.2' > requirements/base.txt
+$ echo 'django==3.2' > requirements/base.txt
 $ echo '-r base.txt' > requirements/prod.txt
 $ echo '-r base.txt' > requirements/dev.txt
 ----
@@ -327,7 +327,7 @@ La structure de vos répertoires devient celle-ci:
 
 ==== Fonctionement général
 
-Le métier de programmeur est devenu de plus en plus complexe. Il y a 20 ans, nous pouvions nous contenter d'une simple page PHP dans laquelle nous mixions l'ensemble des actios à réaliser: requêtes en bases de données, construction de la page, ... 
+Le métier de programmeur est devenu de plus en plus complexe. Il y a 20 ans, nous pouvions nous contenter d'une simple page PHP dans laquelle nous mixions l'ensemble des actios à réaliser: requêtes en bases de données, construction de la page, ...
 La recherche d'une solution a un problème n'était pas spécialement plus complexe - dans la mesure où le rendu des enregistrements en direct n'était finalement qu'une forme un chouia plus évoluée du `print()` ou des `System.out.println()` - mais c'était l'évolutivité des applications qui en prenait un coup: une grosse partie des tâches étaient dupliquées entre les différentes pages, et l'ajout d'une nouvelle fonctionnalité était relativement ardue.
 
 Django (et d'autres cadriciels) résolvent ce problème en se basant ouvertement sur le principe de `Don't repeat yourself` footnote:[DRY].
@@ -338,17 +338,17 @@ Le chemin parcouru par une requête est expliqué en (petits) détails ci-dessou
 .How it works
 image::images/diagrams/django-how-it-works.png[]
 
-*1. Un utilisateur ou un visiteur souhaite accéder à une URL hébergée et servie par notre application*. 
+*1. Un utilisateur ou un visiteur souhaite accéder à une URL hébergée et servie par notre application*.
 Ici, nous prenons l'exemple de l'URL fictive `https://gwift/wishes/91827`.
 Lorsque cette URL "arrive" dans notre application, son point d'entrée se trouvera au niveau des fichiers `asgi.py` ou `wsgi.py`. Nous verrons cette partie plus tard, et nous pouvons nous concentrer sur le chemin interne qu'elle va parcourir.
 
-*Etape 0* - La première étape consiste à vérifier que cette URL répond à un schéma que nous avons défini dans le fichier `gwift/urls.py`. 
+*Etape 0* - La première étape consiste à vérifier que cette URL répond à un schéma que nous avons défini dans le fichier `gwift/urls.py`.
 
 *Etape 1* - Si ce n'est pas le cas, l'application n'ira pas plus loin et retournera une erreur à l'utilisateur.
 
 
-*Etape 2* - Django va parcourir l'ensemble des _patterns_ présents dans le fichier `urls.py` et s'arrêtera sur le premier qui correspondra à la requête qu'il a reçue. 
-Ce cas est relativement trivial: la requête `/wishes/91827` a une correspondance au niveau de la ligne `path("wishes/<int:wish_id>` dans l'exemple ci-dessous. 
+*Etape 2* - Django va parcourir l'ensemble des _patterns_ présents dans le fichier `urls.py` et s'arrêtera sur le premier qui correspondra à la requête qu'il a reçue.
+Ce cas est relativement trivial: la requête `/wishes/91827` a une correspondance au niveau de la ligne `path("wishes/<int:wish_id>` dans l'exemple ci-dessous.
 Django va alors appeler la fonction footnote:[Qui ne sera pas toujours une fonction. Django s'attend à trouver un _callable_, c'est-à-dire n'importe quel élément qu'il peut appeler comme une fonction.] associée à ce _pattern_, c'est-à-dire `wish_details` du module `gwift.views`.
 
 [source,python]
@@ -367,7 +367,7 @@ urlpatterns = [
 <2> Champomy et cotillons! Nous avons une correspondance avec `wishes/details/91827`
 
 
-TODO: En fait, il faudrait quand même s'occuper du modèle ici. 
+TODO: En fait, il faudrait quand même s'occuper du modèle ici.
 TODO: et de la mise en place de l'administration, parce que nous en aurons besoin pour les étapes de déploiement.
 
 [line-through]#Nous n'allons pas nous occuper de l'accès à la base de données pour le moment (nous nous en occuperons dans un prochain chapitre) et nous nous contenterons de remplir un canevas avec un ensemble de données.#
@@ -485,7 +485,7 @@ plugins =
 
 === Structure finale de notre environnement
 
-Nous avons donc la strucutre finale pour notre environnement de travail:
+Nous avons donc la structure finale pour notre environnement de travail:
 
 [source,bash]
 ----
@@ -519,7 +519,7 @@ Nous avons donc la strucutre finale pour notre environnement de travail:
 
 === Cookie cutter
 
-Pfiou! Ca en fait des commandes et du boulot pour "juste" démarrer un nouveau projet, non? Sachant qu'en plus, nous avons dû modifier des fichiers, déplacer des dossiers, ajouter des dépendances, configurer une base de données, ... 
+Pfiou! Ca en fait des commandes et du boulot pour "juste" démarrer un nouveau projet, non? Sachant qu'en plus, nous avons dû modifier des fichiers, déplacer des dossiers, ajouter des dépendances, configurer une base de données, ...
 
 Bonne nouvelle! Il existe des générateurs, permettant de démarrer rapidement un nouveau projet sans (trop) se prendre la tête. Le plus connu (et le plus personnalisable) est https://cookiecutter.readthedocs.io/[Cookie-Cutter], qui se base sur des canevas _type https://pypi.org/project/Jinja2/[Jinja2]_, pour créer une arborescence de dossiers et fichiers conformes à votre manière de travailler. Et si vous avez la flemme de créer votre propre canevas, vous pouvez utiliser https://cookiecutter-django.readthedocs.io[ceux qui existent déjà].
 
@@ -542,10 +542,10 @@ Pour démarrer, créez un environnement virtuel (comme d'habitude):
  [SUCCESS]: Project initialized, keep up the good work!
 ----
 
-Si vous explorez les différents fichiers, vous trouverez beaucoup de similitudes avec la configuration que nous vous proposions ci-dessus. 
+Si vous explorez les différents fichiers, vous trouverez beaucoup de similitudes avec la configuration que nous vous proposions ci-dessus.
 En fonction de votre expérience, vous serez tenté de modifier certains paramètres, pour faire correspondre ces sources avec votre utilisation ou vos habitudes.
 
-NOTE: Il est aussi possible d'utiliser l'argument `--template`, suivie d'un argument reprenant le nom de votre projet (`<my_project>`), lors de l'initialisation d'un projet avec la commande `startproject` de `django-admin`, afin de calquer votre arborescence sur un projet existant. 
+NOTE: Il est aussi possible d'utiliser l'argument `--template`, suivie d'un argument reprenant le nom de votre projet (`<my_project>`), lors de l'initialisation d'un projet avec la commande `startproject` de `django-admin`, afin de calquer votre arborescence sur un projet existant.
 La https://docs.djangoproject.com/en/stable/ref/django-admin/#startproject[documentation] à ce sujet est assez complète.
 
 [source,bash]

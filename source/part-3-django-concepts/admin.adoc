@@ -1,26 +1,113 @@
 == Administration
 
-Woké. On va commencer par la *partie à ne _surtout_ (__surtout__ !!) pas faire en premier dans un projet Django*. Mais on va la faire quand même: la raison principale est que cette partie est tellement puissante et performante, qu'elle pourrait laisser penser qu'il est possible de réaliser une application complète rien qu'en configurant l'administration. Mais c'est faux.
+Woké. On va commencer par la *partie à ne _surtout_ (__surtout__ !!) pas faire en premier dans un projet Django*.
+Mais on va la faire quand même: la raison principale est que cette partie est tellement puissante et performante, qu'elle pourrait laisser penser qu'il est possible de réaliser une application complète rien qu'en configurant l'administration.
+Mais c'est faux.
 
-L'administration est une sorte de tour de contrôle évoluée; elle se base sur le modèle de données programmé et construit dynamiquement les formulaires qui lui est associé. Elle joue avec les clés primaires, étrangères, les champs et types de champs par https://fr.wikipedia.org/wiki/Introspection[introspection], et présente tout ce qu'il faut pour avoir du https://fr.wikipedia.org/wiki/CRUD[CRUD], c'est-à-dire tout ce qu'il faut pour ajouter, lister, modifier ou supprimer des informations.
+L'administration est une sorte de tour de contrôle évoluée, un _back office_ sans transpirer; elle se base sur le modèle de données programmé et construit dynamiquement les formulaires qui lui est associé.
+Elle joue avec les clés primaires, étrangères, les champs et types de champs par https://fr.wikipedia.org/wiki/Introspection[introspection], et présente tout ce qu'il faut pour avoir du https://fr.wikipedia.org/wiki/CRUD[CRUD], c'est-à-dire tout ce qu'il faut pour ajouter, lister, modifier ou supprimer des informations.
 
-Son problème est qu'elle présente une courbe d'apprentissage asymptotique. Il est *très* facile d'arriver rapidement à un bon résultat, au travers d'un périmètre de configuration relativement restreint. Mais quoi que vous fassiez, il y a un moment où la courbe de paramétrage sera tellement ardue que vous aurez plus facile à développer ce que vous souhaitez ajouter en utilisant les autres concepts de Django.
+Son problème est qu'elle présente une courbe d'apprentissage asymptotique.
+Il est *très* facile d'arriver rapidement à un bon résultat, au travers d'un périmètre de configuration relativement restreint.
+Mais quoi que vous fassiez, il y a un moment où la courbe de paramétrage sera tellement ardue que vous aurez plus facile à développer ce que vous souhaitez ajouter en utilisant les autres concepts de Django.
 
-Elle doit rester dans les mains d'administrateurs ou de gestionnaires, et dans leurs mains à eux uniquement: il n'est pas question de donner des droits aux utilisateurs finaux (même si c'est extrêment tentant durant les premiers tours de roues). Indépendamment de la manière dont vous allez l'utiliser et la configurer, vous finirez par devoir développer une "vraie" application, destinée aux utilisateurs classiques, et répondant à leurs besoins uniquement.
+Cette fonctionnalité doit rester dans les mains d'administrateurs ou de gestionnaires, et dans leurs mains à eux uniquement: il n'est pas question de donner des droits aux utilisateurs finaux (même si c'est extrêment tentant durant les premiers tours de roues).
+Indépendamment de la manière dont vous allez l'utiliser et la configurer, vous finirez par devoir développer une "vraie" application, destinée aux utilisateurs classiques, et répondant à leurs besoins uniquement.
 
-Une bonne idée consiste à développer l'administration dans un premier temps, en *gardant en tête qu'il sera nécessaire de développer des concepts spécifiques*. Dans cet objectif, l'administration est un outil exceptionel, qui permet de valider un modèle, de créer des objets rapidement et de valider les liens qui existent entre eux. 
+Une bonne idée consiste à développer l'administration dans un premier temps, en *gardant en tête qu'il sera nécessaire de développer des concepts spécifiques*.
+Dans cet objectif, l'administration est un outil exceptionel, qui permet de valider un modèle, de créer des objets rapidement et de valider les liens qui existent entre eux.
 
-C'est un excellent outil de prototypage et de preuve de concept.
+C'est aussi un excellent outil de prototypage et de preuve de concept.
 
-Elle se base sur plusieurs couches que l'on a déjà (ou on va bientôt) aborder (suivant le sens de lecture que vous préférez): 
+Elle se base sur plusieurs couches que l'on a déjà (ou on va bientôt) aborder (suivant le sens de lecture que vous préférez):
 
-. Le modèle et les validateurs
+. Le modèle de données
+. Les validateurs
 . Les formulaires
 . Les widgets
 
-=== Quelques conseils
+=== Le modèle de données
 
-. Surchargez la méthode `__str__(self)` pour chaque classe que vous aurez définie dans le modèle. Cela permettra de construire une représentation textuelle pour chaque instance de votre classe. Cette information sera utilisée un peu partout dans le code, et donnera une meilleure idée de ce que l'on manipule. En plus, cette méthode est également appelée lorsque l'administration historisera une action (et comme cette étape sera inaltérable, autant qu'elle soit fixée dans le début). 
+Comme expliqué ci-dessus, le modèle de données est constité d'un ensemble de champs typés et de relations.
+L'administration permet de décrire les données qui peuvent être modifiées, en y associant un ensemble (basique) de permissions.
+
+Si vous vous rappelez de l'application que nous avions créée dans la première partie, les URLs reprenaient déjà la partie suivante:
+
+[source,python]
+----
+from django.contrib import admin
+from django.urls import path
+
+from gwift.views import wish_details
+
+urlpatterns = [
+    path('admin/', admin.site.urls), <1>
+    [...]
+]
+----
+<1> Cette URL signifie que la partie `admin` est déjà active et accessible à l'URL `<mon_site>/admin`
+
+C'est le seul prérequis pour cette partie.
+
+Chaque application nouvellement créée contient par défaut un fichier `admin.py`, dans lequel il est possible de déclarer quel ensemble de données sera accessible/éditable.
+Ainsi, si nous partons du modèle basique que nous avions détaillé plus tôt, avec des souhaits et des listes de souhaits:
+
+[source,python]
+----
+# gwift/wish/models.py
+
+from django.db import models
+
+
+class WishList(models.Model):
+    name = models.CharField(max_length=255)
+
+
+class Item(models.Model):
+    name = models.CharField(max_length=255)
+    wishlist = models.ForeignKey(WishList, on_delete=models.CASCADE)
+
+----
+
+Nous pouvons facilement arriver au résultat suivant, en ajoutant quelques lignes de configuration dans ce fichier `admin.py`:
+
+[source,python]
+----
+from django.contrib import admin
+
+from .models import Item, WishList <1>
+
+
+admin.site.register(Item) <2>
+admin.site.register(WishList)
+
+----
+<1> Nous importons les modèles que nous souhaitons gérer dans l'admin
+<2> Et nous les déclarons comme gérables. Cette dernière ligne implique aussi qu'un modèle pourrait ne pas être disponible du tout, ce qui n'activera simplement aucune opération de lecture ou modification.
+
+Il nous reste une seule étape à réaliser: créer un nouvel utilisateur.
+Pour cet exemple, notre gestion va se limiter à une gestion manuelle; nous aurons donc besoin d'un _super-utilisateur_, que nous pouvons créer grâce à la commande `python manage.py createsuperuser`.
+
+[source,bash]
+----
+λ python manage.py createsuperuser
+Username (leave blank to use 'fred'): fred
+Email address: fred@root.org
+Password: ******
+Password (again): ******
+Superuser created successfully.
+----
+
+.Connexion au site d'administration
+image::images/django/django-site-admin.png[align=center]
+
+.Administration
+image::images/django/django-site-admin-after-connection.png[align=center]
+
+
+=== Quelques conseils de base
+
+. Surchargez la méthode `__str__(self)` pour chaque classe que vous aurez définie dans le modèle. Cela permettra de construire une représentation textuelle pour chaque instance de votre classe. Cette information sera utilisée un peu partout dans le code, et donnera une meilleure idée de ce que l'on manipule. En plus, cette méthode est également appelée lorsque l'administration historisera une action (et comme cette étape sera inaltérable, autant qu'elle soit fixée dans le début).
 
 . La méthode `get_absolute_url(self)` retourne l'URL à laquelle on peut accéder pour obtenir les détails d'une instance. Par exemple:
 
@@ -52,17 +139,17 @@ https://hackernoon.com/all-you-need-to-know-about-prefetching-in-django-f9068ebe
 https://medium.com/@hakibenita/things-you-must-know-about-django-admin-as-your-app-gets-bigger-6be0b0ee9614
 
 En gros, le problème de l'admin est que si on fait des requêtes imbriquées, on va flinguer l'application et le chargement de la page.
-La solution consiste à utiliser la propriété `list_select_related` de la classe d'Admin, afin d'appliquer une jointure par défaut et 
+La solution consiste à utiliser la propriété `list_select_related` de la classe d'Admin, afin d'appliquer une jointure par défaut et
 et gagner en performances.
 
 === admin.ModelAdmin
 
-La classe `admin.ModelAdmin` que l'on retrouvera principalement dans le fichier `admin.py` de chaque application contiendra la définition de ce que l'on souhaite faire avec nos données dans l'administration. Cette classe (et sa partie Meta) 
+La classe `admin.ModelAdmin` que l'on retrouvera principalement dans le fichier `admin.py` de chaque application contiendra la définition de ce que l'on souhaite faire avec nos données dans l'administration. Cette classe (et sa partie Meta)
 
 
-=== L'affichage 
+=== L'affichage
 
-Comme l'interface d'administration fonctionne (en trèèèès) gros comme un CRUD auto-généré, on trouve par défaut la possibilité de : 
+Comme l'interface d'administration fonctionne (en trèèèès) gros comme un CRUD auto-généré, on trouve par défaut la possibilité de :
 
 . Créer de nouveaux éléments
 . Lister les éléments existants
@@ -71,7 +158,7 @@ Comme l'interface d'administration fonctionne (en trèèèès) gros comme un CRU
 
 Les affichages sont donc de deux types: en liste et par élément.
 
-Pour les affichages en liste, le plus simple consiste à jouer sur la propriété `list_display`. 
+Pour les affichages en liste, le plus simple consiste à jouer sur la propriété `list_display`.
 
 Par défaut, la première colonne va accueillir le lien vers le formulaire d'édition.
 On peut donc modifier ceci, voire créer de nouveaux liens vers d'autres éléments en construisant des URLs dynamiquement.
@@ -137,7 +224,7 @@ class Wishlist(admin.ModelAdmin):
 ----
 
 
-Et voilà : l'administration d'une liste de souhaits (_Wishlist_) pourra directement gérer des relations multiples vers des souhaits. 
+Et voilà : l'administration d'une liste de souhaits (_Wishlist_) pourra directement gérer des relations multiples vers des souhaits.
 
 
 ==== Les auto-suggestions et auto-complétions
@@ -152,7 +239,7 @@ Parler ici des `fieldsets` et montrer comment on peut regrouper des champs dans 
 
 === Les actions sur des sélections
 
-Les actions permettent de partir d'une liste d'éléments, et autorisent un utilisateur à appliquer une action sur une sélection d'éléments. Par défaut, il existe déjà une action de *suppression*. 
+Les actions permettent de partir d'une liste d'éléments, et autorisent un utilisateur à appliquer une action sur une sélection d'éléments. Par défaut, il existe déjà une action de *suppression*.
 
 Les paramètres d'entrée sont :
 
