@@ -1,6 +1,6 @@
 == Modélisation
 
-On va aborder la modélisation des objets en elle-même, qui s'apparente à la conception de la base de données.
+Nous allons aborder la modélisation des objets en elle-même, qui est en lien direct avec la conception de la base de données et la manière dont celles-ci s'agencent et communiquent entre elles.
 
 Django utilise un paradigme de type https://fr.wikipedia.org/wiki/Mapping_objet-relationnel[ORM] - c'est-à-dire que chaque type d'objet peut s'apparenter à une table SQL, mais en ajoutant une couche propre au modèle orienté objet.
 Il est ainsi possible de définir facilement des notions d'héritage (tout en restant dans une forme d'héritage simple), la possibilité d'utiliser des propriétés spécifiques, des classes intermédiaires, ...
