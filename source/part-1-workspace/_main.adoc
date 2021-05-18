@@ -2,15 +2,17 @@
 
 Avant de démarrer le développement, il est nécessaire de passer un peu de temps sur la configuration de l'environnement.
 
-Les morceaux de code que vous trouverez ci-dessous seront développés pour Python3.6+ et Django 3.0+. Ils nécessiteront peut-être quelques adaptations pour fonctionner sur une version antérieure.
+Les morceaux de code que vous trouverez ci-dessous seront développés pour Python3.9+ et Django 3.2+. 
+Ils nécessiteront peut-être quelques adaptations pour fonctionner sur une version antérieure.
 
 Django fonctionne sur un https://docs.djangoproject.com/en/dev/internals/release-process/[roulement de trois versions mineures pour une version majeure], clôturé par une version LTS (_Long Term Support_).
 
 image::images/django-support-lts.png[]
 
-La version utilisée sera une bonne indication à prendre en considération pour nos dépendances, puisqu'en visant une version particulière, nous ne devrons pratiquement pas nous soucier (bon, un peu quand même...) des dépendances à installer, pour peu que l'on reste sous un certain seuil.
+La version utilisée sera une bonne indication à prendre en considération pour nos dépendances, puisqu'en visant une version particulière, nous ne devrons pratiquement pas nous soucier (bon, un peu quand même, mais nous le verrons plus tard...) des dépendances à installer, pour peu que l'on reste sous un certain seuil.
 
-Dans cette partie, nous allons parler de *méthode de travail*, avec comme objectif d'éviter que l'application ne tourne que sur notre machine et que chaque déploiement ne soit une plaie à gérer. Chaque mise à jour doit être réalisable de la manière la plus simple possible:
+Dans cette partie, nous allons parler de *méthodes de travail*, avec comme objectif d'éviter que l'application ne tourne que sur notre machine et que chaque déploiement ne soit une plaie à gérer. 
+Chaque mise à jour doit être réalisable de la manière la plus simple possible:
 
 . démarrer un script,
 . prévoir un rollback si cela plante

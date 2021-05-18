@@ -15,15 +15,50 @@ Chacune d'entre elles doit être approuvée par le http://fr.wikipedia.org/wiki/
 
 Si vous avez besoin d'un aide-mémoire ou d'une liste exhaustive des types et structures de données du langage, référez-vous au lien suivant: https://gto76.github.io/python-cheatsheet/[Python Cheat Sheet].
 
-NOTE: Le langage Python utilise un typage dynamique appelé https://fr.wikipedia.org/wiki/Duck_typing[*duck typing*]: "_When I see a bird that quacks like a duck, walks like a duck, has feathers and webbed feet and associates with ducks — I’m certainly going to assume that he is a duck_" (Source: http://en.wikipedia.org/wiki/Duck_test[Wikipedia (as usual)]).
+NOTE: Le langage Python utilise un typage dynamique appelé https://fr.wikipedia.org/wiki/Duck_typing[*duck typing*]: "_When I see a bird that quacks like a duck, walks like a duck, has feathers and webbed feet and associates with ducks — I’m certainly going to assume that he is a duck_" 
+Source: http://en.wikipedia.org/wiki/Duck_test[Wikipedia].
+
+==== The Zen of Python
+
+[source,python]
+----
+>>> import this
+----
+
+[source,text]
+----
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+----
+
 
 ==== PEP8 - Style Guide for Python Code
 
 La première PEP qui va nous intéresser est la https://www.python.org/dev/peps/pep-0008/[PEP 8 -- Style Guide for Python Code]. Elle spécifie comment du code Python doit être organisé ou formaté, quelles sont les conventions pour l’indentation, le nommage des variables et des classes, ...
 En bref, elle décrit comment écrire du code proprement, afin que d’autres développeurs puissent le reprendre facilement, ou simplement que votre base de code ne dérive lentement vers un seuil de non-maintenabilité.
 
-Dans cet objectif, un outil existe et listera l'ensemble des conventions qui ne sont pas correctement suivies dans votre projet: pep8. Pour l'installer, passez par pip. Lancez ensuite la commande pep8 suivie du chemin à analyser (`.`, le nom d'un répertoire, le nom d'un fichier `.py`, ...). Si vous souhaitez uniquement avoir le nombre d'erreur de chaque type, saisissez les options `--statistics -qq`.
-
+Dans cet objectif, un outil existe et listera l'ensemble des conventions qui ne sont pas correctement suivies dans votre projet: pep8. 
+Pour l'installer, passez par pip. Lancez ensuite la commande pep8 suivie du chemin à analyser (`.`, le nom d'un répertoire, le nom d'un fichier `.py`, ...). 
+Si vous souhaitez uniquement avoir le nombre d'erreur de chaque type, saisissez les options `--statistics -qq`.
 
 [source,bash]
 ----
@@ -168,7 +203,8 @@ Nous trouvons des erreurs:
 * de *conventions*: le nombre de lignes qui séparent deux fonctions, le nombre d'espace après un opérateur, une ligne vide à la fin du fichier, ... Ces _erreurs_ n'en sont pas vraiment, elles indiquent juste de potentiels problèmes de communication si le code devait être lu ou compris par une autre personne.
 * de *définition*: une variable assignée mais pas utilisée ou une lexème non trouvé. Cette dernière information indique clairement un bug potentiel. Ne pas en tenir compte nuira sans doute à la santé de votre code (et risque de vous réveiller à cinq heures du mat', quand votre application se prendra méchamment les pieds dans le tapis).
 
-L'étape d'après consiste à invoquer pylint. Lui, il est directement moins conciliant:
+L'étape d'après consiste à invoquer pylint. 
+Lui, il est directement moins conciliant:
 
 
 [source,text]
@@ -195,7 +231,8 @@ test.py:16:10: E0602: Undefined variable 'Get_Today' (undefined-variable)
 Your code has been rated at -5.45/10
 ----
 
-En gros, j'ai programmé comme une grosse bouse anémique (et oui, le score d'évaluation du code permet bien d'aller en négatif). En vrac, on trouve des problèmes liés:
+En gros, j'ai programmé comme une grosse bouse anémique (et oui: le score d'évaluation du code permet bien d'aller en négatif). 
+En vrac, nous trouvons des problèmes liés:
 
 * au nommage (C0103) et à la mise en forme (C0305, C0326, W0105)
 * à des variables non définies (E0602)
@@ -213,23 +250,30 @@ Pour reprendre la http://pylint.pycqa.org/en/latest/user_guide/message-control.h
 
 TODO: Expliquer comment faire pour tagger une explication.
 
+TODO: Voir si la sortie de pylint est obligatoirement 0 s'il y a un warning
+
+TODO: parler de `pylint --errors-only`
+
+
 ==== Formatage de code
 
 Nous avons parlé ci-dessous de style de codage pour Python (PEP8), de style de rédaction pour la documentation (PEP257), d'un _linter_ pour nous indiquer quels morceaux de code doivent absolument être revus, ...
-Reste que ces tâches sont [line-through]#parfois# (très) souvent fastidieuses: écrire un code propre et systématiquement cohérent est une tâche ardue. Heureusement, il existe des outils pour nous aider (un peu).
+Reste que ces tâches sont [line-through]#parfois# (très) souvent fastidieuses: écrire un code propre et systématiquement cohérent est une tâche ardue. 
+Heureusement, il existe des outils pour nous aider (un peu).
 
 A nouveau, il existe plusieurs possibilités de formatage automatique du code.
-Même si elle n'est pas parfaite, https://black.readthedocs.io/en/stable/[Black] arrive à un compromis entre la clarté du code, la facilité d'installation et d'intégration et un résultat.
+Même si elle n'est pas parfaite, https://black.readthedocs.io/en/stable/[Black] arrive à un compromis entre clarté du code, facilité d'installation et d'intégration et résultat.
 
 Est-ce que ce formatage est idéal et accepté par tout le monde ?
-Non. Même Pylint arrivera parfois à râler.
+**Non**. Même Pylint arrivera parfois à râler.
 Mais ce formatage conviendra dans 97,83% des cas (au moins).
 
 > By using Black, you agree to cede control over minutiae of hand-formatting. In return, Black gives you speed, determinism, and freedom from pycodestyle nagging about formatting. You will save time and mental energy for more important matters.
 >
 > Black makes code review faster by producing the smallest diffs possible. Blackened code looks the same regardless of the project you’re reading. Formatting becomes transparent after a while and you can focus on the content instead.
 
-Traduit rapidement à partir de la langue de Batman: "_En utilisant Black, vous cédez le contrôle sur le formatage de votre code. En retour, Black vous fera gagner un max de temps, diminuera votre charge mentale et fera revenir l'être aimé_". Mais la partie réellement intéressante concerne le fait que "_Tout code qui sera passé par Black aura la même forme, indépendamment du project sur lequel vous serez en train de travailler. L'étape de formatage deviendra transparente, et vous pourrez vous concentrer sur le contenu_".
+Traduit rapidement à partir de la langue de Batman: "_En utilisant Black, vous cédez le contrôle sur le formatage de votre code. En retour, Black vous fera gagner un max de temps, diminuera votre charge mentale et fera revenir l'être aimé_". 
+Mais la partie réellement intéressante concerne le fait que "_Tout code qui sera passé par Black aura la même forme, indépendamment du project sur lequel vous serez en train de travailler. L'étape de formatage deviendra transparente, et vous pourrez vous concentrer sur le contenu_".
 
 
 ==== Complexité cyclomatique
@@ -483,7 +527,47 @@ $ touch setup.cfg
 
 ==== Dockerfile
 
+[source,docker]
+----
+# Dockerfile
 
+# Pull base image
+#FROM python:3.8
+FROM python:3.8-slim-buster
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV DEBIAN_FRONTEND noninteractive
+ENV ACCEPT_EULA=Y
+
+# install Microsoft SQL Server requirements.
+ENV ACCEPT_EULA=Y
+RUN apt-get update -y && apt-get update \
+  && apt-get install -y --no-install-recommends curl gcc g++ gnupg
+
+
+# Add SQL Server ODBC Driver 17
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+RUN curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list
+RUN apt-get update \
+  && apt-get install -y msodbcsql17 unixodbc-dev
+  
+# clean the install.
+RUN apt-get -y clean
+
+# Set work directory
+WORKDIR /code
+
+# Install dependencies
+COPY ./requirements/base.txt /code/requirements/
+RUN pip install --upgrade pip
+RUN pip install -r ./requirements/base.txt
+
+# Copy project
+COPY . /code/
+
+----
 
 
 ==== Makefile
@@ -513,38 +597,6 @@ coverage:
 
 Pour la petite histoire, `make` peu sembler un peu désuet, mais reste extrêmement efficace.
 
-
-==== The Zen of Python
-
-[source,python]
-----
->>> import this
-----
-
-[source,text]
-----
-The Zen of Python, by Tim Peters
-
-Beautiful is better than ugly.
-Explicit is better than implicit.
-Simple is better than complex.
-Complex is better than complicated.
-Flat is better than nested.
-Sparse is better than dense.
-Readability counts.
-Special cases aren't special enough to break the rules.
-Although practicality beats purity.
-Errors should never pass silently.
-Unless explicitly silenced.
-In the face of ambiguity, refuse the temptation to guess.
-There should be one-- and preferably only one --obvious way to do it.
-Although that way may not be obvious at first unless you're Dutch.
-Now is better than never.
-Although never is often better than *right* now.
-If the implementation is hard to explain, it's a bad idea.
-If the implementation is easy to explain, it may be a good idea.
-Namespaces are one honking great idea -- let's do more of those!
-----
 
 
 === Environnement de développement
@@ -800,6 +852,38 @@ services:
       - "5555:5555"
     command: /start-flower
 
+----
+
+[source,dockerfile]
+----
+[source,docker]
+----
+# docker-compose.yml
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: python /code/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - slqserver
+  slqserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - "ACCEPT_EULA=Y"
+      - "SA_PASSWORD=sqklgjqihagrtdgqk12§!"
+    ports:
+      - 1433:1433
+    volumes:
+      - ../sqlserver/data:/var/opt/mssql/data
+      - ../sqlserver/log:/var/opt/mssql/log
+      - ../sqlserver/secrets:/var/opt/mssql/secrets
+
+----
 ----
 
 

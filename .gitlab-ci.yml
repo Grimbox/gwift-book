@@ -1,7 +1,0 @@
-compile_pdf:
-  image: ddidier/sphinx-doc
-  script:
-    - make latexpdf
-  artifacts:
-    paths:
-      - build/latex/Gwift.pdf
