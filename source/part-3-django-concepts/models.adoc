@@ -105,6 +105,38 @@ Les propriétés de la classe Meta les plus utiles sont les suivates:
 * `ordering` pour spécifier un ordre de récupération spécifique.
 * `verbose_name` pour indiquer le nom à utiliser au singulier pour définir votre classe
 * `verbose_name_plural`, pour le pluriel.
+* `contraints` (Voir https://girlthatlovestocode.com/django-model[ici]-), par exemple 
+
+[source,python]
+----
+    constraints = [ # constraints added
+        models.CheckConstraint(check=models.Q(year_born__lte=datetime.date.today().year-18), name='will_be_of_age'),
+    ]
+----
+
+==== Choix
+
+Voir https://girlthatlovestocode.com/django-model[ici]
+
+[source,python]
+----
+class Runner(models.Model):
+
+    # this is new:
+    class Zone(models.IntegerChoices):
+        ZONE_1 = 1, 'Less than 3.10'
+        ZONE_2 = 2, 'Less than 3.25'
+        ZONE_3 = 3, 'Less than 3.45'
+        ZONE_4 = 4, 'Less than 4 hours'
+        ZONE_5 = 5, 'More than 4 hours'
+
+    name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    start_zone = models.PositiveSmallIntegerField(choices=Zone.choices, default=Zone.ZONE_5, help_text="What was your best time on the marathon in last 2 years?") # this is new
+----
+
 
 ==== Shell
 

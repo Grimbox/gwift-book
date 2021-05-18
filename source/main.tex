@@ -1,0 +1,82 @@
+\documentclass[a4paper,12pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\begin{document}
+
+\author{Cédric Declerfayt, Frederick Pauchet}
+\title{Minor swing with Django}
+\date{2016-2032}
+
+\frontmatter
+\maketitle
+\tableofcontents
+
+\mainmatter
+\part{Environnement de travail}
+
+\chapter{Construire des applications maintenables}
+\section{12 facteurs}
+
+Pour la méthode de travail et de développement, nous allons nous baser sur les \href{https://12factor.net/fr/}{Twelve-factorApp} - ou plus simplement les 12 facteurs. 
+L’idée derrière cette méthode, et indépendamment des langages de développement utilisés, consisteà suivre un ensemble de douze concepts, afin de:
+
+\begin{enumerate}
+	\item Faciliter  la  mise  en  place  de  phases  d’automatisation;  plus  concrètement,  de  faciliter  lesmises  à  jour  applicatives,  simplifier  la  gestion  de  l’hôte,  diminuer  la  divergence  entre  lesdifférents  environnements  d’exécution  et  offrir  la  possibilité  d’intégrer  le  projet  dans  unprocessus d’intégration continue ou déploiement continu
+	\item Faciliter  la  mise  à  pied  de  nouveaux  développeurs  ou  de  personnes  souhaitant  rejoindrele  projet,  dans  la  mesure  où  la  mise  à  disposition  d’un  environnement  sera  grandementfacilitée
+	\item Minimiser  les  divergences  entre  les  différents  environnemens  sur  lesquels  un  projetpourrait être déployé
+	\item Augmenter    l’agilité    générale    du    projet,    en    permettant    une    meilleure    évolutivité architecturale et une meilleure mise à l’échelle - Vous avez 5000 utilisateurs en plus? Ajoutez un serveur et on n’en parle plus ;-)
+\end{enumerate}
+
+En pratique, les points ci-dessus permettront de monter facilement un nouvel environnement - qu’il soit sur la machine du petit nouveau dans l’équipe, sur un serveur Azure/Heroku/Digital Ocean ou votre nouveau Raspberry Pi Zéro planqué à la cave - et vous feront gagner un temps précieux. Pour reprendre de manière très brute les différentes idées derrière cette méthode, nous avons:
+
+\begin{enumerate}
+	\item ...
+	\item ...
+\end{enumerate}
+
+\subsection{Une base de code unique, suivie par un système de contrôle de versions}
+
+\chapter{Boite à outils}
+\chapter{Un projet Python}
+\chapter{Un projet Django}
+
+
+\part{Déploiement}
+\chapter{Infrastructure et composants}
+\chapter{Code source}
+\chapter{Supervision et mise à disposition}
+\chapter{Méthodes de déploiement}
+\chapter{Ressources}
+
+\part{Backend}
+\chapter{Modélisation}
+\chapter{Migrations}
+\chapter{Administration}
+\chapter{Authentification}
+\chapter{Shell}
+
+\part{Frontend}
+\chapter{Formulaires}
+\chapter{Vues}
+\chapter{Templates}
+\chapter{URLs et espaces de noms}
+
+\part{Concepts périphériques}
+\chapter{Logging}
+\chapter{Tests unitaires}
+
+\part{Go Live}
+\chapter{Gwift}
+
+\chapter{Khana}
+
+\chapter{Applications \textit{Legacy}}
+
+\chapter{Refactoring}
+
+\backmatter
+% bibliography, glossary and index would go here.
+
+\end{document}
