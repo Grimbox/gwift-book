@@ -1,5 +1,5 @@
 
-.PHONY: help pdf
+.PHONY: help pdf pdflatex
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -15,3 +15,6 @@ html:
 
 pdf:
 	asciidoctor-pdf -a pdf-themesdir=resources/themes -a pdf-theme=book.yml source/main.adoc -t
+
+pdflatex:
+	docker run --rm -ti   -v miktex:/miktex/.miktex   -v $(shell pwd)/source/tex:/miktex/work   -e MIKTEX_GID=$(id -g)   -e MIKTEX_UID=$(id -u)   miktex/miktex   pdflatex main.tex
