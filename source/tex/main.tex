@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% LaTeX book template                           %%
-%% Author:  Amber Jain (http://amberj.devio.us/) %%
-%% License: ISC license                          %%
+%% LaTeX book template %%
+%% Author: Amber Jain (http://amberj.devio.us/) %%
+%% License: ISC license %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[a4paper,11pt]{book}
@@ -13,51 +13,56 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{hyperref}
 \usepackage{graphicx}
-\usepackage[english]{babel}
+\usepackage[french]{babel}
+\usepackage{cancel}
+\usepackage{listings}
+
+\graphicspath{ {./images/} }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 'dedication' environment: To add a dedication paragraph at the start of book %
-% Source: http://www.tug.org/pipermail/texhax/2010-June/015184.html            %
+% Source: http://www.tug.org/pipermail/texhax/2010-June/015184.html %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newenvironment{dedication}
 {
-   \cleardoublepage
-   \thispagestyle{empty}
-   \vspace*{\stretch{1}}
-   \hfill\begin{minipage}[t]{0.66\textwidth}
-   \raggedright
+ \cleardoublepage
+ \thispagestyle{empty}
+ \vspace*{\stretch{1}}
+ \hfill\begin{minipage}[t]{0.66\textwidth}
+ \raggedright
 }
 {
-   \end{minipage}
-   \vspace*{\stretch{3}}
-   \clearpage
+ \end{minipage}
+ \vspace*{\stretch{3}}
+ \clearpage
 }
 
+\parskip=5pt plus 5pt
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Chapter quote at the start of chapter        %
+% Chapter quote at the start of chapter %
 % Source: http://tex.stackexchange.com/a/53380 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \makeatletter
 \renewcommand{\@chapapp}{}% Not necessary...
 \newenvironment{chapquote}[2][2em]
-  {\setlength{\@tempdima}{#1}%
-   \def\chapquote@author{#2}%
-   \parshape 1 \@tempdima \dimexpr\textwidth-2\@tempdima\relax%
-   \itshape}
-  {\par\normalfont\hfill--\ \chapquote@author\hspace*{\@tempdima}\par\bigskip}
+ {\setlength{\@tempdima}{#1}%
+ \def\chapquote@author{#2}%
+ \parshape 1 \@tempdima \dimexpr\textwidth-2\@tempdima\relax%
+ \itshape}
+ {\par\normalfont\hfill--\ \chapquote@author\hspace*{\@tempdima}\par\bigskip}
 \makeatother
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % First page of book which contains 'stuff' like: %
-%  - Book title, subtitle                         %
-%  - Book author name                             %
+% - Book title, subtitle %
+% - Book author name %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Book's title and subtitle
-\title{\Huge \textbf{Sample Book Title}  \footnote{This is a footnote.} \\ \huge Sample book subtitle \footnote{This is yet another footnote.}}
+\title{\Huge \textbf{Minor Swing with Django} \\ \huge Sample book subtitle }
 % Author
-\author{\textsc{First-name Last-name}\thanks{\url{www.example.com}}}
-
+\author{Cédric Declerfayt \and Fred Pauchet}
 
 \begin{document}
 
@@ -68,15 +73,13 @@
 % Add a dedication paragraph to dedicate your book to someone %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{dedication}
-Dedicated to Calvin and Hobbes.
+	A nos enfants, sans qui ce document aurait été publié dix ans plus tôt.
 \end{dedication}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Auto-generated table of contents, list of figures and list of tables %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tableofcontents
-\listoffigures
-\listoftables
 
 \mainmatter
 
@@ -84,7 +87,8 @@ Dedicated to Calvin and Hobbes.
 % Preface %
 %%%%%%%%%%%
 \chapter*{Preface}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna.
+
+Ici, c'est Lili qui va tout écrire :-)
 
 \section*{Un-numbered sample section}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis.
@@ -99,14 +103,14 @@ Each unit will focus on <SOMETHING>.
 \section*{About the companion website}
 The website\footnote{\url{https://github.com/amberj/latex-book-template}} for this file contains:
 \begin{itemize}
-  \item A link to (freely downlodable) latest version of this document.
-  \item Link to download LaTeX source for this document.
-  \item Miscellaneous material (e.g. suggested readings etc).
+ \item A link to (freely downlodable) latest version of this document.
+ \item Link to download LaTeX source for this document.
+ \item Miscellaneous material (e.g. suggested readings etc).
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Give credit where credit is due. %
-% Say thanks!                      %
+% Say thanks! %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Acknowledgements}
 \begin{itemize}
@@ -122,11 +126,53 @@ The website\footnote{\url{https://github.com/amberj/latex-book-template}} for th
 %%%%%%%%%%%%%%%%
 % NEW CHAPTER! %
 %%%%%%%%%%%%%%%%
-\chapter{Introductory Chapter}
+\chapter*{Introduction}
 
 \begin{chapquote}{Author's name, \textit{Source of this quote}}
-``This is a quote and I don't know who said this.''
+``Make it work, make it right, make it fast.''
 \end{chapquote}
+
+Nous n’allons pas vous mentir: il existe enormément de tutoriaux très bien réalisés sur "\textit{Comment réaliser une application Django}" et autres "\textit{Déployer votre code en 2 minutes}". 
+Nous nous disions juste que ces tutoriaux restaient relativement haut-niveaux et se limitaient à un contexte donné.
+
+L’idée du texte ci-dessous est de jeter les bases d’un bon développement, en survolant l’ensemble des outils permettant de suivre des lignes directrices reconnues, de maintenir une bonne qualité de code au travers des différentes étape (du développement au déploiement) et de s’assurer du maintient correct de la base de code, en permettant à n’importe qui de reprendre le développement.
+
+Ces idées ne s’appliquent pas uniquement à Django et à son cadre de travail, ni même au langage Python.
+Juste que ces deux sujets sont de bons candidats et que le cadre de travail est bien défini et suffisamment flexible.
+
+Django se présente comme un "\href{https://www.djangoproject.com/}{Framework Web pour perfectionnistes ayant des deadlines}" et suit \href{https://docs.djangoproject.com/en/dev/misc/design-philosophies/}{ces quelques principes}:
+
+\begin{itemize}
+	\item Faible couplage et forte cohésion, pour que chaque composant dispose de son indépendance.
+	\item Moins de code, plus de fonctionnalités.
+	\item \href{https://fr.wikipedia.org/wiki/DRY}{Don't repeat yourself}
+	\item Rapidité du développement \footnote{Après une petite courbe d’apprentissage un peu ardue au début ;-). Mais c'est pour cela que vous êtes là, non ?}
+\end{itemize}
+
+Mis côte à côte, l’application de ces principes permet une meilleure stabilité du projet à moyen etlong terme. Tout pour plaire à n’importe quel directeur IT.
+
+\textbf{Dans la première partie}, nous verrons comment partir d’un environnement sain, comment le configurer correctement, comment installer Django de manière isolée et comment démarrer un nouveau projet. 
+Nous verrons rapidement comment gérer les dépendances, les versions et comment appliquer et suivre un score de qualité de notre code. 
+Nous verrons aussi que la configuration proposée par défaut par le framework n’est pas idéale dans la majorité des cas.
+
+Pour cela, nous présenterons différents outils, la rédaction de tests unitaires et d’intégration pour limiter les régressions, les règles de nomenclature et de contrôle du contenu, comment partir d’un squelette plus complet, ainsi que les bonnes étapes à suivre pour arriver à un déploiement rapide et fonctionnel avec peu d’efforts.
+
+A la fin de cette partie, vous disposerez d’un code propre et d’un projet fonctionnel (mais encore inutile, parce qu’encore un peu vide).
+
+\textbf{Dans la deuxième partie}, nous détaillerons précisément les étapes de déploiement, avec la description et la configuration de l’infrastructure, des exemples concrets de mise à disposition sur une distribution GNU/Linux connue (Debian), sur une *\textit{Plateform as a Service}* (Heroku), ainsi quel’utilisation de Docker et Docker-Compose.
+
+Nous aborderons également la supervision et la mise à jour d’une application existante, en respectant les bonnes pratiques d’administration système.
+
+\textbf{Dans la troisième partie}, nous aborderons les grands principes de modélisation, en suivant les lignes de conduites du cadre de travail. 
+Nous aborderons les concepts clés qui permettent à une application de rester maintenable, les formulaires, leurs validations, comment gérer les données en entrée, les migrations de données et l’administration.
+
+\textbf{Dans la quatrième partie}, nous mettrons ces concepts en pratique en présentant le développement de deux "vraies" applications: définition des tables, gestion des utilisateurs, ... etmise à disposition!
+
+Et tout ça à un seul et même endroit.\footnote{Avec un peu d'\href{https://xkcd.com}{XKCD} dedans.} Oui. :-) Bonne lecture.
+
+\part{Environnement de travail}
+
+\chapter{Construire des applications maintenables}
 
 \section{Section heading}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \\ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. \\ Lorem ipsum list:
@@ -171,8 +217,17 @@ In hac habitasse platea dictumst. Nullam turpis erat, porttitor ut pretium ac, c
 \section{Another section heading}
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
+\part{Déploiement}
+
+\include{part-2-deployment/index.tex}
+
+\part{Django}
+
+
+\part{Go Live!}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Sample table                                        %
+% Sample table %
 % Source: www1.maths.leeds.ac.uk/latex/TableHelp1.pdf %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}[ht]
@@ -209,6 +264,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor
 
 \subsection{Lorem ipsum dolor sit amet, consectetur adipiscing}
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus ante, auctor et pulvinar non, posuere ac lacus. Praesent egestas nisi id metus rhoncus ac lobortis sem hendrerit. Etiam et sapien eget lectus interdum posuere sit amet ac urna. Aliquam pellentesque imperdiet erat, eget consectetur felis malesuada quis. Pellentesque sollicitudin, odio sed dapibus eleifend, magna sem luctus turpis, id aliquam felis dolor eu diam.
+
+\listoffigures
+\listoftables
 
 \end{document}
 

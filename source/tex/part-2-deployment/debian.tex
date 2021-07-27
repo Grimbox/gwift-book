@@ -1,0 +1,10 @@
+\section{Debian}
+
+\begin{lstlisting}[language=bash]
+    apt update
+    groupadd --system webapps <1>
+    groupadd --system gunicorn_sockets <2>
+    useradd --system --gid webapps --shell /bin/bash --home /home/gwift gwift <3>
+    mkdir -p /home/gwift <4>
+    chown gwift:webapps /home/gwift <5>
+\end{lstlisting}
