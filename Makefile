@@ -15,3 +15,6 @@ html:
 
 pdf:
 	asciidoctor-pdf -a pdf-themesdir=resources/themes -a pdf-theme=book.yml source/main.adoc -t
+
+pdflatex:
+	docker run --rm -ti -v miktex:/miktex/.miktex -v $(shell pwd)/source:/miktex/work -e MIKTEX_GID=$(id -g)  -e MIKTEX_UID=$(id -u) miktex/miktex xelatex main.tex

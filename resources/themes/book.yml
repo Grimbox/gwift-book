@@ -1,11 +1,13 @@
 extends: default
+page:
+  margin: [1.0in, 1.0in, 1.0in, 1.0in]
 footer:
   recto:
     right:
       content: '{section-or-chapter-title} | {page-number}'
   verso:
     left:
-      content: '{page-number} | {chapter-title}'
+      content: '{page-number} | {part-title} {chapter-title}'
 admonition:
   icon:
     caution:

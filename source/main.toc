@@ -1,0 +1,187 @@
+\contentsline {part}{\noindent Environnement de travail}{9}{part*.1}%
+\contentsline {chapter}{\tocchapter {Chapter}{1}{Construire des applications maintenables}}{11}{chapter.1}%
+\contentsline {section}{\tocsection {}{1}{12 facteurs}}{11}{section.1.1}%
+\contentsline {section}{\tocsection {}{2}{Une base de code unique, suivie par un système de contrôle de versions}}{11}{section.1.2}%
+\contentsline {section}{\tocsection {}{3}{Bonnes pratiques}}{15}{section.1.3}%
+\contentsline {subsection}{\tocsubsection {}{3.1}{Au niveau des méthodes et fonctions}}{16}{subsection.1.3.1}%
+\contentsline {subsection}{\tocsubsection {}{3.2}{Au niveau des classes}}{16}{subsection.1.3.2}%
+\contentsline {subsection}{\tocsubsection {}{3.3}{Au niveau des composants}}{16}{subsection.1.3.3}%
+\contentsline {subsection}{\tocsubsection {}{3.4}{De manière plus générale}}{17}{subsection.1.3.4}%
+\contentsline {section}{\tocsection {}{4}{SOLID}}{17}{section.1.4}%
+\contentsline {subsection}{\tocsubsection {}{4.1}{Single Responsibility Principle}}{17}{subsection.1.4.1}%
+\contentsline {subsection}{\tocsubsection {}{4.2}{Open Closed}}{18}{subsection.1.4.2}%
+\contentsline {subsection}{\tocsubsection {}{4.3}{Liskov Substitution}}{19}{subsection.1.4.3}%
+\contentsline {subsection}{\tocsubsection {}{4.4}{Interface Segregation}}{20}{subsection.1.4.4}%
+\contentsline {subsection}{\tocsubsection {}{4.5}{Dependency inversion}}{20}{subsection.1.4.5}%
+\contentsline {subsection}{\tocsubsection {}{4.6}{Sources}}{21}{subsection.1.4.6}%
+\contentsline {section}{\tocsection {}{5}{Complexité de McCabe}}{21}{section.1.5}%
+\contentsline {chapter}{\tocchapter {Chapter}{2}{Boite à outils}}{23}{chapter.2}%
+\contentsline {section}{\tocsection {}{1}{Python}}{23}{section.2.1}%
+\contentsline {subsection}{\tocsubsection {}{1.1}{The Zen of Python}}{24}{subsection.2.1.1}%
+\contentsline {subsection}{\tocsubsection {}{1.2}{PEP8 - Style Guide for Python Code}}{24}{subsection.2.1.2}%
+\contentsline {subsection}{\tocsubsection {}{1.3}{PEP257 - Docstring Conventions}}{25}{subsection.2.1.3}%
+\contentsline {subsection}{\tocsubsection {}{1.4}{Linters}}{27}{subsection.2.1.4}%
+\contentsline {subsection}{\tocsubsection {}{1.5}{Formatage de code}}{30}{subsection.2.1.5}%
+\contentsline {subsection}{\tocsubsection {}{1.6}{Complexité cyclomatique}}{30}{subsection.2.1.6}%
+\contentsline {subsection}{\tocsubsection {}{1.7}{Typage statique - \href {https://www.python.org/dev/peps/pep-0585/}{PEP585}}}{30}{subsection.2.1.7}%
+\contentsline {subsection}{\tocsubsection {}{1.8}{Tests unitaires}}{32}{subsection.2.1.8}%
+\contentsline {subsection}{\tocsubsection {}{1.9}{Couverture de code}}{33}{subsection.2.1.9}%
+\contentsline {subsection}{\tocsubsection {}{1.10}{Matrice de compatibilité}}{35}{subsection.2.1.10}%
+\contentsline {subsection}{\tocsubsection {}{1.11}{Configuration globale}}{35}{subsection.2.1.11}%
+\contentsline {subsection}{\tocsubsection {}{1.12}{Dockerfile}}{35}{subsection.2.1.12}%
+\contentsline {subsection}{\tocsubsection {}{1.13}{Makefile}}{36}{subsection.2.1.13}%
+\contentsline {section}{\tocsection {}{2}{Environnement de développement}}{37}{section.2.2}%
+\contentsline {section}{\tocsection {}{3}{Un terminal}}{37}{section.2.3}%
+\contentsline {section}{\tocsection {}{4}{Un gestionnaire de base de données}}{38}{section.2.4}%
+\contentsline {section}{\tocsection {}{5}{Un gestionnaire de mots de passe}}{39}{section.2.5}%
+\contentsline {section}{\tocsection {}{6}{Un système de gestion de versions}}{39}{section.2.6}%
+\contentsline {subsection}{\tocsubsection {}{6.1}{Décrire ses changements}}{41}{subsection.2.6.1}%
+\contentsline {section}{\tocsection {}{7}{Un système de virtualisation}}{41}{section.2.7}%
+\contentsline {subsection}{\tocsubsection {}{7.1}{Vagrant}}{42}{subsection.2.7.1}%
+\contentsline {subsection}{\tocsubsection {}{7.2}{Docker}}{43}{subsection.2.7.2}%
+\contentsline {chapter}{\tocchapter {Chapter}{3}{Un projet Django}}{49}{chapter.3}%
+\contentsline {section}{\tocsection {}{1}{Travailler en isolation}}{49}{section.3.1}%
+\contentsline {subsection}{\tocsubsection {}{1.1}{Environnement virtuel}}{49}{subsection.3.1.1}%
+\contentsline {subsection}{\tocsubsection {}{1.2}{Gestion des dépendances, installation de Django et création d’un nouveau projet}}{51}{subsection.3.1.2}%
+\contentsline {section}{\tocsection {}{2}{Django}}{53}{section.3.2}%
+\contentsline {subsection}{\tocsubsection {}{2.1}{manage.py}}{55}{subsection.3.2.1}%
+\contentsline {subsection}{\tocsubsection {}{2.2}{Création d’une nouvelle application}}{56}{subsection.3.2.2}%
+\contentsline {subsection}{\tocsubsection {}{2.3}{Fonctionement général}}{57}{subsection.3.2.3}%
+\contentsline {subsection}{\tocsubsection {}{2.4}{12 facteurs et configuration globale}}{61}{subsection.3.2.4}%
+\contentsline {subsection}{\tocsubsection {}{2.5}{setup.cfg}}{61}{subsection.3.2.5}%
+\contentsline {section}{\tocsection {}{3}{Structure finale de notre environnement}}{61}{section.3.3}%
+\contentsline {section}{\tocsection {}{4}{Cookie cutter}}{62}{section.3.4}%
+\contentsline {part}{\noindent Déploiement}{65}{part*.2}%
+\contentsline {chapter}{\tocchapter {Chapter}{4}{Infrastructure \& composants}}{67}{chapter.4}%
+\contentsline {section}{\tocsection {}{1}{Reverse proxy}}{67}{section.4.1}%
+\contentsline {section}{\tocsection {}{2}{Load balancer}}{68}{section.4.2}%
+\contentsline {section}{\tocsection {}{3}{Workers}}{68}{section.4.3}%
+\contentsline {section}{\tocsection {}{4}{Supervision des processus}}{68}{section.4.4}%
+\contentsline {section}{\tocsection {}{5}{Base de données}}{68}{section.4.5}%
+\contentsline {section}{\tocsection {}{6}{Tâches asynchrones}}{68}{section.4.6}%
+\contentsline {section}{\tocsection {}{7}{Mise en cache}}{68}{section.4.7}%
+\contentsline {chapter}{\tocchapter {Chapter}{5}{Code source}}{69}{chapter.5}%
+\contentsline {chapter}{\tocchapter {Chapter}{6}{Outils de supervision et de mise à disposition}}{71}{chapter.6}%
+\contentsline {chapter}{\tocchapter {Chapter}{7}{Méthode de déploiement}}{73}{chapter.7}%
+\contentsline {section}{\tocsection {}{1}{Sur une machine hôte}}{73}{section.7.1}%
+\contentsline {section}{\tocsection {}{2}{Déploiement sur Debian}}{74}{section.7.2}%
+\contentsline {subsection}{\tocsubsection {}{2.1}{Installation des dépendances systèmes}}{74}{subsection.7.2.1}%
+\contentsline {subsection}{\tocsubsection {}{2.2}{Installation de la base de données}}{74}{subsection.7.2.2}%
+\contentsline {subsubsection}{\tocsubsubsection {}{2.2.1}{PostgreSQL}}{75}{subsubsection.7.2.2.1}%
+\contentsline {subsubsection}{\tocsubsubsection {}{2.2.2}{MariaDB}}{75}{subsubsection.7.2.2.2}%
+\contentsline {subsubsection}{\tocsubsubsection {}{2.2.3}{Microsoft SQL Server}}{75}{subsubsection.7.2.2.3}%
+\contentsline {subsubsection}{\tocsubsubsection {}{2.2.4}{Oracle}}{75}{subsubsection.7.2.2.4}%
+\contentsline {subsection}{\tocsubsection {}{2.3}{Préparation de l’environnement utilisateur}}{75}{subsection.7.2.3}%
+\contentsline {subsection}{\tocsubsection {}{2.4}{Configuration de l’application}}{76}{subsection.7.2.4}%
+\contentsline {subsection}{\tocsubsection {}{2.5}{Création des répertoires de logs}}{76}{subsection.7.2.5}%
+\contentsline {subsection}{\tocsubsection {}{2.6}{Création du répertoire pour le socket}}{76}{subsection.7.2.6}%
+\contentsline {subsection}{\tocsubsection {}{2.7}{Gunicorn}}{76}{subsection.7.2.7}%
+\contentsline {subsection}{\tocsubsection {}{2.8}{Supervision, keep-alive et autoreload}}{77}{subsection.7.2.8}%
+\contentsline {subsection}{\tocsubsection {}{2.9}{Ouverture des ports}}{78}{subsection.7.2.9}%
+\contentsline {subsection}{\tocsubsection {}{2.10}{Installation d’Nginx}}{79}{subsection.7.2.10}%
+\contentsline {subsection}{\tocsubsection {}{2.11}{Mise à jour}}{80}{subsection.7.2.11}%
+\contentsline {subsection}{\tocsubsection {}{2.12}{Configuration des sauvegardes}}{80}{subsection.7.2.12}%
+\contentsline {subsection}{\tocsubsection {}{2.13}{Rotation des jounaux}}{80}{subsection.7.2.13}%
+\contentsline {subsection}{\tocsubsection {}{2.14}{Ansible}}{80}{subsection.7.2.14}%
+\contentsline {section}{\tocsection {}{3}{Heroku}}{81}{section.7.3}%
+\contentsline {subsection}{\tocsubsection {}{3.1}{Configuration du compte Heroku}}{82}{subsection.7.3.1}%
+\contentsline {section}{\tocsection {}{4}{Docker-Compose}}{84}{section.7.4}%
+\contentsline {chapter}{\tocchapter {Chapter}{8}{Supervision}}{87}{chapter.8}%
+\contentsline {chapter}{\tocchapter {Chapter}{9}{Autres outils}}{89}{chapter.9}%
+\contentsline {chapter}{\tocchapter {Chapter}{10}{Ressources}}{91}{chapter.10}%
+\contentsline {part}{\noindent Django}{93}{part*.3}%
+\contentsline {chapter}{\tocchapter {Chapter}{11}{Modélisation}}{95}{chapter.11}%
+\contentsline {section}{\tocsection {}{1}{Modélisation de base}}{95}{section.11.1}%
+\contentsline {subsection}{\tocsubsection {}{1.1}{Types de champs}}{95}{subsection.11.1.1}%
+\contentsline {subsection}{\tocsubsection {}{1.2}{Clés étrangères et relations}}{95}{subsection.11.1.2}%
+\contentsline {subsection}{\tocsubsection {}{1.3}{Metamodèle}}{97}{subsection.11.1.3}%
+\contentsline {subsection}{\tocsubsection {}{1.4}{Choix}}{97}{subsection.11.1.4}%
+\contentsline {subsection}{\tocsubsection {}{1.5}{Shell}}{98}{subsection.11.1.5}%
+\contentsline {subsection}{\tocsubsection {}{1.6}{Constructeurs}}{98}{subsection.11.1.6}%
+\contentsline {chapter}{\tocchapter {Chapter}{12}{Migrations}}{101}{chapter.12}%
+\contentsline {section}{\tocsection {}{1}{Description d’une migration}}{102}{section.12.1}%
+\contentsline {section}{\tocsection {}{2}{Application d’une ou plusieurs migrations}}{102}{section.12.2}%
+\contentsline {section}{\tocsection {}{3}{Analyse}}{102}{section.12.3}%
+\contentsline {subsection}{\tocsubsection {}{3.1}{Création de nouveaux champs}}{102}{subsection.12.3.1}%
+\contentsline {subsection}{\tocsubsection {}{3.2}{Modification d’un champ existant}}{102}{subsection.12.3.2}%
+\contentsline {subsection}{\tocsubsection {}{3.3}{Suppression d’un champ existant}}{102}{subsection.12.3.3}%
+\contentsline {chapter}{\tocchapter {Chapter}{13}{Shell}}{103}{chapter.13}%
+\contentsline {chapter}{\tocchapter {Chapter}{14}{Administration}}{105}{chapter.14}%
+\contentsline {section}{\tocsection {}{1}{Le modèle de données}}{106}{section.14.1}%
+\contentsline {section}{\tocsection {}{2}{Quelques conseils de base}}{107}{section.14.2}%
+\contentsline {section}{\tocsection {}{3}{admin.ModelAdmin}}{109}{section.14.3}%
+\contentsline {section}{\tocsection {}{4}{L’affichage}}{109}{section.14.4}%
+\contentsline {section}{\tocsection {}{5}{Les filtres}}{109}{section.14.5}%
+\contentsline {section}{\tocsection {}{6}{Les permissions}}{109}{section.14.6}%
+\contentsline {section}{\tocsection {}{7}{Les relations}}{110}{section.14.7}%
+\contentsline {subsection}{\tocsubsection {}{7.1}{Les relations 1-n}}{110}{subsection.14.7.1}%
+\contentsline {subsection}{\tocsubsection {}{7.2}{Les auto-suggestions et auto-complétions}}{110}{subsection.14.7.2}%
+\contentsline {section}{\tocsection {}{8}{La présentation}}{110}{section.14.8}%
+\contentsline {section}{\tocsection {}{9}{Les actions sur des sélections}}{111}{section.14.9}%
+\contentsline {chapter}{\tocchapter {Chapter}{15}{Forms}}{113}{chapter.15}%
+\contentsline {section}{\tocsection {}{1}{Flux de validation}}{114}{section.15.1}%
+\contentsline {section}{\tocsection {}{2}{Dépendance avec le modèle}}{114}{section.15.2}%
+\contentsline {section}{\tocsection {}{3}{Rendu et affichage}}{114}{section.15.3}%
+\contentsline {section}{\tocsection {}{4}{Squelette par défaut}}{115}{section.15.4}%
+\contentsline {section}{\tocsection {}{5}{Crispy-forms}}{115}{section.15.5}%
+\contentsline {section}{\tocsection {}{6}{En conclusion}}{116}{section.15.6}%
+\contentsline {chapter}{\tocchapter {Chapter}{16}{Vues}}{117}{chapter.16}%
+\contentsline {section}{\tocsection {}{1}{Function Based Views}}{117}{section.16.1}%
+\contentsline {section}{\tocsection {}{2}{Class Based Views}}{119}{section.16.2}%
+\contentsline {subsection}{\tocsubsection {}{2.1}{ListView}}{119}{subsection.16.2.1}%
+\contentsline {chapter}{\tocchapter {Chapter}{17}{Templates}}{121}{chapter.17}%
+\contentsline {section}{\tocsection {}{1}{Structure et configuration}}{123}{section.17.1}%
+\contentsline {section}{\tocsection {}{2}{Builtins}}{124}{section.17.2}%
+\contentsline {section}{\tocsection {}{3}{Non-builtins}}{124}{section.17.3}%
+\contentsline {subsection}{\tocsubsection {}{3.1}{Filtres}}{125}{subsection.17.3.1}%
+\contentsline {subsection}{\tocsubsection {}{3.2}{Tags simples}}{125}{subsection.17.3.2}%
+\contentsline {subsection}{\tocsubsection {}{3.3}{Tags d’inclusion}}{126}{subsection.17.3.3}%
+\contentsline {section}{\tocsection {}{4}{Contexts Processors}}{126}{section.17.4}%
+\contentsline {section}{\tocsection {}{5}{Mise en page}}{127}{section.17.5}%
+\contentsline {subsection}{\tocsubsection {}{5.1}{Fichiers statiques}}{130}{subsection.17.5.1}%
+\contentsline {chapter}{\tocchapter {Chapter}{18}{URLs et espaces de noms}}{131}{chapter.18}%
+\contentsline {section}{\tocsection {}{1}{Reverse}}{132}{section.18.1}%
+\contentsline {chapter}{\tocchapter {Chapter}{19}{Authentification}}{135}{chapter.19}%
+\contentsline {section}{\tocsection {}{1}{Mécanisme d’authentification}}{135}{section.19.1}%
+\contentsline {section}{\tocsection {}{2}{Modification du modèle}}{137}{section.19.2}%
+\contentsline {section}{\tocsection {}{3}{Extension du modèle existant}}{138}{section.19.3}%
+\contentsline {section}{\tocsection {}{4}{Substitution}}{138}{section.19.4}%
+\contentsline {subsection}{\tocsubsection {}{4.1}{Backend}}{138}{subsection.19.4.1}%
+\contentsline {subsection}{\tocsubsection {}{4.2}{Templates}}{138}{subsection.19.4.2}%
+\contentsline {subsection}{\tocsubsection {}{4.3}{Social-Authentification}}{139}{subsection.19.4.3}%
+\contentsline {subsection}{\tocsubsection {}{4.4}{Un petit mot sur OAuth}}{139}{subsection.19.4.4}%
+\contentsline {chapter}{\tocchapter {Chapter}{20}{Logging}}{141}{chapter.20}%
+\contentsline {part}{\noindent Go Live !}{143}{part*.4}%
+\contentsline {chapter}{\tocchapter {Chapter}{21}{Gwift}}{145}{chapter.21}%
+\contentsline {chapter}{\tocchapter {Chapter}{22}{Besoins utilisateurs}}{147}{chapter.22}%
+\contentsline {chapter}{\tocchapter {Chapter}{23}{Besoins fonctionnels}}{149}{chapter.23}%
+\contentsline {section}{\tocsection {}{1}{Gestion des utilisateurs}}{149}{section.23.1}%
+\contentsline {section}{\tocsection {}{2}{Gestion des listes}}{149}{section.23.2}%
+\contentsline {subsection}{\tocsubsection {}{2.1}{Modèlisation}}{149}{subsection.23.2.1}%
+\contentsline {subsection}{\tocsubsection {}{2.2}{Fonctionnalités}}{149}{subsection.23.2.2}%
+\contentsline {section}{\tocsection {}{3}{Gestion des souhaits}}{150}{section.23.3}%
+\contentsline {subsection}{\tocsubsection {}{3.1}{Modélisation}}{150}{subsection.23.3.1}%
+\contentsline {subsection}{\tocsubsection {}{3.2}{Fonctionnalités}}{150}{subsection.23.3.2}%
+\contentsline {section}{\tocsection {}{4}{Gestion des réalisations de souhaits}}{150}{section.23.4}%
+\contentsline {subsection}{\tocsubsection {}{4.1}{Modélisation}}{150}{subsection.23.4.1}%
+\contentsline {subsection}{\tocsubsection {}{4.2}{Fonctionnalités}}{151}{subsection.23.4.2}%
+\contentsline {section}{\tocsection {}{5}{Gestion des personnes réalisants les souhaits et qui ne sont pas connues}}{151}{section.23.5}%
+\contentsline {subsection}{\tocsubsection {}{5.1}{Modélisation}}{151}{subsection.23.5.1}%
+\contentsline {subsection}{\tocsubsection {}{5.2}{Fonctionnalités}}{151}{subsection.23.5.2}%
+\contentsline {chapter}{\tocchapter {Chapter}{24}{Tests unitaires}}{157}{chapter.24}%
+\contentsline {section}{\tocsection {}{1}{Pourquoi s’ennuyer à écrire des tests?}}{157}{section.24.1}%
+\contentsline {section}{\tocsection {}{2}{Why Bother with Test Discipline?}}{157}{section.24.2}%
+\contentsline {section}{\tocsection {}{3}{What are you testing?}}{158}{section.24.3}%
+\contentsline {section}{\tocsection {}{4}{Couverture de code}}{158}{section.24.4}%
+\contentsline {section}{\tocsection {}{5}{Comment tester ?}}{158}{section.24.5}%
+\contentsline {section}{\tocsection {}{6}{Quelques liens utiles}}{161}{section.24.6}%
+\contentsline {chapter}{\tocchapter {Chapter}{25}{Refactoring}}{163}{chapter.25}%
+\contentsline {section}{\tocsection {}{1}{Classe abstraite}}{163}{section.25.1}%
+\contentsline {section}{\tocsection {}{2}{Héritage classique}}{164}{section.25.2}%
+\contentsline {section}{\tocsection {}{3}{Classe proxy}}{165}{section.25.3}%
+\contentsline {chapter}{\tocchapter {Chapter}{26}{Khana}}{169}{chapter.26}%
+\contentsline {part}{\noindent Ressources et bibliographie}{171}{part*.5}%
+\contentsline {chapter}{\tocchapter {Chapter}{27}{Snippets utiles (et forcément dispensables)}}{173}{chapter.27}%
+\contentsline {section}{\tocsection {}{1}{Récupération du dernier tag Git en Python}}{173}{section.27.1}%
+\contentsline {chapter}{\tocchapter {Chapter}{28}{Applications \emph {Legacy}}}{175}{chapter.28}%
+\contentsline {chapter}{\tocchapter {Chapter}{29}{Livres}}{177}{chapter.29}%
