@@ -663,6 +663,7 @@ image::images/xkcd-1597-git.png[]
 Même pour un développeur solitaire, un système de gestion de versions (quel qu'il soit) reste indispensable.
 
 Chaque "*branche*" correspond à une tâche à réaliser: un bogue à corriger (_Hotfix A_), une nouvelle fonctionnalité à ajouter ou un "_truc à essayer_" footnote:[Oui, comme dans "Attends, j'essaie vite un truc, si ça marche, c'est beau."] (_Feature A_ et _Feature B_).
+
 Chaque "*commit*" correspond à une sauvegarde atomique d'un état ou d'un ensemble de modifications cohérentes entre elles.footnote:[Il convient donc de s'abstenir de modifier le CSS d'une application et la couche d'accès à la base de données, sous peine de se faire huer par ses relecteurs au prochain stand-up.]
 De cette manière, il est beaucoup plus facile pour le développeur de se concenter sur un sujet en particulier, dans la mesure où celui-ci ne doit pas obligatoirement être clôturé pour appliquer un changement de contexte.
 
@@ -856,8 +857,6 @@ services:
 
 [source,dockerfile]
 ----
-[source,docker]
-----
 # docker-compose.yml
 version: '3.8'
 
@@ -884,8 +883,6 @@ services:
       - ../sqlserver/secrets:/var/opt/mssql/secrets
 
 ----
-----
-
 
 [source,dockerfile]
 ----

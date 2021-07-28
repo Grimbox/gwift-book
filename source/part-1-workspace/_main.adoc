@@ -1,5 +1,8 @@
 = Environnement de travail
 
+"Make it work, make it right, make it fast"
+-- Kent Beck
+
 Avant de démarrer le développement, il est nécessaire de passer un peu de temps sur la configuration de l'environnement.
 
 Les morceaux de code que vous trouverez ci-dessous seront développés pour Python3.9+ et Django 3.2+. 
