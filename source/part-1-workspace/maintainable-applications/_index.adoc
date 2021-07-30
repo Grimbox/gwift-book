@@ -1,9 +1,18 @@
-== Construire des applications maintenables
+== Construire des applications ...
+
+=== ... évolutives ...
 
 include::12-factors.adoc[]
 
+=== ... maintenables ...
+
 include::maintainable-applications.adoc[]
+include::mccabe.adoc[]
+
+=== ... robustes, flexibles, ...
 
 include::solid.adoc[]
 
-include::mccabe.adoc[]
+=== ... et bien structurées
+
+include::clean_architecture.adoc[]
